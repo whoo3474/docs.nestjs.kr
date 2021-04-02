@@ -1,12 +1,12 @@
 ### Extensions
 
-> warning **Warning** This chapter applies only to the code first approach.
+> warning **경고** 이 장은 코드 우선 접근 방식에만 적용됩니다.
 
-Extensions is an **advanced, low-level feature** that lets you define arbitrary data in the types configuration. Attaching custom metadata to certain fields allows you to create more sophisticated, generic solutions. For example, with extensions, you can define field-level roles required to access particular fields. Such roles can be reflected at runtime to determine whether the caller has sufficient permissions to retrieve a specific field.
+익스텐션은 타입 구성에서 임의의 데이터를 정의할 수 있는 **고급, 저 레벨 기능**입니다. 특정 필드에 사용자 지정 메타 데이터를 첨부하면 보다 정교하고 일반적인 솔루션을 만들 수 있습니다. 예를 들어 익스텐션을 사용하면 특정 필드에 액세스하는 데 필요한 필드 수준 역할을 정의할 수 있습니다. 이러한 역할은 런타임에 반영되어 호출자(caller)가 특정 필드를 검색할 수 있는 충분한 권한이 있는지 확인할 수 있습니다.
 
 #### Adding custom metadata
 
-To attach custom metadata for a field, use the `@Extensions()` decorator exported from the `@nestjs/graphql` package.
+필드에 대한 사용자 지정 메타 데이터를 첨부하려면 `@nestjs/graphql` 패키지에서 내 보낸 `@Extensions()` 데코레이터를 사용합니다.
 
 ```typescript
 @Field()
@@ -14,15 +14,15 @@ To attach custom metadata for a field, use the `@Extensions()` decorator exporte
 password: string;
 ```
 
-In the example above, we assigned the `role` metadata property the value of `Role.ADMIN`. `Role` is a simple TypeScript enum that groups all the user roles available in our system.
+위의 예에서는 `role` 메타 데이터 속성에 `Role.ADMIN`값을 할당했습니다. `Role`은 시스템에서 사용 가능한 모든 사용자 역할을 그룹화하는 간단한 TypeScript enum 형입니다.
 
-Note, in addition to setting metadata on fields, you can use the `@Extensions()` decorator at the class level and method level (e.g., on the query handler).
+필드에 메타 데이터를 설정하는 것 외에도 클래스 수준 및 메서드 수준 (예: 쿼리 핸들러에서)에서 `@Extensions()` 데코레이터를 사용할 수 있습니다.
 
 #### Using custom metadata
 
-Logic that leverages the custom metadata can be as complex as needed. For example, you can create a simple interceptor that stores/logs events per method invocation, or a [field middleware](/graphql/field-middleware) that matches roles required to retrieve a field with the caller permissions (field-level permissions system).
+사용자 지정 메타 데이터를 활용하는 논리는 필요에 따라 복잡할 수 있습니다. 예를 들어 메서드 호출당 이벤트를 저장/기록하는 간단한 인터셉터 또는 호출자 권한이 있는 필드를 검색하는 데 필요한 역할과 일치하는 [필드 미들웨어](/graphql/field-middleware)를 만들 수 있습니다 (필드 수준 권한 시스템).
 
-For illustration purposes, let's define a `checkRoleMiddleware` that compares a user's role (hardcoded here) with a role required to access a target field:
+설명을 위해 사용자의 역할 (여기에 하드 코딩 됨)을 대상 필드에 액세스하는 데 필요한 역할과 비교하는 `checkRoleMiddleware`를 정의하겠습니다.
 
 ```typescript
 export const checkRoleMiddleware: FieldMiddleware = async (
@@ -47,7 +47,7 @@ export const checkRoleMiddleware: FieldMiddleware = async (
 };
 ```
 
-With this in place, we can register a middleware for the `password` field, as follows:
+이를 통해 다음과 같이 `password` 필드에 대한 미들웨어를 등록할 수 있습니다.
 
 ```typescript
 @Field({ middleware: [checkRoleMiddleware] })

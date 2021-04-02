@@ -1,18 +1,18 @@
 ### Scalars
 
-A GraphQL object type has a name and fields, but at some point those fields have to resolve to some concrete data. That's where the scalar types come in: they represent the leaves of the query (read more [here](https://graphql.org/learn/schema/#scalar-types)). GraphQL includes the following default types: `Int`, `Float`, `String`, `Boolean` and `ID`. In addition to these built-in types, you may need to support custom atomic data types (e.g., `Date`).
+GraphQL 객체 타입에는 이름과 필드가 있지만 어느 시점에서 이러한 필드는 구체적인 데이터로 확인되어야 합니다. 여기에서 스칼라 타입이 등장합니다. 이들은 쿼리의 잎을 나타냅니다 (자세한 내용은 [여기](https://graphql.org/learn/schema/#scalar-types) 참조). GraphQL에는 `Int`, `Float`, `String`, `Boolean` 및 `ID`와 같은 기본 타입이 포함됩니다. 이러한 내장 타입 외에도 커스텀 원자 데이터 타입 (예: `Date`)을 지원해야 할 수도 있습니다.
 
 #### Code first
 
-The code-first approach ships with five scalars in which three of them are simple aliases for the existing GraphQL types.
+코드 우선 접근 방식은 5 개의 스칼라와 함께 제공되며 그중 3 개는 기존 GraphQL 타입에 대한 간단한 별칭입니다.
 
-- `ID` (alias for `GraphQLID`) - represents a unique identifier, often used to refetch an object or as the key for a cache
-- `Int` (alias for `GraphQLInt`) - a signed 32‐bit integer
-- `Float` (alias for `GraphQLFloat`) - a signed double-precision floating-point value
-- `GraphQLISODateTime` - a date-time string at UTC (used by default to represent `Date` type)
-- `GraphQLTimestamp` - a numeric string which represents time and date as number of milliseconds from start of UNIX epoch
+- `ID` (`GraphQLID`의 별칭) - 객체를 다시 가져오는 데 자주 사용되거나 캐시의 키로 사용되는 고유 식별자를 나타냅니다.
+- `Int` (`GraphQLInt`의 별칭) - 부호있는 32 비트 정수
+- `Float` (`GraphQLFloat`의 별칭) - 부호있는 배정 밀도 부동 소수점 값
+- `GraphQLISODateTime` - UTC의 날짜-시간 문자열 (기본적으로 `Date` 타입을 나타내는 데 사용됨)
+- `GraphQLTimestamp` - 시간과 날짜를 UNIX 시대의 시작부터 밀리 초 단위로 나타내는 숫자 문자열
 
-The `GraphQLISODateTime` (e.g. `2019-12-03T09:54:33Z`) is used by default to represent the `Date` type. To use the `GraphQLTimestamp` instead, set the `dateScalarMode` of the `buildSchemaOptions` object to `'timestamp'` as follows:
+`GraphQLISODateTime` (예: `2019-12-03T09:54:33Z`)은 기본적으로 `Date` 타입을 나타내는 데 사용됩니다. 대신 `GraphQLTimestamp`를 사용하려면 `buildSchemaOptions` 객체의 `dateScalarMode`를 다음과 같이 `'timestamp'`로 설정합니다.
 
 ```typescript
 GraphQLModule.forRoot({
@@ -22,7 +22,7 @@ GraphQLModule.forRoot({
 }),
 ```
 
-Likewise, the `GraphQLFloat` is used by default to represent the `number` type. To use the `GraphQLInt` instead, set the `numberScalarMode` of the `buildSchemaOptions` object to `'integer'` as follows:
+마찬가지로 `GraphQLFloat`는 기본적으로 `number`타입을 나타내는 데 사용됩니다. 대신 `GraphQLInt`를 사용하려면 `buildSchemaOptions` 객체의 `numberScalarMode`를 다음과 같이 `'integer'`로 설정합니다.
 
 ```typescript
 GraphQLModule.forRoot({
@@ -32,7 +32,7 @@ GraphQLModule.forRoot({
 }),
 ```
 
-In addition, you can create custom scalars. For example, to create a `Date` scalar, simply create a new class.
+또한 사용자 지정 스칼라를 만들 수 있습니다. 예를 들어 `Date`스칼라를 만들려면 새 클래스를 만들기 만하면됩니다.
 
 ```typescript
 import { Scalar, CustomScalar } from '@nestjs/graphql';
@@ -59,7 +59,7 @@ export class DateScalar implements CustomScalar<number, Date> {
 }
 ```
 
-With this in place, register `DateScalar` as a provider.
+이 위치에 `DateScalar`를 프로바이더로 등록하십시오.
 
 ```typescript
 @Module({
@@ -68,7 +68,7 @@ With this in place, register `DateScalar` as a provider.
 export class CommonModule {}
 ```
 
-Now we can use the `Date` type in our classes.
+이제 클래스에서 `Date` 타입을 사용할 수 있습니다.
 
 ```typescript
 @Field()
@@ -77,15 +77,15 @@ creationDate: Date;
 
 #### Schema first
 
-To define a custom scalar (read more about scalars [here](https://www.apollographql.com/docs/graphql-tools/scalars.html)), create a type definition and a dedicated resolver. Here (as in the official documentation), we’ll use the `graphql-type-json` package for demonstration purposes. This npm package defines a `JSON` GraphQL scalar type.
+사용자 지정 스칼라([여기](https://www.apollographql.com/docs/graphql-tools/scalars.html)에서 스칼라에 대해 자세히 알아보세요.)를 정의하려면 타입 정의와 전용 리졸버를 만듭니다. 여기(공식 문서에서와 같이)서는 데모용으로 `graphql-type-json` 패키지를 사용합니다. 이 npm 패키지는 `JSON` GraphQL 스칼라 타입을 정의합니다.
 
-Start by installing the package:
+패키지를 설치하여 시작하십시오.
 
 ```bash
 $ npm i --save graphql-type-json
 ```
 
-Once the package is installed, we pass a custom resolver to the `forRoot()` method:
+패키지가 설치되면 사용자 정의 리졸버를 `forRoot()` 메소드에 전달합니다.
 
 ```typescript
 import GraphQLJSON from 'graphql-type-json';
@@ -101,7 +101,7 @@ import GraphQLJSON from 'graphql-type-json';
 export class AppModule {}
 ```
 
-Now we can use the `JSON` scalar in our type definitions:
+이제 타입 정의에서 `JSON` 스칼라를 사용할 수 있습니다.
 
 ```graphql
 scalar JSON
@@ -111,7 +111,7 @@ type Foo {
 }
 ```
 
-Another method to define a scalar type is to create a simple class. Assume we want to enhance our schema with the `Date` type.
+스칼라 타입을 정의하는 또 다른 방법은 간단한 클래스를 만드는 것입니다. `Date` 타입으로 스키마를 향상시키고 싶다고 가정합니다.
 
 ```typescript
 import { Scalar, CustomScalar } from '@nestjs/graphql';
@@ -138,7 +138,7 @@ export class DateScalar implements CustomScalar<number, Date> {
 }
 ```
 
-With this in place, register `DateScalar` as a provider.
+이 위치에 `DateScalar`를 프로바이더로 등록하십시오.
 
 ```typescript
 @Module({
@@ -147,14 +147,14 @@ With this in place, register `DateScalar` as a provider.
 export class CommonModule {}
 ```
 
-Now we can use the `Date` scalar in type definitions.
+이제 타입 정의에서 `Date` 스칼라를 사용할 수 있습니다.
 
 ```graphql
 scalar Date
 ```
 
-By default, the generated TypeScript definition for all scalars is `any` - which isn't particularly typesafe.
-But, you can configure how Nest generates typings for your custom scalars when you specify how to generate types:
+기본적으로 모든 스칼라에 대해 생성된 TypeScript 정의는 `any`이며 특히 타입세이프(typesafe)하지 않습니다.
+그러나 타입을 생성하는 방법을 지정할 때 Nest가 커스텀 스칼라에 대한 타입을 생성하는 방법을 구성할 수 있습니다.
 
 ```typescript
 import { GraphQLDefinitionsFactory } from '@nestjs/graphql';
@@ -175,9 +175,9 @@ definitionsFactory.generate({
 })
 ```
 
-> info **Hint** Alternatively, you can use a type reference instead, for example: `DateTime: Date`. In this case, `GraphQLDefinitionsFactory` will extract the name property of the specified type (`Date.name`) to generate TS definitions. Note: adding an import statement for non-built-in types (custom types) is required.
+> info **힌트** 또는 대신 타입 참조를 사용할 수 있습니다 (예: `DateTime: Date`). 이 경우 `GraphQLDefinitionsFactory`는 지정된 타입 (`Date.name`)의 이름 속성을 추출하여 Typescript 정의를 생성합니다. 참고: 내장되지 않은 타입 (사용자 정의 타입)에 대한 import 문을 추가해야 합니다.
 
-Now, given the following GraphQL custom scalar types:
+이제 다음 GraphQL 커스텀 스칼라 타입이 주어집니다.
 
 ```graphql
 scalar DateTime
@@ -185,7 +185,7 @@ scalar BigNumber
 scalar Payload
 ```
 
-We will now see the following generated TypeScript definitions in `src/graphql.ts`:
+이제 `src/graphql.ts`에서 생성된 다음 TypeScript 정의를 볼 수 있습니다.
 
 ```typescript
 import _BigNumber from 'bignumber.js'
@@ -195,9 +195,6 @@ export type BigNumber = _BigNumber
 export type Payload = unknown
 ```
 
-Here, we've used the `customScalarTypeMapping` property to supply a map of the types we wish to declare for our custom scalars. We've
-also provided an `additionalHeader` property so that we can add any imports required for these type definitions. Lastly, we've added
-a `defaultScalarType` of `'unknown'`, so that any custom scalars not specified in `customScalarTypeMapping` will be aliased to
-`unknown` instead of `any` (which [TypeScript recommends](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-0.html#new-unknown-top-type) using since 3.0 for added type safety).
+여기서는 `customScalarTypeMapping` 속성을 사용하여 사용자 지정 스칼라에 대해 선언하려는 타입의 맵을 제공했습니다. 또한 이러한 타입 정의에 필요한 가져오기를 추가할 수 있도록 `additionalHeader` 속성도 제공했습니다. 마지막으로 `'unknown'`의 `defaultScalarType`을 추가하여 `customScalarTypeMapping`에 지정되지 않은 모든 커스텀 스칼라가 `any` 대신 `unknown`으로 별칭이 지정됩니다. ([TypeScript 권장](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-0.html#new-unknown-top-type) 사용 추가된 타입 안전을 위해 3.0부터).
 
-> info **Hint** Note that we've imported `_BigNumber` from `bignumber.js`; this is to avoid [circular type references](https://github.com/Microsoft/TypeScript/issues/12525#issuecomment-263166239).
+> info **힌트** `bignumber.js`에서 `_BigNumber`를 가져 왔습니다. 이것은 [순환 타입 참조](https://github.com/Microsoft/TypeScript/issues/12525#issuecomment-263166239)를 피하기 위한 것입니다.

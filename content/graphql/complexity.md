@@ -1,14 +1,14 @@
 ### Complexity
 
-> warning **Warning** This chapter applies only to the code first approach.
+> warning **경고** 이 장은 코드 우선 접근 방식에만 적용됩니다.
 
-Query complexity allows you to define how complex certain fields are, and to restrict queries with a **maximum complexity**. The idea is to define how complex each field is by using a simple number. A common default is to give each field a complexity of `1`. In addition, the complexity calculation of a GraphQL query can be customized with so-called complexity estimators. A complexity estimator is a simple function that calculates the complexity for a field. You can add any number of complexity estimators to the rule, which are then executed one after another. The first estimator that returns a numeric complexity value determines the complexity for that field.
+쿼리 복잡성을 사용하면 특정 필드의 복잡성을 정의하고 **최대 복잡성**으로 쿼리를 제한할 수 있습니다. 아이디어는 간단한 숫자를 사용하여 각 필드가 얼마나 복잡한 지 정의하는 것입니다. 일반적인 기본값은 각 필드에 `1`의 복잡성을 부여하는 것입니다. 또한 GraphQL 쿼리의 복잡도 계산은 소위 복잡도 추정기로 사용자 정의할 수 있습니다. 복잡도 추정기는 필드의 복잡도를 계산하는 간단한 함수입니다. 규칙에 복잡도 추정기를 원하는만큼 추가할 수 있으며, 규칙은 차례로 실행됩니다. 숫자 복잡도 값을 반환하는 첫번째 추정기는 해당 필드의 복잡도를 결정합니다.
 
-The `@nestjs/graphql` package integrates very well with tools like [graphql-query-complexity](https://github.com/slicknode/graphql-query-complexity) that provides a cost analysis-based solution. With this library, you can reject queries to your GraphQL server that are deemed too costly to execute.
+`@nestjs/graphql` 패키지는 비용 분석 기반 솔루션을 제공하는 [graphql-query-complexity](https://github.com/slicknode/graphql-query-complexity)와 같은 도구와 매우 잘 통합됩니다. 이 라이브러리를 사용하면 실행 비용이 너무 많이 드는 GraphQL 서버에 대한 쿼리를 거부할 수 있습니다.
 
 #### Installation
 
-To begin using it, we first install the required dependency.
+사용을 시작하려면 먼저 필요한 종속성을 설치합니다.
 
 ```bash
 $ npm install --save graphql-query-complexity
@@ -16,7 +16,7 @@ $ npm install --save graphql-query-complexity
 
 #### Getting started
 
-Once the installation process is complete, we can define the `ComplexityPlugin` class:
+설치 프로세스가 완료되면 `ComplexityPlugin` 클래스를 정의할 수 있습니다.
 
 ```typescript
 import { GraphQLSchemaHost, Plugin } from '@nestjs/graphql';
@@ -62,23 +62,23 @@ export class ComplexityPlugin implements ApolloServerPlugin {
 }
 ```
 
-For demonstration purposes, we specified the maximum allowed complexity as `20`. In the example above, we used 2 estimators, the `simpleEstimator` and the `fieldExtensionsEstimator`.
+데모 목적으로 허용되는 최대 복잡성을 `20`으로 지정했습니다. 위의 예에서는 `simpleEstimator`와  `fieldExtensionsEstimator`라는 2 개의 추정기를 사용했습니다.
 
-- `simpleEstimator`: the simple estimator returns a fixed complexity for each field
-- `fieldExtensionsEstimator`: the field extensions estimator extracts the complexity value for each field of your schema
+- `simpleEstimator`: 단순 추정기는 각 필드에 대해 고정된 복잡도를 반환합니다.
+- `fieldExtensionsEstimator`: 필드 확장 추정기는 스키마의 각 필드에 대한 복잡성 값을 추출합니다.
 
-> info **Hint** Remember to add this class to the providers array in any module.
+> info **힌트** 이 클래스를 모든 모듈의 프로바이더 배열에 추가하는 것을 잊지 마십시오.
 
 #### Field-level complexity
 
-With this plugin in place, we can now define the complexity for any field by specifying the `complexity` property in the options object passed into the `@Field()` decorator, as follows:
+이 플러그인을 사용하면 이제 다음과 같이 `@Field()` 데코레이터에 전달된 옵션 객체에 `complexity` 속성을 지정하여 모든 필드의 복잡성을 정의할 수 있습니다.
 
 ```typescript
 @Field({ complexity: 3 })
 title: string;
 ```
 
-Alternatively, you can define the estimator function:
+또는 추정 기능을 정의할 수 있습니다.
 
 ```typescript
 @Field({ complexity: (options: ComplexityEstimatorArgs) => ... })
@@ -87,7 +87,7 @@ title: string;
 
 #### Query/Mutation-level complexity
 
-In addition, `@Query()` and `@Mutation()` decorators may have a `complexity` property specified like so:
+또한 `@Query()` 및 `@Mutation()` 데코레이터에는 다음과 같이 지정된 `complexity` 속성이 있을 수 있습니다.
 
 ```typescript
 @Query({ complexity: (options: ComplexityEstimatorArgs) => options.args.count * options.childComplexity })

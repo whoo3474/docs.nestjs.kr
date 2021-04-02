@@ -1,12 +1,12 @@
 ### Other features
 
-In the GraphQL world, there is a lot of debate about handling issues like **authentication**, or **side-effects** of operations. Should we handle things inside the business logic? Should we use a higher-order function to enhance queries and mutations with authorization logic? Or should we use [schema directives](https://www.apollographql.com/docs/apollo-server/schema/directives/)? There is no single one-size-fits-all answer to these questions.
+GraphQL 세계에서는 **인증** 또는 작업의 **부작용**과 같은 문제를 처리하는 것에 대해 많은 논쟁이 있습니다. 비즈니스 로직 내부에서 처리해야합니까? 권한 부여 논리로 쿼리 및 뮤테이션을 향상시키기 위해 고차 함수를 사용해야합니까? 아니면 [스키마 지시문](https://www.apollographql.com/docs/apollo-server/schema/directives/)을 사용해야 합니까? 이러한 질문에 대한 간단한(one-size-fits-all) 대답은 없습니다.
 
-Nest helps address these issues with its cross-platform features like [guards](/guards) and [interceptors](/interceptors). The philosophy is to reduce redundancy and provide tooling that helps create well-structured, readable, and consistent applications.
+Nest는 [guards](/guards) 및 [interceptors](/interceptors)와 같은 크로스 플랫폼 기능으로 이러한 문제를 해결하는 데 도움이 됩니다. 이 철학은 중복성을 줄이고 잘 구조화되고 읽기 가능하며 일관된 애플리케이션을 만드는 데 도움이 되는 도구를 제공하는 것입니다.
 
 #### Overview
 
-You can use standard [guards](/guards), [interceptors](/interceptors), [filters](/exception-filters) and [pipes](/pipes) in the same fashion with GraphQL as with any RESTful application. Additionally, you can easily create your own decorators by leveraging the [custom decorators](/custom-decorators) feature. Let's take a look at a sample GraphQL query handler.
+표준 [guards](/guards), [interceptors](/interceptors), [filters](/exception-filters) 및 [pipes](/pipes)를 모든 RESTful 응용 프로그램과 동일한 방식으로 GraphQL에서 사용할 수 있습니다. 또한 [커스텀 데코레이터](/custom-decorators) 기능을 활용하여 자신만의 데코레이터를 쉽게 만들 수 있습니다. 샘플 GraphQL 쿼리 핸들러를 살펴 보겠습니다.
 
 ```typescript
 @Query('author')
@@ -16,7 +16,7 @@ async getAuthor(@Args('id', ParseIntPipe) id: number) {
 }
 ```
 
-As you can see, GraphQL works with both guards and pipes in the same way as HTTP REST handlers. Because of this, you can move your authentication logic to a guard; you can even reuse the same guard class across both a REST and GraphQL API interface. Similarly, interceptors work across both types of applications in the same way:
+보시다시피 GraphQL은 HTTP REST 핸들러와 동일한 방식으로 가드 및 파이프 모두에서 작동합니다. 이 때문에 인증 로직을 가드로 이동할 수 있습니다. REST 및 GraphQL API 인터페이스에서 동일한 가드 클래스를 재사용할 수도 있습니다. 마찬가지로 인터셉터는 두 타입의 애플리케이션에서 동일한 방식으로 작동합니다.
 
 ```typescript
 @Mutation()
@@ -28,7 +28,7 @@ async upvotePost(@Args('postId') postId: number) {
 
 #### Execution context
 
-Since GraphQL receives a different type of data in the incoming request, the [execution context](https://docs.nestjs.com/fundamentals/execution-context) received by both guards and interceptors is somewhat different with GraphQL vs. REST. GraphQL resolvers have a distinct set of arguments: `root`, `args`, `context`, and `info`. Thus guards and interceptors must transform the generic `ExecutionContext` to a `GqlExecutionContext`. This is straightforward:
+GraphQL은 수신 요청에서 다른 타입의 데이터를 수신하기 때문에 가드와 인터셉터가 수신하는 [실행 컨텍스트](https://docs.nestjs.com/fundamentals/execution-context)는 GraphQL과 REST에서 다소 다릅니다. GraphQL 리졸버에는 `root`, `args`, `context` 및 `info`와 같은 고유한 전달인자 세트가 있습니다. 따라서 가드와 인터셉터는 일반 `ExecutionContext`를 `GqlExecutionContext`로 변환해야 합니다. 이것은 간단합니다.
 
 ```typescript
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
@@ -43,11 +43,11 @@ export class AuthGuard implements CanActivate {
 }
 ```
 
-The GraphQL context object returned by `GqlExecutionContext.create()` exposes a **get** method for each GraphQL resolver argument (e.g., `getArgs()`, `getContext()`, etc). Once transformed, we can easily pick out any GraphQL argument for the current request.
+`GqlExecutionContext.create()`에서 반환된 GraphQL 컨텍스트 객체는 각 GraphQL 리졸버 전달인수 (예: `getArgs()`, `getContext()`등)에 대해 **get** 메서드를 노출합니다. 일단 변환되면 현재 요청에 대한 GraphQL 전달인수를 쉽게 선택할 수 있습니다.
 
 #### Exception filters
 
-Nest standard [exception filters](/exception-filters) are compatible with GraphQL applications as well. As with `ExecutionContext`, GraphQL apps should transform the `ArgumentsHost` object to a `GqlArgumentsHost` object.
+Nest 표준 [예외 필터](/exception-filters)는 GraphQL 애플리케이션과도 호환됩니다. `ExecutionContext`와 마찬가지로 GraphQL 앱은 `ArgumentsHost` 객체를 `GqlArgumentsHost` 객체로 변환해야합니다.
 
 ```typescript
 @Catch(HttpException)
@@ -59,13 +59,13 @@ export class HttpExceptionFilter implements GqlExceptionFilter {
 }
 ```
 
-> info **Hint** Both `GqlExceptionFilter` and `GqlArgumentsHost` are imported from the `@nestjs/graphql` package.
+> info **힌트** `GqlExceptionFilter`와 `GqlArgumentsHost`는 모두 `@nestjs/graphql` 패키지에서 가져옵니다.
 
-Note that unlike the REST case, you don't use the native `response` object to generate a response.
+REST의 경우와 달리 응답을 생성하는 데 네이티브 `response` 객체를 사용하지 않습니다.
 
 #### Custom decorators
 
-As mentioned, the [custom decorators](/custom-decorators) feature works as expected with GraphQL resolvers.
+언급했듯이 [커스텀 데코레이터](/custom-decorators) 기능은 GraphQL 리졸버에서 예상대로 작동합니다.
 
 ```typescript
 export const User = createParamDecorator(
@@ -74,7 +74,7 @@ export const User = createParamDecorator(
 );
 ```
 
-Use the `@User()` custom decorator as follows:
+다음과 같이 `@User()` 커스텀 데코레이터를 사용하세요.
 
 ```typescript
 @Mutation()
@@ -84,11 +84,11 @@ async upvotePost(
 ) {}
 ```
 
-> info **Hint** In the above example, we have assumed that the `user` object is assigned to the context of your GraphQL application.
+> info **힌트** 위의 예에서는 `user` 객체가 GraphQL 애플리케이션의 컨텍스트에 할당되었다고 가정했습니다.
 
 #### Execute enhancers at the field resolver level
 
-In the GraphQL context, Nest does not run **enhancers** (the generic name for interceptors, guards and filters) at the field level [see this issue](https://github.com/nestjs/graphql/issues/320#issuecomment-511193229): they only run for the top level `@Query()`/`@Mutation()` method. You can tell Nest to execute interceptors, guards or filters for methods annotated with `@ResolveField()` by setting the `fieldResolverEnhancers` option in `GqlModuleOptions`.  Pass it a list of `'interceptors'`, `'guards'`, and/or `'filters'` as appropriate:
+GraphQL 컨텍스트에서 Nest는 필드 수준에서 **인핸서** (인터셉터, 가드 및 필터의 일반적인 이름)를 실행하지 않습니다 [이 문제 참조](https://github.com/nestjs/graphql/issues/320#issuecomment-511193229): 최상위 `@Query()`/`@ Mutation()` 메서드에 대해서만 실행됩니다. `GqlModuleOptions`에서 `fieldResolverEnhancers` 옵션을 설정하여 `@ResolveField()` 코멘트가 달린 메소드에 대한 인터셉터, 가드 또는 필터를 실행하도록 Nest에 지시할 수 있습니다. `'interceptors'`, `'guards'` 및/또는 `'filters'` 목록을 적절하게 전달합니다.
 
 ```typescript
 GraphQLModule.forRoot({
@@ -96,7 +96,7 @@ GraphQLModule.forRoot({
 }),
 ```
 
-> **Warning** Enabling enhancers for field resolvers can cause performance issues when you are returning lots of records and your field resolver is executed thousands of times. For this reason, when you enable `fieldResolverEnhancers`, we advise you to skip execution of enhancers that are not strictly necessary for your field resolvers. You can do this using the following helper function:
+> warning **경고** 필드 리졸버용 인핸서를 활성화하면 많은 레코드를 반환하고 필드 리졸버가 수천번 실행될 때 성능 문제가 발생할 수 있습니다. 따라서 `fieldResolverEnhancers`를 활성화할 때 필드 리졸버에 꼭 필요하지 않은 인핸서 실행을 건너뛰는 것이 좋습니다. 다음 도우미 기능을 사용하여 이 작업을 수행할 수 있습니다.
 
 ```typescript
 export function isResolvingGraphQLField(context: ExecutionContext): boolean {

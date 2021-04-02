@@ -1,16 +1,16 @@
 ### Directives
 
-A directive can be attached to a field or fragment inclusion, and can affect execution of the query in any way the server desires (read more [here](https://graphql.org/learn/queries/#directives)). The GraphQL specification provides several default directives:
+지시문(directive)은 필드 또는 조각 포함에 첨부될 수 있으며 서버가 원하는 방식으로 쿼리 실행에 영향을 미칠 수 있습니다 ([여기](https://graphql.org/learn/queries/#directives)에서 자세히 읽어보십시오). GraphQL 사양은 몇 가지 기본 지시문(directive)을 제공합니다.
 
-- `@include(if: Boolean)` - only include this field in the result if the argument is true
-- `@skip(if: Boolean)` - skip this field if the argument is true
-- `@deprecated(reason: String)` - marks field as deprecated with message
+- `@include(if: Boolean)` - 인수가 true 인 경우에만 결과에 이 필드를 포함합니다.
+- `@skip(if: Boolean)` - 인수가 참이면 이 필드를 건너 뜁니다.
+- `@deprecated(reason: String)` - 메시지와 함께 사용되지 않음으로 필드 표시
 
-A directive is an identifier preceded by a `@` character, optionally followed by a list of named arguments, which can appear after almost any element in the GraphQL query and schema languages.
+지시문은 앞에 `@`문자가 붙은 식별자이며, 선택적으로 이름이 지정된 인수 목록이 뒤 따릅니다. 이는 GraphQL 쿼리 및 스키마 언어의 거의 모든 요소 뒤에 나타날 수 있습니다.
 
 #### Custom directives
 
-To create a custom schema directive, declare a class which extends the `SchemaDirectiveVisitor` class exported from the `apollo-server` package.
+커스텀 스키마 지시문을 생성하려면 `apollo-server` 패키지에서 내보낸 `SchemaDirectiveVisitor` 클래스를 확장하는 클래스를 선언합니다.
 
 ```typescript
 import { SchemaDirectiveVisitor } from 'apollo-server';
@@ -30,9 +30,9 @@ export class UpperCaseDirective extends SchemaDirectiveVisitor {
 }
 ```
 
-> info **Hint** Note that directives cannot be decorated with the `@Injectable()` decorator. Thus, they are not able to inject dependencies.
+> info **힌트** 지시문은 `@Injectable()` 데코레이터로 데코레이팅할 수 없습니다. 따라서 종속성을 주입할 수 없습니다.
 
-Now, register the `UpperCaseDirective` in the `GraphQLModule.forRoot()` method:
+이제 `GraphQLModule.forRoot()` 메서드에 `UpperCaseDirective`를 등록합니다.
 
 ```typescript
 GraphQLModule.forRoot({
@@ -43,11 +43,11 @@ GraphQLModule.forRoot({
 });
 ```
 
-Once registered, the `@upper` directive can be used in our schema. However, the way you apply the directive will vary depending on the approach you use (code first or schema first).
+일단 등록되면 `@upper` 지시문을 스키마에서 사용할 수 있습니다. 그러나 지시문을 적용하는 방법은 사용하는 접근 방식 (코드 우선 또는 스키마 우선)에 따라 다릅니다.
 
 #### Code first
 
-In the code first approach, use the `@Directive()` decorator to apply the directive.
+코드 우선 접근 방식에서는 `@Directive()` 데코레이터를 사용하여 지시문을 적용합니다.
 
 ```typescript
 @Directive('@upper')
@@ -55,9 +55,9 @@ In the code first approach, use the `@Directive()` decorator to apply the direct
 title: string;
 ```
 
-> info **Hint** The `@Directive()` decorator is exported from the `@nestjs/graphql` package.
+> info **힌트** `@Directive()` 데코레이터는 `@nestjs/graphql` 패키지에서 내보내집니다.
 
-Directives can be applied on fields, field resolvers, input and object types, as well as queries, mutations, and subscriptions. Here's an example of the directive applied on the query handler level:
+지시문은 필드, 필드 리졸버, 입력 및 객체 타입은 물론 쿼리, 뮤테이션 및 구독에 적용될 수 있습니다. 다음은 쿼리 핸들러 수준에 적용된 지시문의 예입니다.
 
 ```typescript
 @Directive('@deprecated(reason: "This query will be removed in the next version")')
@@ -67,11 +67,11 @@ async getAuthor(@Args({ name: 'id', type: () => Int }) id: number) {
 }
 ```
 
-Directives applied through the `@Directive()` decorator will not be reflected in the generated schema definition file.
+`@Directive()` 데코레이터를 통해 적용된 지시문은 생성된 스키마 정의 파일에 반영되지 않습니다.
 
 #### Schema first
 
-In the schema first approach, apply directives directly in SDL.
+스키마 우선 접근 방식에서는 SDL에서 직접 지시문을 적용합니다.
 
 ```graphql
 directive @upper on FIELD_DEFINITION
