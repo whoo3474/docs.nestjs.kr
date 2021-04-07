@@ -1,37 +1,37 @@
 ### Libraries
 
-Many applications need to solve the same general problems, or re-use a modular component in several different contexts. Nest has a few ways of addressing this, but each works at a different level to solve the problem in a way that helps meet different architectural and organizational objectives.
+많은 애플리케이션은 동일한 일반적인 문제를 해결하거나 여러 다른 상황에서 모듈식 구성 요소를 재사용해야 합니다. Nest에는 이 문제를 해결하는 몇가지 방법이 있지만 각각 다른 수준에서 작동하여 서로 다른 아키텍처 및 조직 목표를 충족하는 데 도움이 되는 방식으로 문제를 해결합니다.
 
-Nest [modules](/modules) are useful for providing an execution context that enables sharing components within a single application. Modules can also be packaged with [npm](https://npmjs.com) to create a reusable library that can be installed in different projects. This can be an effective way to distribute configurable, re-usable libraries that can be used by different, loosely connected or unaffiliated organizations (e.g., by distributing/installing 3rd party libraries).
+Nest [모듈](/modules)은 단일 애플리케이션내에서 구성요소를 공유할 수 있는 실행 컨텍스트를 제공하는 데 유용합니다. 모듈은 [npm](https://npmjs.com)과 함께 패키징하여 다른 프로젝트에 설치할 수 있는 재사용 가능한 라이브러리를 만들 수도 있습니다. 이는 서로 다른, 느슨하게 연결되거나 제휴되지 않은 조직(예: 타사 라이브러리 배포/설치)에서 사용할 수 있는 구성 가능하고 재사용 가능한 라이브러리를 배포하는 효과적인 방법이 될 수 있습니다.
 
-For sharing code within closely organized groups (e.g., within company/project boundaries), it can be useful to have a more lightweight approach to sharing components. Monorepos have arisen as a construct to enable that, and within a monorepo, a **library** provides a way to share code in an easy, lightweight fashion. In a Nest monorepo, using libraries enables easy assembly of applications that share components. In fact, this encourages decomposition of monolithic applications and development processes to focus on building and composing modular components.
+밀접하게 조직된 그룹(예: 회사/프로젝트 경계내)내에서 코드를 공유하려면 구성요소 공유에 대해 보다 가벼운 접근 방식을 사용하는 것이 유용할 수 있습니다. 모노레포는 이를 가능하게 하는 구조로 생겨 났으며, 모노레포내에서 **라이브러리**는 쉽고 가벼운 방식으로 코드를 공유하는 방법을 제공합니다. Nest 모노레포에서 라이브러리를 사용하면 구성요소를 공유하는 애플리케이션을 쉽게 조립할 수 있습니다. 사실, 이것은 모놀리식 애플리케이션과 개발 프로세스의 분해를 장려하여 모듈식 구성요소를 구축하고 구성하는 데 집중합니다.
 
 #### Nest libraries
 
-A Nest library is a Nest project that differs from an application in that it cannot run on its own. A library must be imported into a containing application in order for its code to execute. The built-in support for libraries described in this section is only available for **monorepos** (standard mode projects can achieve similar functionality using npm packages).
+Nest 라이브러리는 자체적으로 실행할 수 없다는 점에서 애플리케이션과 다른 Nest 프로젝트입니다. 코드를 실행하려면 라이브러리를 포함하는 애플리케이션으로 가져와야 합니다. 이 섹션에 설명된 라이브러리에 대한 기본 제공 지원은 **모노레포**에서만 사용할 수 있습니다 (표준 모드 프로젝트는 npm 패키지를 사용하여 유사한 기능을 달성할 수 있음).
 
-For example, an organization may develop an `AuthModule` that manages authentication by implementing company policies that govern all internal applications. Rather than build that module separately for each application, or physically packaging the code with npm and requiring each project to install it, a monorepo can define this module as a library. When organized this way, all consumers of the library module can see an up-to-date version of the `AuthModule` as it is committed. This can have significant benefits for coordinating component development and assembly, and simplifying end-to-end testing.
+예를 들어 조직은 모든 내부 애플리케이션을 관리하는 회사 정책을 구현하여 인증을 관리하는 `AuthModule`을 개발할 수 있습니다. 각 애플리케이션에 대해 해당 모듈을 개별적으로 빌드하거나 npm으로 코드를 물리적으로 패키징하고 각 프로젝트에서 이를 설치하도록 요구하는 대신 모노레포는 이 모듈을 라이브러리로 정의할 수 있습니다. 이러한 방식으로 구성하면 라이브러리 모듈의 모든 소비자가 커밋 된 `AuthModule`의 최신 버전을 볼 수 있습니다. 이는 구성요소 개발 및 조립을 조정하고 종단간 테스트를 단순화하는 데 상당한 이점을 제공할 수 있습니다.
 
 #### Creating libraries
 
-Any functionality that is suitable for re-use is a candidate for being managed as a library. Deciding what should be a library, and what should be part of an application, is an architectural design decision. Creating libraries involves more than simply copying code from an existing application to a new library. When packaged as a library, the library code must be decoupled from the application. This may require **more** time up front and force some design decisions that you may not face with more tightly coupled code. But this additional effort can pay off when the library can be used to enable more rapid application assembly across multiple applications.
+재사용에 적합한 모든 기능은 라이브러리로 관리할 후보입니다. 라이브러리가 되어야 하고 애플리케이션의 일부가 되어야하는 것을 결정하는 것은 아키텍처 설계 결정입니다. 라이브러리를 만드는 것은 단순히 기존 애플리케이션에서 새 라이브러리로 코드를 복사하는 것 이상을 포함합니다. 라이브러리로 패키징된 경우 라이브러리 코드는 애플리케이션에서 분리되어야 합니다. 이를 위해 **더** 많은 시간이 필요할 수 있으며 더 밀접하게 결합된 코드에서는 직면하지 않을 수 있는 일부 디자인 결정을 강제할 수 있습니다. 그러나 이러한 추가 노력은 라이브러리를 사용하여 여러 애플리케이션에서 보다 빠른 애플리케이션 조립을 가능하게 할 때 효과가 있을 수 있습니다.
 
-To get started with creating a library, run the following command:
+라이브러리 생성을 시작하려면 다음 명령을 실행하십시오.
 
 ```bash
 nest g library my-library
 ```
 
-When you run the command, the `library` schematic prompts you for a prefix (AKA alias) for the library:
+명령을 실행하면 `library` 스키메틱이 라이브러리의 접두사(일명 별칭)를 입력하라는 메시지가 표시됩니다.
 
 ```bash
 What prefix would you like to use for the library (default: @app)?
 ```
 
-This creates a new project in your workspace called `my-library`.
-A library-type project, like an application-type project, is generated into a named folder using a schematic. Libraries are managed under the `libs` folder of the monorepo root. Nest creates the `libs` folder the first time a library is created.
+그러면 작업 공간에 `my-library`라는 새 프로젝트가 생성됩니다.
+애플리케이션 유형 프로젝트와 같은 라이브러리 유형 프로젝트는 스키메틱을 사용하여 명명된 폴더에 생성됩니다. 라이브러리는 모노레포 루트의 `libs` 폴더에서 관리됩니다. Nest는 라이브러리가 처음 생성될 때 `libs` 폴더를 생성합니다.
 
-The files generated for a library are slightly different from those generated for an application. Here is the contents of the `libs` folder after executing the command above:
+라이브러리용으로 생성된 파일은 애플리케이션용으로 생성된 파일과 약간 다릅니다. 위의 명령을 실행한 후 `libs` 폴더의 내용은 다음과 같습니다.
 
 <div class="file-tree">
   <div class="item">libs</div>
@@ -49,7 +49,7 @@ The files generated for a library are slightly different from those generated fo
   </div>
 </div>
 
-The `nest-cli.json` file will have a new entry for the library under the `"projects"` key:
+`nest-cli.json` 파일에는 `"projects"`키 아래에 라이브러리에 대한 새 항목이 있습니다.
 
 ```javascript
 ...
@@ -66,16 +66,16 @@ The `nest-cli.json` file will have a new entry for the library under the `"proje
 ...
 ```
 
-There are two differences in `nest-cli.json` metadata between libraries and applications:
+라이브러리와 애플리케이션간에 `nest-cli.json` 메타데이터에는 두가지 차이점이 있습니다.
 
-- the `"type"` property is set to `"library"` instead of `"application"`
-- the `"entryFile"` property is set to `"index"` instead of `"main"`
+- `"type"` 속성이 `"application"`대신 `"library"`로 설정됨
+- `"entryFile"` 속성이 `"main"`대신 `"index"`로 설정됨
 
-These differences key the build process to handle libraries appropriately. For example, a library exports its functions through the `index.js` file.
+이러한 차이점은 라이브러리를 적절하게 처리하기 위한 빌드 프로세스의 핵심입니다. 예를 들어 라이브러리는 `index.js` 파일을 통해 함수를 내보냅니다.
 
-As with application-type projects, libraries each have their own `tsconfig.lib.json` file that extends the root (monorepo-wide) `tsconfig.json` file. You can modify this file, if necessary, to provide library-specific compiler options.
+애플리케이션 유형 프로젝트와 마찬가지로 라이브러리에는 각각 루트(모노레포 전체) `tsconfig.json` 파일을 확장하는 자체 `tsconfig.lib.json` 파일이 있습니다. 필요한 경우 이 파일을 수정하여 라이브러리별 컴파일러 옵션을 제공할 수 있습니다.
 
-You can build the library with the CLI command:
+CLI 명령을 사용하여 라이브러리를 빌드 할 수 있습니다.
 
 ```bash
 nest build my-library
@@ -83,9 +83,9 @@ nest build my-library
 
 #### Using libraries
 
-With the automatically generated configuration files in place, using libraries is straightforward. How would we import `MyLibraryService` from the `my-library` library into the `my-project` application?
+자동으로 생성된 구성 파일이 있으면 라이브러리를 사용하는 것이 간단합니다. `my-library` 라이브러리에서 `my-project` 애플리케이션으로 `MyLibraryService`를 가져오는 방법은 무엇입니까?
 
-First, note that using library modules is the same as using any other Nest module. What the monorepo does is manage paths in a way that importing libraries and generating builds is now transparent. To use `MyLibraryService`, we need to import its declaring module. We can modify `my-project/src/app.module.ts` as follows to import `MyLibraryModule`.
+먼저 라이브러리 모듈을 사용하는 것은 다른 Nest 모듈을 사용하는 것과 동일합니다. 모노레포가 하는 일은 라이브러리를 가져오고 빌드를 생성하는 것이 이제 투명하게 경로를 관리하는 것입니다. `MyLibraryService`를 사용하려면 선언 모듈을 가져와야 합니다. `my-project/src/app.module.ts`를 다음과 같이 수정하여 `MyLibraryModule`을 가져올 수 있습니다.
 
 ```typescript
 import { Module } from '@nestjs/common';
@@ -101,7 +101,7 @@ import { MyLibraryModule } from '@app/my-library';
 export class AppModule {}
 ```
 
-Notice above that we've used a path alias of `@app` in the ES module `import` line, which was the `prefix` we supplied with the `nest g library` command above. Under the covers, Nest handles this through tsconfig path mapping. When adding a library, Nest updates the global (monorepo) `tsconfig.json` file's `"paths"` key like this:
+위의 `nest g library` 명령으로 제공한 `접두사 prefix`인 ES 모듈 `import` 줄에서 `@app`의 경로 별칭을 사용했습니다. 내부적으로 Nest는 tsconfig 경로 매핑을 통해 이를 처리합니다. 라이브러리를 추가할 때 Nest는 전역(monorepo) `tsconfig.json` 파일의 `"paths"`키를 다음과 같이 업데이트합니다.
 
 ```javascript
 "paths": {
@@ -114,6 +114,6 @@ Notice above that we've used a path alias of `@app` in the ES module `import` li
 }
 ```
 
-So, in a nutshell, the combination of the monorepo and library features has made it easy and intuitive to include library modules into applications.
+요컨대, 모노레포와 라이브러리 기능의 조합은 라이브러리 모듈을 애플리케이션에 포함하는 것을 쉽고 직관적으로 만들었습니다.
 
-This same mechanism enables building and deploying applications that compose libraries. Once you've imported the `MyLibraryModule`, running `nest build` handles all the module resolution automatically and bundles the app along with any library dependencies, for deployment. The default compiler for a monorepo is **webpack**, so the resulting distribution file is a single file that bundles all of the transpiled JavaScript files into a single file. You can also switch to `tsc` as described <a href="https://docs.nestjs.com/cli/monorepo#global-compiler-options">here</a>.
+이 동일한 메커니즘을 통해 라이브러리를 구성하는 애플리케이션을 빌드하고 배포할 수 있습니다. `MyLibraryModule`을 가져온 후 `nest build`를 실행하면 모든 모듈 확인이 자동으로 처리되고 배포를 위해 모든 라이브러리 종속성과 함께 앱이 번들로 제공됩니다. 모노레포의 기본 컴파일러는 **웹팩 webpack**이므로 결과 배포 파일은 트랜스파일된 모든 JavaScript 파일을 단일 파일로 묶는 단일 파일입니다. [여기](/cli/monorepo#global-compiler-options)에 설명 된대로 `tsc`로 전환할 수도 있습니다.

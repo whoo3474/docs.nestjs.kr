@@ -1,35 +1,35 @@
 ### Workspaces
 
-Nest has two modes for organizing code:
+Nest에는 코드 구성을 위한 두가지 모드가 있습니다.
 
-- **standard mode**: useful for building individual project-focused applications that have their own dependencies and settings, and don't need to optimize for sharing modules, or optimizing complex builds. This is the default mode.
-- **monorepo mode**: this mode treats code artifacts as part of a lightweight **monorepo**, and may be more appropriate for teams of developers and/or multi-project environments. It automates parts of the build process to make it easy to create and compose modular components, promotes code re-use, makes integration testing easier, makes it easy to share project-wide artifacts like `tslint` rules and other configuration policies, and is easier to use than alternatives like github submodules. Monorepo mode employs the concept of a **workspace**, represented in the `nest-cli.json` file, to coordinate the relationship between the components of the monorepo.
+- **표준 모드**: 자체 종속성 및 설정이 있고 모듈 공유를 위해 최적화하거나 복잡한 빌드를 최적화할 필요가 없는 개별 프로젝트 중심 애플리케이션을 빌드하는 데 유용합니다. 이것이 기본 모드입니다.
+- **모노레포 모드**: 이 모드는 코드 아티팩트(artifact)를 경량 **모노레포**의 일부로 취급하며 개발자 팀 및/또는 다중 프로젝트 환경에 더 적합할 수 있습니다. 빌드 프로세스의 일부를 자동화하여 모듈식 구성요소를 쉽게 만들고 구성하고, 코드 재사용을 촉진하고, 통합 테스트를 더 쉽게 만들고, `tslint` 규칙 및 기타 구성 정책과 같은 프로젝트 전체 아티팩트를 쉽게 공유할 수 있도록 합니다. github 하위 모듈과 같은 대안보다 사용하기 쉽습니다. Monorepo 모드는 `nest-cli.json` 파일에 표시되는 **workspace** 개념을 사용하여 monorepo 구성요소간의 관계를 조정합니다.
 
-It's important to note that virtually all of Nest's features are independent of your code organization mode. The **only** affect of this choice is how your projects are composed and how build artifacts are generated. All other functionality, from the CLI to core modules to add-on modules work the same in either mode.
+사실상 Nest의 모든 기능은 코드 구성 모드와 무관하다는 점에 유의해야 합니다. 이 선택의 **유일한** 영향은 프로젝트 구성방식과 빌드 아티팩트 생성방식입니다. CLI에서 핵심 모듈, 추가 모듈에 이르는 다른 모든 기능은 두 모드에서 동일하게 작동합니다.
 
-Also, you can easily switch from **standard mode** to **monorepo mode** at any time, so you can delay this decision until the benefits of one or the other approach become more clear.
+또한 언제든지 ** 표준 모드 **에서 ** 모노 레포 모드 **로 쉽게 전환 할 수 있으므로 하나 또는 다른 접근 방식의 이점이 더 명확해질 때까지이 결정을 지연 할 수 있습니다.
 
 #### Standard mode
 
-When you run `nest new`, a new **project** is created for you using a built-in schematic. Nest does the following:
+`nest new`를 실행하면 내장 스키메틱을 사용하여 새 **프로젝트**가 생성됩니다. Nest는 다음을 수행합니다.
 
-1. Create a new folder, corresponding to the `name` argument you provide to `nest new`
-2. Populate that folder with default files corresponding to a minimal base-level Nest application. You can examine these files at the [typescript-starter](https://github.com/nestjs/typescript-starter) repository.
-3. Provide additional files such as `nest-cli.json`, `package.json` and `tsconfig.json` that configure and enable various tools for compiling, testing and serving your application.
+1. `nest new`에 제공한 `name` 인수에 해당하는 새 폴더를 만듭니다.
+2. 최소 기본 수준 Nest 애플리케이션에 해당하는 기본 파일로 해당 폴더를 채웁니다. 이러한 파일은 [typescript-starter](https://github.com/nestjs/typescript-starter) 저장소에서 확인할 수 있습니다.
+3. 애플리케이션 컴파일, 테스트 및 제공을 위한 다양한 도구를 구성하고 활성화하는 `nest-cli.json`, `package.json` 및 `tsconfig.json`과 같은 추가 파일을 제공합니다.
 
-From there, you can modify the starter files, add new components, add dependencies (e.g., `npm install`), and otherwise develop your application as covered in the rest of this documentation.
+여기에서 시작 파일을 수정하고, 새 구성요소를 추가하고, 종속성(예: `npm install`)을 추가하고, 이 문서의 나머지 부분에서 설명하는대로 애플리케이션을 개발할 수 있습니다.
 
 #### Monorepo mode
 
-To enable monorepo mode, you start with a _standard mode_ structure, and add **projects**. A project can be a full **application** (which you add to the workspace with the command `nest generate app`) or a **library** (which you add to the workspace with the command `nest generate library`). We'll discuss the details of these specific types of project components below. The key point to note now is that it is the **act of adding a project** to an existing standard mode structure that **converts it** to monorepo mode. Let's look at an example.
+모로레포 모드를 활성화하려면 _standard mode_ 구조로 시작하고 **프로젝트**를 추가합니다. 프로젝트는 전체 **애플리케이션** (`nest generate app` 명령으로 작업 공간에 추가) 또는 **라이브러리**(`nest generate library` 명령으로 작업 공간에 추가)일 수 있습니다. 아래에서 이러한 특정 유형의 프로젝트 구성요소에 대해 자세히 설명합니다. 지금 주목해야 할 요점은 기존 표준 모드 구조에 **프로젝트를 추가하는 작업**이라는 점에서 모노레포 모드로 **변환**하는 것입니다. 예를 살펴 보겠습니다.
 
-If we run:
+실행하면:
 
 ```bash
 nest new my-project
 ```
 
-We've constructed a _standard mode_ structure, with a folder structure that looks like this:
+다음과 같은 폴더 구조로 _standard mode_ 구조를 구성했습니다.
 
 <div class="file-tree">
   <div class="item">node_modules</div>
@@ -46,14 +46,14 @@ We've constructed a _standard mode_ structure, with a folder structure that look
   <div class="item">tslint.json</div>
 </div>
 
-We can convert this to a monorepo mode structure as follows:
+다음과 같이 이를 모로레포 모드 구조로 변환할 수 있습니다.
 
 ```bash
 cd my-project
 nest generate app my-app
 ```
 
-At this point, `nest` converts the existing structure to a **monorepo mode** structure. This results in a few important changes. The folder structure now looks like this:
+이 시점에서 `nest`는 기존 구조를 **모노레포 모드** 구조로 변환합니다. 이로 인해 몇가지 중요한 변경사항이 발생합니다. 이제 폴더 구조는 다음과 같습니다.
 
 <div class="file-tree">
   <div class="item">apps</div>
@@ -87,28 +87,28 @@ At this point, `nest` converts the existing structure to a **monorepo mode** str
   <div class="item">tslint.json</div>
 </div>
 
-The `generate app` schematic has reorganized the code - moving each **application** project under the `apps` folder, and adding a project-specific `tsconfig.app.json` file in each project's root folder. Our original `my-project` app has become the **default project** for the monorepo, and is now a peer with the just-added `my-app`, located under the `apps` folder. We'll cover default projects below.
+`generate app` 스키메틱은 코드를 재구성했습니다. 각 **application** 프로젝트를 `apps` 폴더 아래로 이동하고 각 프로젝트의 루트 폴더에 프로젝트별 `tsconfig.app.json` 파일을 추가합니다. 우리의 원래 `my-project` 앱은 모노레포의 **기본 프로젝트**가 되었으며 이제 `apps` 폴더 아래에 방금 추가된 `my-app`과 동료가 되었습니다. 아래에서 기본 프로젝트를 다룰 것입니다.
 
-> error **Warning** The conversion of a standard mode structure to monorepo only works for projects that have followed the canonical Nest project structure. Specifically, during conversion, the schematic attempts to relocate the `src` and `test` folders in a project folder beneath the `apps` folder in the root. If a project does not use this structure, the conversion will fail or produce unreliable results.
+> error **경고** 표준 모드 구조를 모로레포로 변환하는 것은 표준 Nest 프로젝트 구조를 따르는 프로젝트에서만 작동합니다. 특히 변환 중에 스키메틱은 루트의 `apps` 폴더 아래에 있는 프로젝트 폴더의 `src` 및 `test` 폴더를 재배치하려고 시도합니다. 프로젝트에서 이 구조를 사용하지 않으면 변환이 실패하거나 신뢰할 수 없는 결과가 생성됩니다.
 
 #### Workspace projects
 
-A monorepo uses the concept of a workspace to manage its member entities. Workspaces are composed of **projects**. A project may be either:
+모노레포는 작업 공간의 개념을 사용하여 구성원 엔티티를 관리합니다. 작업 공간은 **프로젝트**로 구성됩니다. 프로젝트는 다음중 하나일 수 있습니다.
 
-- an **application**: a full Nest application including a `main.ts` file to bootstrap the application. Aside from compile and build considerations, an application-type project within a workspace is functionally identical to an application within a _standard mode_ structure.
-- a **library**: a library is a way of packaging a general purpose set of features (modules, providers, controllers, etc.) that can be used within other projects. A library cannot run on its own, and has no `main.ts` file. Read more about libraries [here](/cli/libraries).
+- **애플리케이션**: 애플리케이션을 부트 스트랩하기 위한 `main.ts` 파일을 포함하는 전체 Nest 애플리케이션. 컴파일 및 빌드 고려 사항 외에도 작업 영역 내의 애플리케이션 유형 프로젝트는 _standard mode_ 구조내의 애플리케이션과 기능적으로 동일합니다.
+- **라이브러리**: 라이브러리는 다른 프로젝트 내에서 사용할 수 있는 범용 기능 집합(모듈, 프로바이더, 컨트롤러 등)을 패키징하는 방법입니다. 라이브러리는 자체적으로 실행할 수 없으며 `main.ts` 파일이 없습니다. 라이브러리에 대한 자세한 내용은 [여기](/cli/libraries)를 참조하세요.
 
-All workspaces have a **default project** (which should be an application-type project). This is defined by the top-level `"root"` property in the `nest-cli.json` file, which points at the root of the default project (see [CLI properties](/cli/monorepo#cli-properties) below for more details). Usually, this is the **standard mode** application you started with, and later converted to a monorepo using `nest generate app`. When you follow these steps, this property is populated automatically.
+모든 작업 공간에는 **기본 프로젝트**(애플리케이션 유형 프로젝트여야 함)가 있습니다. 이것은 기본 프로젝트의 루트를 가리키는 `nest-cli.json` 파일의 최상위 `"root"` 속성으로 정의됩니다([CLI 속성](/cli/monorepo#cli-properties) 참조). 자세한 내용은 아래 참조). 일반적으로 이것은 당신이 시작한 **표준 모드** 애플리케이션이며 나중에 `nest generate app`을 사용하여 모노레포로 변환됩니다. 이 단계를 수행하면 이 속성이 자동으로 채워집니다.
 
-Default projects are used by `nest` commands like `nest build` and `nest start` when a project name is not supplied.
+기본 프로젝트는 프로젝트 이름이 제공되지 않은 경우 `nest build`및 `nest start`와 같은 `nest` 명령어에서 사용됩니다.
 
-For example, in the above monorepo structure, running
+예를 들어, 위의 모로레포 구조에서
 
 ```bash
 $ nest start
 ```
 
-will start up the `my-project` app. To start `my-app`, we'd use:
+`my-project` 앱이 시작됩니다. `my-app`을 시작하려면 다음을 사용합니다.
 
 ```bash
 $ nest start my-app
@@ -116,21 +116,21 @@ $ nest start my-app
 
 #### Applications
 
-Application-type projects, or what we might informally refer to as just "applications", are complete Nest applications that you can run and deploy. You generate an application-type project with `nest generate app`.
+애플리케이션 유형 프로젝트 또는 비공식적으로 "애플리케이션"이라고 부르는 것은 실행 및 배포할 수 있는 완전한 Nest 애플리케이션입니다. `nest generate app`을 사용하여 애플리케이션 유형 프로젝트를 생성합니다.
 
-This command automatically generates a project skeleton, including the standard `src` and `test` folders from the [typescript starter](https://github.com/nestjs/typescript-starter). Unlike standard mode, an application project in a monorepo does not have any of the package dependency (`package.json`) or other project configuration artifacts like `.prettierrc` and `tslint.json`. Instead, the monorepo-wide dependencies and config files are used.
+이 명령어는 [typescript starter](https://github.com/nestjs/typescript-starter)의 표준 `src` 및 `test` 폴더를 포함한 프로젝트 스켈레톤을 자동으로 생성합니다. 표준 모드와 달리 모로레포의 애플리케이션 프로젝트에는 패키지 종속성(`package.json`)이나 `.prettierrc` 및 `tslint.json`과 같은 기타 프로젝트 구성 아티팩트가 없습니다. 대신 모노레포 전체 종속성 및 구성 파일이 사용됩니다.
 
-However, the schematic does generate a project-specific `tsconfig.app.json` file in the root folder of the project. This config file automatically sets appropriate build options, including setting the compilation output folder properly. The file extends the top-level (monorepo) `tsconfig.json` file, so you can manage global settings monorepo-wide, but override them if needed at the project level.
+그러나 스키메틱은 프로젝트의 루트 폴더에 프로젝트별ㅍ`tsconfig.app.json` 파일을 생성합니다. 이 구성 파일은 컴파일 출력 폴더를 올바르게 설정하는 것을 포함하여 적절한 빌드 옵션을 자동으로 설정합니다. 이 파일은 최상위(monorepo) `tsconfig.json` 파일을 확장하므로 전역 설정을 단일 저장소 전체에서 관리할 수 있지만 필요한 경우 프로젝트 수준에서 재정의할 수 있습니다.
 
 #### Libraries
 
-As mentioned, library-type projects, or simply "libraries", are packages of Nest components that need to be composed into applications in order to run. You generate a library-type project with `nest generate library`. Deciding what belongs in a library is an architectural design decision. We discuss libraries in depth in the [libraries](/cli/libraries) chapter.
+언급했듯이 라이브러리 유형 프로젝트 또는 단순히 "라이브러리"는 실행하기 위해 애플리케이션으로 구성되어야하는 Nest 구성요소의 패키지입니다. `nest generate library`를 사용하여 라이브러리 유형 프로젝트를 생성합니다. 라이브러리에 속한 것을 결정하는 것은 건축 설계 결정입니다. [라이브러리](/cli/libraries) 장에서 라이브러리에 대해 자세히 설명합니다.
 
 #### CLI properties
 
-Nest keeps the metadata needed to organize, build and deploy both standard and monorepo structured projects in the `nest-cli.json` file. Nest automatically adds to and updates this file as you add projects, so you usually do not have to think about it or edit its contents. However, there are some settings you may want to change manually, so it's helpful to have an overview understanding of the file.
+Nest는 `nest-cli.json` 파일에 표준 및 단일 저장소 구조화된 프로젝트를 구성, 빌드 및 배포하는 데 필요한 메타 데이터를 보관합니다. Nest는 프로젝트를 추가할 때 이 파일을 자동으로 추가하고 업데이트하므로 일반적으로 파일에 대해 생각하거나 내용을 편집할 필요가 없습니다. 그러나 수동으로 변경할 수 있는 몇가지 설정이 있으므로 파일을 전체적으로 이해하는 것이 좋습니다.
 
-After running the steps above to create a monorepo, our `nest-cli.json` file looks like this:
+위의 단계를 실행하여 모노레포를 만든 후 `nest-cli.json` 파일은 다음과 같습니다.
 
 ```javascript
 {
@@ -165,42 +165,42 @@ After running the steps above to create a monorepo, our `nest-cli.json` file loo
 }
 ```
 
-The file is divided into sections:
+파일은 섹션으로 나뉩니다.
 
-- a global section with top-level properties controlling standard and monorepo-wide settings
-- a top level property (`"projects"`) with metadata about each project. This section is present only for monorepo-mode structures.
+- 표준 및 단일 저장소 전체 설정을 제어하는 최상위 속성이 있는 전역 섹션
+- 각 프로젝트에 대한 메타데이터가 포함된 최상위 속성(`"projects"`) 이 섹션은 모노레포 모드 구조에만 존재합니다.
 
-The top-level properties are as follows:
+최상위 속성은 다음과 같습니다.
 
-- `"collection"`: points at the collection of schematics used to generate components; you generally should not change this value
-- `"sourceRoot"`: points at the root of the source code for the single project in standard mode structures, or the _default project_ in monorepo mode structures
-- `"compilerOptions"`: a map with keys specifying compiler options and values specifying the option setting; see details below
-- `"generateOptions"`: a map with keys specifying global generate options and values specifying the option setting; see details below
-- `"monorepo"`: (monorepo only) for a monorepo mode structure, this value is always `true`
-- `"root"`: (monorepo only) points at the project root of the _default project_
+- `"collection"`: 구성요소를 생성하는 데 사용되는 스키메틱 모음의 지점. 일반적으로 이 값을 변경해서는 안됩니다.
+- `"sourceRoot"`: 표준 모드 구조의 단일 프로젝트에 대한 소스 코드의 루트 또는 모노레포 모드 구조의 _기본 프로젝트_ 를 가리 킵니다.
+- `"compilerOptions"`: 컴파일러 옵션을 지정하는 키와 옵션 설정을 지정하는 값이 있는 맵. 아래 세부정보를 참조하십시오
+- `"generateOptions"`: 전역 생성 옵션을 지정하는 키와 옵션 설정을 지정하는 값이있는 맵. 아래 세부 정보를 참조하십시오
+- `"monorepo"`: (모노레포 전용) 모노레포 모드 구조의 경우 이 값은 항상 `true`입니다.
+- `"root"`: (모노레포만 해당) _기본 프로젝트_ 의 프로젝트 루트를 가리킵니다.
 
 #### Global compiler options
 
-These properties specify the compiler to use as well as various options that affect **any** compilation step, whether as part of `nest build` or `nest start`, and regardless of the compiler, whether `tsc` or webpack.
+이러한 속성은 사용할 컴파일러뿐만 아니라 `nest build` 또는 `nest start`의 일부로, 컴파일러에 상관없이 `tsc` 또는 webpack에 관계없이 **모든** 컴파일 단계에 영향을 미치는 다양한 옵션을 지정합니다.
 
-| Property Name       | Property Value Type | Description                                                                                                                                                                                                                           |
+| 프러퍼티 이름      | 프러퍼티 값 유형 | 설명                                                                                                                                                                                                                          |
 | ------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `webpack`           | boolean             | If `true`, use [webpack compiler](https://webpack.js.org/). If `false` or not present, use `tsc`. In monorepo mode, the default is `true` (use webpack), in standard mode, the default is `false` (use `tsc`). See below for details. |
-| `tsConfigPath`      | string              | (**monorepo only**) Points at the file containing the `tsconfig.json` settings that will be used when `nest build` or `nest start` is called without a `project` option (e.g., when the default project is built or started).         |
-| `webpackConfigPath` | string              | Points at a webpack options file. If not specified, Nest looks for the file `webpack.config.js`. See below for more details.                                                                                                          |
-| `deleteOutDir`      | boolean             | If `true`, whenever the compiler is invoked, it will first remove the compilation output directory (as configured in `tsconfig.json`, where the default is `./dist`).                                                                 |
-| `assets`            | array               | Enables automatically distributing non-TypeScript assets whenever a compilation step begins (asset distribution does **not** happen on incremental compiles in `--watch` mode). See below for details.                                |
-| `watchAssets`       | boolean             | If `true`, run in watch-mode, watching **all** non-TypeScript assets. (For more fine-grained control of the assets to watch, see [Assets](cli/monorepo#assets) section below).                                                        |
+| `webpack`           | boolean             | `true` 인 경우 [webpack compiler](https://webpack.js.org/)를 사용합니다. `false`이거나 없는 경우 `tsc`를 사용합니다. 모노레포 모드에서 기본값은 `true`(웹팩 사용)이고, 표준 모드에서 기본값은 `false`('tsc'사용)입니다. 자세한 내용은 아래를 참조하십시오. |
+| `tsConfigPath`      | string              | (**모노레포 전용**) `project` 옵션없이 `nest build` 또는 `nest start`가 호출될 때 사용되는 `tsconfig.json` 설정이 포함된 파일을 가리킵니다(예: 기본 프로젝트가 구축 또는 시작).        |
+| `webpackConfigPath` | string              | 웹팩 옵션 파일을 가리킵니다. 지정하지 않으면 Nest는 `webpack.config.js` 파일을 찾습니다. 자세한 내용은 아래를 참조하십시오.                                                                                                      |
+| `deleteOutDir`      | boolean             | `true`이면 컴파일러가 호출될 때마다 먼저 컴파일 출력 디렉토리를 제거합니다 (기본값은 `./dist` 인 `tsconfig.json`에 구성된대로).                                                                 |
+| `assets`            | array               | 컴파일 단계가 시작될 때마다 TypeScript가 아닌 자산(asset)을 자동으로 배포할 수 있습니다 (자산 배포는 `--watch` 모드의 증분 컴파일에서 발생하지 **않습니다**.). 자세한 내용은 아래를 참조하십시오.                                |
+| `watchAssets`       | boolean             | `true`인 경우 감시 모드에서 실행하여 **모든** 비 TypeScript 자산을 감시합니다. (감시할 자산을 보다 세밀하게 제어하려면 아래의 [Assets](cli/monorepo#assets) 섹션을 참조하십시오).                                                        |
 
 #### Global generate options
 
-These properties specify the default generate options to be used by the `nest generate` command.
+이러한 속성은 `nest generate` 명령에서 사용할 기본 생성 옵션을 지정합니다.
 
-| Property Name | Property Value Type | Description                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| 프러퍼티 이름 | 프러퍼티 값 유형 |  설명                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | ------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `spec`        | boolean _or_ object | If the value is boolean, a value of `true` enables `spec` generation by default and a value of `false` disables it. A flag passed on the CLI command line overrides this setting, as does a project-specific `generateOptions` setting (more below). If the value is an object, each key represents a schematic name, and the boolean value determines whether the default spec generation is enabled / disabled for that specific schematic. |
+| `spec`        | boolean _or_ object | 값이 부울인 경우 `true` 값은 기본적으로 `spec` 생성을 활성화하고 `false` 값은 비활성화합니다. CLI 명령줄에 전달된 플래그는 프로젝트 별 `generateOptions` 설정(아래 참조)과 마찬가지로 이 설정을 재정의합니다. 값이 객체인 경우 각 키는 회로도 이름을 나타내고 부울 값은 해당 특정 스키메틱에 대해 기본 사양 생성을 활성화/비활성화할지 여부를 결정합니다.|
 
-The following example uses a boolean value to specify that spec file generation should be disabled by default for all projects:
+다음 예에서는 부울 값을 사용하여 모든 프로젝트에 대해 기본적으로 사양 파일 생성을 사용하지 않도록 지정합니다.
 
 ```javascript
 {
@@ -211,7 +211,7 @@ The following example uses a boolean value to specify that spec file generation 
 }
 ```
 
-In the following example, `spec` file generation is disabled only for `service` schematics (e.g., `nest generate service...`):
+다음 예제에서 `spec` 파일 생성은 `service` 스키메틱에 대해서만 비활성화됩니다 (예: `nest generate service...`).
 
 ```javascript
 {
@@ -224,7 +224,7 @@ In the following example, `spec` file generation is disabled only for `service` 
 }
 ```
 
-> warning **Warning** When specifying the `spec` as an object, the key for the generation schematic does not currently support automatic alias handling. This means that specifying a key as for example `service: false` and trying to generate a service via the alias `s`, the spec would still be generated. To make sure both the normal schematic name and the alias work as intended, specify both the normal command name as well as the alias, as seen below.
+> warning **경고** `spec`을 객체로 지정할 때 생성 스키메틱의 키는 현재 자동 별칭 처리를 지원하지 않습니다. 이는 예를 들어 `service: false`와 같은 키를 지정하고 `s` 별칭을 통해 서비스를 생성하려고 시도해도 사양이 계속 생성된다는 것을 의미합니다. 일반 스키메틱 이름과 별칭이 모두 의도한대로 작동하는지 확인하려면 아래와 같이 일반 명령 이름과 별칭을 모두 지정합니다.
 >
 > ```javascript
 > {
@@ -240,9 +240,9 @@ In the following example, `spec` file generation is disabled only for `service` 
 
 #### Project-specific generate options
 
-In addition to providing global generate options, you may also specify project-specific generate options. The project specific generate options follow the exact same format as the global generate options, but are specified directly on each project.
+전역 생성 옵션을 제공하는 것 외에도 프로젝트별 생성 옵션을 지정할 수도 있습니다. 프로젝트별 생성 옵션은 전역 생성 옵션과 정확히 동일한 형식을 따르지만 각 프로젝트에서 직접 지정됩니다.
 
-Project-specific generate options override global generate options.
+프로젝트별 생성 옵션은 전역 생성 옵션보다 우선합니다.
 
 ```javascript
 {
@@ -260,15 +260,15 @@ Project-specific generate options override global generate options.
 }
 ```
 
-> warning **Warning** The order of precedence for generate options is as follows. Options specified on the CLI command line take precedence over project-specific options. Project-specific options override global options.
+> warning **경고** 생성 옵션의 우선 순위는 다음과 같습니다. CLI 명령줄에 지정된 옵션은 프로젝트별 옵션보다 우선합니다. 프로젝트별 옵션은 전역 옵션보다 우선합니다.
 
 #### Specified compiler
 
-The reason for the different default compilers is that for larger projects (e.g., more typical in a monorepo) webpack can have significant advantages in build times and in producing a single file bundling all project components together. If you wish to generate individual files, set `"webpack"` to `false`, which will cause the build process to use `tsc`.
+기본 컴파일러가 다른 이유는 더 큰 프로젝트(예: monorepo에서 더 일반적)의 경우 웹팩이 빌드 시간과 모든 프로젝트 구성요소를 함께 묶는 단일 파일을 생성하는 데 상당한 이점을 가질 수 있기 때문입니다. 개별 파일을 생성하려면 `"webpack"`을 `false`로 설정하십시오. 그러면 빌드 프로세스가 `tsc`를 사용하게됩니다.
 
 #### Webpack options
 
-The webpack options file can contain standard [webpack configuration options](https://webpack.js.org/configuration/). For example, to tell webpack to bundle `node_modules` (which are excluded by default), add the following to `webpack.config.js`:
+웹팩 옵션 파일에는 표준 [webpack 구성 옵션](https://webpack.js.org/configuration/)이 포함될 수 있습니다. 예를 들어, webpack에 `node_modules`(기본적으로 제외됨)를 번들로 지정하려면 `webpack.config.js`에 다음을 추가하십시오.
 
 ```javascript
 module.exports = {
@@ -276,7 +276,7 @@ module.exports = {
 };
 ```
 
-Since the webpack config file is a JavaScript file, you can even expose a function that takes default options and returns a modified object:
+웹팩 구성 파일은 JavaScript 파일이므로 기본 옵션을 사용하고 수정된 객체를 반환하는 함수를 노출할 수도 있습니다.
 
 ```javascript
 module.exports = function(options) {
@@ -289,23 +289,23 @@ module.exports = function(options) {
 
 #### Assets
 
-TypeScript compilation automatically distributes compiler output (`.js` and `.d.ts` files) to the specified output directory. It can also be convenient to distribute non-TypeScript files, such as `.graphql` files, `images`, `.html` files and other assets. This allows you to treat `nest build` (and any initial compilation step) as a lightweight **development build** step, where you may be editing non-TypeScript files and iteratively compiling and testing.
+TypeScript 컴파일은 컴파일러 출력(`.js` 및 `.d.ts` 파일)을 지정된 출력 디렉토리에 자동으로 배포합니다. `.graphql` 파일, `images`, `.html` 파일 및 기타 자산과 같은 비 TypeScript 파일을 배포하는 것도 편리할 수 있습니다. 이를 통해 `nest build`(및 모든 초기 컴파일 단계)를 가벼운 **개발 빌드** 단계로 취급할 수 있습니다. 여기서 TypeScript가 아닌 파일을 편집하고 반복적으로 컴파일 및 테스트할 수 있습니다.
 
-The value of the `assets` key should be an array of elements specifying the files to be distributed. The elements can be simple strings with `glob`-like file specs, for example:
+`assets` 키의 값은 배포할 파일을 지정하는 요소의 배열이어야 합니다. 요소는 `glob`과 유사한 파일 사양이 있는 간단한 문자열일 수 있습니다. 예를 들면 다음과 같습니다.
 
 ```typescript
 "assets": ["**/*.graphql"],
 "watchAssets": true,
 ```
 
-For finer control, the elements can be objects with the following keys:
+보다 세밀한 제어를 위해 요소는 다음 키가 있는 객체일 수 있습니다.
 
-- `"include"`: `glob`-like file specifications for the assets to be distributed
-- `"exclude"`: `glob`-like file specifications for assets to be **excluded** from the `include` list
-- `"outDir"`: a string specifying the path (relative to the root folder) where the assets should be distributed. Defaults to the same output directory configured for compiler output.
-- `"watchAssets"`: boolean; if `true`, run in watch mode watching specified assets
+- `"include"`: 배포할 자산에 대한 `glob` 유사 파일 사양
+- `"exclude"`:`include` 목록에서 **제외**될 자산에 대한 `glob` 유사 파일 사양
+- `"outDir"`: 자산이 배포되어야 하는 경로(루트 폴더 기준)를 지정하는 문자열입니다. 기본값은 컴파일러 출력용으로 구성된 동일한 출력 디렉토리입니다.
+- `"watchAssets"`: 부울; `true`인 경우 지정된 자산을 감시하는 감시 모드로 실행합니다.
 
-For example:
+예를 들면:
 
 ```typescript
 "assets": [
@@ -313,8 +313,8 @@ For example:
 ]
 ```
 
-> warning **Warning** Setting `watchAssets` in a top-level `compilerOptions` property overrides any `watchAssets` settings within the `assets` property.
+> warning **경고** 최상위 `compilerOptions` 속성에서 `watchAssets`를 설정하면 `assets`속성 내의 모든 `watchAssets` 설정이 재정의됩니다.
 
 #### Project properties
 
-This element exists only for monorepo-mode structures. You generally should not edit these properties, as they are used by Nest to locate projects and their configuration options within the monorepo.
+이 요소는 단일 저장소 모드 구조에만 존재합니다. 이러한 속성은 Nest에서 모노레포내에서 프로젝트 및 해당 구성 옵션을 찾는 데 사용하므로 일반적으로 편집해서는 안됩니다.
