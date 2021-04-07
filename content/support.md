@@ -1,13 +1,13 @@
 ### Support
 
-Nest is an MIT-licensed open source project with its ongoing development made possible thanks to the support by the community. This framework is a result of the long road, full of sleepless nights, working **after hours**, and busy weekends.
+Nest는 커뮤니티의 지원 덕분에 지속적인 개발이 가능한 MIT 라이선스 오픈소스 프로젝트입니다. 이 프레임워크는 잠 못 이루는 밤으로 가득한 긴 길, **시간 외** 근무, 바쁜 주말의 결과입니다.
 
 #### How can you help?
 
-Nest doesn't have a large company that sits behind and is continuously paying for hours spent on the development. I fully rely on the **goodness** ❤️ of the people. However, I would love to make this framework even more **powerful**, to be fully focused on delivering you great solutions that make coding process enjoyable: In order to help me, I run few supporting platforms:
+Nest는 개발에 소요된 시간에 대해 지속적으로 비용을 지불하고 있는 대기업이 없습니다. 나는 사람들의 **선함** ❤️에 전적으로 의존합니다. 그러나 저는 이 프레임워크를 더욱 **강력하게** 만들고 코딩 과정을 즐겁게 만드는 훌륭한 솔루션을 제공하는 데 전적으로 집중하고 싶습니다. 저를 돕기 위해 저는 지원 플랫폼을 거의 실행하지 않습니다.
 
-- become a backer or sponsor on [OpenCollective](https://opencollective.com/nest)
-- use [PayPal](https://paypal.me/kamilmysliwiec) to send a one-time donation
-- or reach me directly: [mail@kamilmysliwiec.com](mailto:mail@kamilmysliwiec.com)
+- [OpenCollective](https://opencollective.com/nest)의 후원자 또는 후원자되기
+- [PayPal](https://paypal.me/kamilmysliwiec)을 사용하여 일회성 기부를 보냅니다.
+- 또는 직접 연락: [mail@kamilmysliwiec.com](mailto:mail@kamilmysliwiec.com)
 
-If you fell in love with Nest, or you run a business which is using Nest, consider sponsoring its development to ensure that the project which your product relies on is **actively maintained** and improved. Also, your support could help me to work more on content that benefits whole Nest community, writing either educational blog posts or recording videos.
+Nest와 사랑에 빠졌거나 Nest를 사용하는 비즈니스를 운영하는 경우 제품이 의존하는 프로젝트가 **적극적으로 유지**되고 개선되도록 개발을 후원하는 것이 좋습니다. 또한 귀하의 지원은 교육 블로그 게시물을 작성하거나 동영상을 녹화하여 전체 Nest 커뮤니티에 도움이 되는 콘텐츠에 대해 더 많이 작업하는 데 도움이 될 수 있습니다.
