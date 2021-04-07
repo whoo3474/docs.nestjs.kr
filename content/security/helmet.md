@@ -1,18 +1,18 @@
 ### Helmet
 
-[Helmet](https://github.com/helmetjs/helmet) can help protect your app from some well-known web vulnerabilities by setting HTTP headers appropriately. Generally, Helmet is just a collection of 14 smaller middleware functions that set security-related HTTP headers (read [more](https://github.com/helmetjs/helmet#how-it-works)).
+[Helmet](https://github.com/helmetjs/helmet)은 HTTP 헤더를 적절하게 설정하여 잘 알려진 웹 취약성으로부터 앱을 보호할 수 있습니다. 일반적으로 Helmet은 보안 관련 HTTP 헤더를 설정하는 14 개의 작은 미들웨어 함수 모음 일뿐입니다 (자세한 것은 [여기서](https://github.com/helmetjs/helmet#how-it-works) 참조).
 
-> info **Hint** Note that applying `helmet` as global or registering it must come before other calls to `app.use()` or setup functions that may call `app.use()`). This is due to the way the underlying platform (i.e., Express or Fastify) works, where the order that middleware/routes are defined matters. If you use middleware like `helmet` or `cors` after you define a route, then that middleware will not apply to that route, it will only apply to middleware defined after the route.
+> info **힌트** `helmet`을 전역으로 적용하거나 등록하려면 `app.use()`를 호출하거나 `app.use()`를 호출할 수 있는 설정 함수를 먼저 호출해야 합니다. 이는 미들웨어/라우트가 정의되는 순서가 중요한 기본 플랫폼 (즉, Express 또는 Fastify)이 작동하는 방식 때문입니다. 경로를 정의한 후 `helmet` 또는 `cors`와 같은 미들웨어를 사용하는 경우 해당 미들웨어는 해당 경로에 적용되지 않고 경로 뒤에 정의된 미들웨어에만 적용됩니다.
 
 #### Use with Express (default)
 
-Start by installing the required package.
+필요한 패키지를 설치하여 시작하십시오.
 
 ```bash
 $ npm i --save helmet
 ```
 
-Once the installation is complete, apply it as a global middleware.
+설치가 완료되면 글로벌 미들웨어로 적용하십시오.
 
 ```typescript
 import * as helmet from 'helmet';
@@ -20,24 +20,25 @@ import * as helmet from 'helmet';
 app.use(helmet());
 ```
 
-> info **Hint** If you are getting the `This expression is not callable` error while trying to import `Helmet`, you very likely have the `allowSyntheticDefaultImports` and `esModuleInterop` options set to `true` in your project's `tsconfig.json` file. If that's the case, change the import statement to: `import helmet from 'helmet'` instead.
+> info **힌트** `Helmet`을 가져 오는 동안 `This expression is not callable` 오류가 발생하면 프로젝트의 `tsconfig.json` 파일에서 `allowSyntheticDefaultImports` 및 `esModuleInterop` 옵션이 `true`로 설정되었을 가능성이 높습니다.  이 경우 import 문을 `import helmet from 'helmet'`로 변경하십시오.
 
 #### Use with Fastify
 
-If you are using the `FastifyAdapter`, install the [fastify-helmet](https://github.com/fastify/fastify-helmet) package:
+`FastifyAdapter`를 사용하는 경우 [fastify-helmet](https://github.com/fastify/fastify-helmet) 패키지를 설치합니다.
 
 ```bash
 $ npm i --save fastify-helmet
 ```
 
-[fastify-helmet](https://github.com/fastify/fastify-helmet) should not be used as a middleware, but as a [Fastify plugin](https://www.fastify.io/docs/latest/Plugins/), i.e., by using `app.register()`:
+[fastify-helmet](https://github.com/fastify/fastify-helmet)은 미들웨어로 사용해서는 안되며 [Fastify 플러그인](https://www.fastify.io/docs/latest/Plugins/)으로 사용됩니다. 즉,`app.register ()`를 사용하여
 
 ```typescript
 import * as helmet from 'fastify-helmet';
 // somewhere in your initialization file
 app.register(helmet);
 ```
-> warning **Warning** When using `apollo-server-fastify` and `fastify-helmet`, there may be a problem with [CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) on the GraphQL playground, to solve this collision, configure the CSP as shown below:
+
+> warning **경고** `apollo-server-fastify` 및 `fastify-helmet`을 사용할 때 GraphQL 플레이 그라운드의 [CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)에 문제가 있을 수 있습니다. 이 충돌을 해결하기 위해 아래와 같이 CSP를 구성합니다.
 >
 > ```typescript
 > app.register(helmet, {
