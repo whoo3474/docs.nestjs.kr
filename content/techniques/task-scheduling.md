@@ -1,17 +1,17 @@
 ### Task Scheduling
 
-Task scheduling allows you to schedule arbitrary code (methods/functions) to execute at a fixed date/time, at recurring intervals, or once after a specified interval. In the Linux world, this is often handled by packages like [cron](https://en.wikipedia.org/wiki/Cron) at the OS level. For Node.js apps, there are several packages that emulate cron-like functionality. Nest provides the `@nestjs/schedule` package, which integrates with the popular Node.js [node-cron](https://github.com/kelektiv/node-cron) package. We'll cover this package in the current chapter.
+작업 예약을 사용하면 고정된 날짜/시간, 반복 간격 또는 지정된 간격후 한 번 실행되도록 임의 코드(방법/기능)를 예약할 수 있습니다. Linux 세계에서는 OS 수준에서 [cron](https://en.wikipedia.org/wiki/Cron)과 같은 패키지에서 처리하는 경우가 많습니다. Node.js 앱의 경우 cron과 유사한 기능을 에뮬레이트하는 여러 패키지가 있습니다. Nest는 인기있는 Node.js [node-cron](https://github.com/kelektiv/node-cron) 패키지와 통합되는 `@nestjs/schedule` 패키지를 제공합니다. 이 패키지는 현재 장에서 다룰 것입니다.
 
 #### Installation
 
-To begin using it, we first install the required dependencies.
+사용을 시작하려면 먼저 필요한 종속성을 설치합니다.
 
 ```bash
 $ npm install --save @nestjs/schedule
 $ npm install --save-dev @types/cron
 ```
 
-To activate job scheduling, import the `ScheduleModule` into the root `AppModule` and run the `forRoot()` static method as shown below:
+작업 스케줄링을 활성화하려면 `ScheduleModule`을 루트 `AppModule`로 가져오고 아래와 같이 `forRoot()` 정적 메서드를 실행합니다.
 
 ```typescript
 @@filename(app.module)
@@ -26,16 +26,16 @@ import { ScheduleModule } from '@nestjs/schedule';
 export class AppModule {}
 ```
 
-The `.forRoot()` call initializes the scheduler and registers any declarative <a href="techniques/task-scheduling#declarative-cron-jobs">cron jobs</a>, <a href="techniques/task-scheduling#declarative-timeouts">timeouts</a> and <a href="techniques/task-scheduling#declarative-intervals">intervals</a> that exist within your app. Registration occurs when the `onApplicationBootstrap` lifecycle hook occurs, ensuring that all modules have loaded and declared any scheduled jobs.
+`.forRoot()` 호출은 스케줄러를 초기화하고 앱 내에 존재하는 선언적 [크론 작업](/techniques/task-scheduling#declarative-cron-jobs), [시간 초과](/techniques/task-scheduling#declarative-timeouts) 및 [간격](/techniques/task-scheduling#declarative-intervals)을 등록합니다. 등록은 `onApplicationBootstrap` 라이프 사이클 후크가 발생할 때 발생하여 모든 모듈이 예약된 작업을 로드하고 선언했는지 확인합니다.
 
 #### Declarative cron jobs
 
-A cron job schedules an arbitrary function (method call) to run automatically. Cron jobs can run:
+크론 작업은 자동으로 실행되도록 임의의 함수(메소드 호출)를 예약합니다. Cron 작업은 다음을 실행할 수 있습니다.
 
-- Once, at a specified date/time.
-- On a recurring basis; recurring jobs can run at a specified instant within a specified interval (for example, once per hour, once per week, once every 5 minutes)
+- 지정된 날짜/시간에 한번.
+- 반복적으로; 반복 작업은 지정된 간격내에서 지정된 순간에 실행할 수 있습니다(예: 시간당 한번, 주당 한번, 5분에 한번).
 
-Declare a cron job with the `@Cron()` decorator preceding the method definition containing the code to be executed, as follows:
+다음과 같이 실행할 코드를 포함하는 메서드 정의 앞에 `@Cron()` 데코레이터를 사용하여 크론 작업을 선언합니다.
 
 ```typescript
 import { Injectable, Logger } from '@nestjs/common';
@@ -52,15 +52,15 @@ export class TasksService {
 }
 ```
 
-In this example, the `handleCron()` method will be called each time the current second is `45`. In other words, the method will be run once per minute, at the 45 second mark.
+이 예에서 `handleCron()`메서드는 현재 초가 `45`일 때마다 호출됩니다. 즉, 이 메서드는 45초일 때 매 1 분마다 한번 실행됩니다.
 
-The `@Cron()` decorator supports all standard [cron patterns](http://crontab.org/):
+`@Cron()` 데코레이터는 모든 표준 [cron 패턴](http://crontab.org/)을 지원합니다.
 
-- Asterisk (e.g. `*`)
-- Ranges (e.g. `1-3,5`)
-- Steps (e.g. `*/2`)
+- 별표 (예: `*`)
+- 범위 (예: `1-3,5`)
+- 단계 (예: `*/2`)
 
-In the example above, we passed `45 * * * * *` to the decorator. The following key shows how each position in the cron pattern string is interpreted:
+위의 예에서 우리는 데코레이터에 `45 * * * * *`를 전달했습니다. 다음 키는 cron 패턴 문자열의 각 위치가 해석되는 방법을 보여줍니다.
 
 <pre class="language-javascript"><code class="language-javascript">
 * * * * * *
@@ -73,34 +73,34 @@ In the example above, we passed `45 * * * * *` to the decorator. The following k
 second (optional)
 </code></pre>
 
-Some sample cron patterns are:
+몇가지 샘플 크론 패턴은 다음과 같습니다.
 
 <table>
   <tbody>
     <tr>
       <td><code>* * * * * *</code></td>
-      <td>every second</td>
+      <td>매 초</td>
     </tr>
     <tr>
       <td><code>45 * * * * *</code></td>
-      <td>every minute, on the 45th second</td>
+      <td>1분마다 45초에</td>
     </tr>
     <tr>
       <td><code>0 10 * * * *</code></td>
-      <td>every hour, at the start of the 10th minute</td>
+      <td>매시간, 10분이 시작될 때</td>
     </tr>
     <tr>
       <td><code>0 */30 9-17 * * *</code></td>
-      <td>every 30 minutes between 9am and 5pm</td>
+      <td>오전 9시부터 오후 5시까지 30분마다</td>
     </tr>
    <tr>
       <td><code>0 30 11 * * 1-5</code></td>
-      <td>Monday to Friday at 11:30am</td>
+      <td>월요일 ~ 금요일 오전 11시 30 분</td>
     </tr>
   </tbody>
 </table>
 
-The `@nestjs/schedule` package provides a convenience enum with commonly used cron patterns. You can use this enum as follows:
+`@nestjs/schedule` 패키지는 일반적으로 사용되는 크론 패턴과 함께 편리한 열거형을 제공합니다. 이 열거형을 다음과 같이 사용할 수 있습니다.
 
 ```typescript
 import { Injectable, Logger } from '@nestjs/common';
@@ -117,32 +117,32 @@ export class TasksService {
 }
 ```
 
-In this example, the `handleCron()` method will be called every `45` seconds.
+이 예에서 `handleCron()` 메서드는 `45`초마다 호출됩니다.
 
-Alternatively, you can supply a JavaScript `Date` object to the `@Cron()` decorator. Doing so causes the job to execute exactly once, at the specified date.
+또는 JavaScript `Date` 객체를 `@Cron()` 데코레이터에 제공할 수 있습니다. 이렇게하면 작업이 지정된 날짜에 정확히 한 번 실행됩니다.
 
-> info **Hint** Use JavaScript date arithmetic to schedule jobs relative to the current date. For example, `@Cron(new Date(Date.now() + 10 * 1000))` to schedule a job to run 10 seconds after the app starts.
+> info **힌트** JavaScript 날짜 산술을 사용하여 현재 날짜를 기준으로 작업을 예약합니다. 예를 들어 `@Cron(new Date(Date.now() + 10 * 1000))`은 앱이 시작된 후 10초 후에 실행되도록 작업을 예약합니다.
 
-Also, you can supply additional options as the second parameter to the `@Cron()` decorator.
+또한 `@Cron()` 데코레이터에 두번째 매개변수로 추가옵션을 제공할 수 있습니다.
 
 <table>
   <tbody>
     <tr>
       <td><code>name</code></td>
       <td>
-        Useful to access and control a cron job after it's been declared.
+        cron 작업이 선언된 후 액세스하고 제어하는데 유용합니다.
       </td>
     </tr>
     <tr>
       <td><code>timeZone</code></td>
       <td>
-        Specify the timezone for the execution. This will modify the actual time relative to your timezone. If the timezone is invalid, an error is thrown. You can check all timezones available at <a href="http://momentjs.com/timezone/">Moment Timezone</a> website.
+        실행 시간대를 지정합니다. 이것은 시간대에 상대적인 실제 시간을 수정합니다. 시간대가 유효하지 않으면 오류가 발생합니다. <a href="http://momentjs.com/timezone/">Moment Timezone</a> 웹사이트에서 사용 가능한 모든 시간대를 확인할 수 있습니다.
       </td>
     </tr>
     <tr>
       <td><code>utcOffset</code></td>
       <td>
-        This allows you to specify the offset of your timezone rather than using the <code>timeZone</code> param.
+        이렇게 하면 <code>timeZone</code> 매개변수를 사용하는 대신 시간대의 오프셋을 지정할 수 있습니다.
       </td>
     </tr>
   </tbody>
@@ -162,11 +162,11 @@ export class NotificationService {
 }
 ```
 
-You can access and control a cron job after it's been declared, or dynamically create a cron job (where its cron pattern is defined at runtime) with the <a href="/techniques/task-scheduling#dynamic-schedule-module-api">Dynamic API</a>. To access a declarative cron job via the API, you must associate the job with a name by passing the `name` property in an optional options object as the second argument of the decorator.
+크론 작업이 선언된 후 액세스 및 제어하거나 [동적 API](/techniques/task-scheduling#dynamic-schedule-module-api)를 사용하여 크론 작업(크론 패턴이 런타임에 정의됨)을 동적으로 생성할 수 있습니다. API를 통해 선언적 크론 작업에 액세스하려면 데코레이터의 두번째 인수로 선택적 옵션 개체의 `name` 속성을 전달하여 작업을 이름과 연결해야합니다.
 
 #### Declarative intervals
 
-To declare that a method should run at a (recurring) specified interval, prefix the method definition with the `@Interval()` decorator. Pass the interval value, as a number in milliseconds, to the decorator as shown below:
+메서드가(반복) 지정된 간격으로 실행되어야 한다고 선언하려면 메서드 정의 앞에 `@Interval()` 데코레이터를 붙입니다. 간격 값을 밀리 초 단위의 숫자로 아래와 같이 데코레이터에 전달합니다.
 
 ```typescript
 @Interval(10000)
@@ -175,22 +175,22 @@ handleInterval() {
 }
 ```
 
-> info **Hint** This mechanism uses the JavaScript `setInterval()` function under the hood. You can also utilize a cron job to schedule recurring jobs.
+> info **힌트** 이 메커니즘은 내부적으로 자바 스크립트 `setInterval()` 함수를 사용합니다. 크론 작업을 사용하여 반복 작업을 예약할 수도 있습니다.
 
-If you want to control your declarative interval from outside the declaring class via the <a href="/techniques/task-scheduling#dynamic-schedule-module-api">Dynamic API</a>, associate the interval with a name using the following construction:
+[동적 API](/techniques/task-scheduling#dynamic-schedule-module-api)를 통해 선언 클래스 외부에서 선언적 간격을 제어하려면 다음 구성을 사용하여 간격을 이름과 연결합니다.
 
 ```typescript
 @Interval('notifications', 2500)
 handleInterval() {}
 ```
 
-The <a href="techniques/task-scheduling#dynamic-intervals">Dynamic API</a> also enables **creating** dynamic intervals, where the interval's properties are defined at runtime, and **listing and deleting** them.
+또한 [동적 API](/content/application-context.mdtechniques/task-scheduling#dynamic-intervals)를 사용하면 런타임에 간격의 속성이 정의되는 동적 간격을 **만들고**, 이를 **나열 및 삭제**할 수 있습니다.
 
 <app-banner-enterprise></app-banner-enterprise>
 
 #### Declarative timeouts
 
-To declare that a method should run (once) at a specified timeout, prefix the method definition with the `@Timeout()` decorator. Pass the relative time offset (in milliseconds), from application startup, to the decorator as shown below:
+메서드가 지정된 시간 제한에(한 번) 실행되어야 한다고 선언하려면 메서드 정의 앞에 `@Timeout()` 데코레이터를 붙입니다. 아래와 같이 애플리케이션 시작에서 데코레이터로 상대 시간 오프셋(밀리 초)을 전달합니다.
 
 ```typescript
 @Timeout(5000)
@@ -199,32 +199,32 @@ handleTimeout() {
 }
 ```
 
-> info **Hint** This mechanism uses the JavaScript `setTimeout()` function under the hood.
+> info **힌트** 이 메커니즘은 내부적으로 자바 스크립트 `setTimeout()` 함수를 사용합니다.
 
-If you want to control your declarative timeout from outside the declaring class via the <a href="/techniques/task-scheduling#dynamic-schedule-module-api">Dynamic API</a>, associate the timeout with a name using the following construction:
+[동적 API](/techniques/task-scheduling#dynamic-schedule-module-api)를 통해 선언 클래스 외부에서 선언적 제한 시간을 제어하려면 다음 구성을 사용하여 제한 시간을 이름과 연결하십시오.
 
 ```typescript
 @Timeout('notifications', 2500)
 handleTimeout() {}
 ```
 
-The <a href="techniques/task-scheduling#dynamic-timeouts">Dynamic API</a> also enables **creating** dynamic timeouts, where the timeout's properties are defined at runtime, and **listing and deleting** them.
+또한 [동적 API](/techniques/task-scheduling#dynamic-timeouts)를 사용하면 런타임에 타임아웃 속성이 정의되는 동적 타임아웃을 **만들고**,이를 **나열 및 삭제**할 수 있습니다.
 
 #### Dynamic schedule module API
 
-The `@nestjs/schedule` module provides a dynamic API that enables managing declarative <a href="techniques/task-scheduling#declarative-cron-jobs">cron jobs</a>, <a href="techniques/task-scheduling#declarative-timeouts">timeouts</a> and <a href="techniques/task-scheduling#declarative-intervals">intervals</a>. The API also enables creating and managing **dynamic** cron jobs, timeouts and intervals, where the properties are defined at runtime.
+`@nestjs/schedule` 모듈은 선언적 [크론 작업](/techniques/task-scheduling#declarative-cron-jobs), [시간 초과](/techniques/task-scheduling#declarative-timeouts) 및 [간격](/techniques/task-scheduling#declarative-intervals)을 관리할 수 있는 동적 API를 제공합니다. 또한 API를 사용하면 **동적** 크론 작업, 시간 초과 및 간격을 만들고 관리할 수 있습니다. 여기서 속성은 런타임에 정의됩니다.
 
 #### Dynamic cron jobs
 
-Obtain a reference to a `CronJob` instance by name from anywhere in your code using the `SchedulerRegistry` API. First, inject `SchedulerRegistry` using standard constructor injection:
+`SchedulerRegistry` API를 사용하여 코드의 어느 곳에서나 이름으로 `CronJob` 인스턴스에 대한 참조를 가져옵니다. 먼저 표준 생성자 주입을 사용하여 `SchedulerRegistry`를 주입합니다.
 
 ```typescript
 constructor(private schedulerRegistry: SchedulerRegistry) {}
 ```
 
-> info **Hint** Import the `SchedulerRegistry` from the `@nestjs/schedule` package.
+> info **힌트** `@nestjs/schedule` 패키지에서 `SchedulerRegistry`를 가져옵니다.
 
-Then use it in a class as follows. Assume a cron job was created with the following declaration:
+그런 다음 다음과 같이 클래스에서 사용하십시오. 다음 선언으로 크론 작업이 생성되었다고 가정합니다.
 
 ```typescript
 @Cron('* * 8 * * *', {
@@ -233,7 +233,7 @@ Then use it in a class as follows. Assume a cron job was created with the follow
 triggerNotifications() {}
 ```
 
-Access this job using the following:
+다음을 사용하여 이 작업에 액세스하십시오.
 
 ```typescript
 const job = this.schedulerRegistry.getCronJob('notifications');
@@ -242,17 +242,17 @@ job.stop();
 console.log(job.lastDate());
 ```
 
-The `getCronJob()` method returns the named cron job. The returned `CronJob` object has the following methods:
+`getCronJob()` 메소드는 명명된 크론 작업을 반환합니다. 반환된 `CronJob` 객체에는 다음 메서드가 있습니다.
 
-- `stop()` - stops a job that is scheduled to run.
-- `start()` - restarts a job that has been stopped.
-- `setTime(time: CronTime)` - stops a job, sets a new time for it, and then starts it
-- `lastDate()` - returns a string representation of the last date a job executed
-- `nextDates(count: number)` - returns an array (size `count`) of `moment` objects representing upcoming job execution dates.
+- `stop()` - 실행이 예약된 작업을 중지합니다.
+- `start()` - 중지된 작업을 다시 시작합니다.
+- `setTime(time: CronTime)` - 작업을 중지하고 새 시간을 설정한 다음 시작
+- `lastDate()`- 작업이 마지막으로 실행된 날짜의 문자열 표현을 반환합니다.
+- `nextDates(count: number)` - 예정된 작업 실행 날짜를 나타내는 `moment` 객체의 배열(크기 `count`)을 반환합니다.
 
-> info **Hint** Use `toDate()` on `moment` objects to render them in human readable form.
+> info **힌트** `moment` 객체에 `toDate()`를 사용하여 사람이 읽을 수 있는 형식으로 렌더링합니다.
 
-**Create** a new cron job dynamically using the `SchedulerRegistry.addCronJob()` method, as follows:
+다음과 같이 `SchedulerRegistry.addCronJob()` 메소드를 사용하여 동적으로 새 크론 작업을 **생성**합니다.
 
 ```typescript
 addCronJob(name: string, seconds: string) {
@@ -269,11 +269,11 @@ addCronJob(name: string, seconds: string) {
 }
 ```
 
-In this code, we use the `CronJob` object from the `cron` package to create the cron job. The `CronJob` constructor takes a cron pattern (just like the `@Cron()` <a href="techniques/task-scheduling#declarative-cron-jobs">decorator</a>) as its first argument, and a callback to be executed when the cron timer fires as its second argument. The `SchedulerRegistry.addCronJob()` method takes two arguments: a name for the `CronJob`, and the `CronJob` object itself.
+이 코드에서는 `cron` 패키지의 `CronJob` 객체를 사용하여 크론 작업을 생성합니다. `CronJob` 생성자는 첫번째 인수로 cron 패턴 (`@Cron()` [데코레이터](/techniques/task-scheduling#declarative-cron-jobs)와 유사)을 취합니다. cron 타이머가 두번째 인수로 실행될 때 실행되는 콜백입니다. `SchedulerRegistry.addCronJob()` 메소드는 `CronJob`의 이름과 `CronJob` 객체 자체의 두가지 인수를 사용합니다.
 
-> warning **Warning** Remember to inject the `SchedulerRegistry` before accessing it. Import `CronJob` from the `cron` package.
+> warning **경고** 액세스하기 전에 `SchedulerRegistry`를 삽입해야합니다. `cron` 패키지에서 `CronJob`을 가져옵니다.
 
-**Delete** a named cron job using the `SchedulerRegistry.deleteCronJob()` method, as follows:
+다음과 같이 `SchedulerRegistry.deleteCronJob()` 메소드를 사용하여 명명된 크론 작업을 **삭제**합니다.
 
 ```typescript
 deleteCron(name: string) {
@@ -282,7 +282,7 @@ deleteCron(name: string) {
 }
 ```
 
-**List** all cron jobs using the `SchedulerRegistry.getCronJobs()` method as follows:
+다음과 같이 `SchedulerRegistry.getCronJobs()` 메소드를 사용하여 모든 크론 작업을 **나열**합니다.
 
 ```typescript
 getCrons() {
@@ -299,24 +299,24 @@ getCrons() {
 }
 ```
 
-The `getCronJobs()` method returns a `map`. In this code, we iterate over the map and attempt to access the `nextDates()` method of each `CronJob`. In the `CronJob` API, if a job has already fired and has no future firing dates, it throws an exception.
+`getCronJobs()` 메소드는 `map`을 반환합니다. 이 코드에서는 map을 반복하고 각 `CronJob`의 `nextDates()` 메소드에 액세스하려고 합니다. `CronJob` API에서 작업이 이미 실행되었고 향후 실행 날짜가 없는 경우 예외가 발생합니다.
 
 #### Dynamic intervals
 
-Obtain a reference to an interval with the `SchedulerRegistry.getInterval()` method. As above, inject `SchedulerRegistry` using standard constructor injection:
+`SchedulerRegistry.getInterval()` 메서드를 사용하여 간격에 대한 참조를 가져옵니다. 위와 같이 표준 생성자 주입을 사용하여 `SchedulerRegistry`를 주입합니다.
 
 ```typescript
 constructor(private schedulerRegistry: SchedulerRegistry) {}
 ```
 
-And use it as follows:
+다음과 같이 사용하십시오.
 
 ```typescript
 const interval = this.schedulerRegistry.getInterval('notifications');
 clearInterval(interval);
 ```
 
-**Create** a new interval dynamically using the `SchedulerRegistry.addInterval()` method, as follows:
+다음과 같이 `SchedulerRegistry.addInterval()` 메소드를 사용하여 동적으로 새 간격을 **생성**합니다.
 
 ```typescript
 addInterval(name: string, milliseconds: number) {
@@ -329,10 +329,10 @@ addInterval(name: string, milliseconds: number) {
 }
 ```
 
-In this code, we create a standard JavaScript interval, then pass it to the `ScheduleRegistry.addInterval()` method.
-That method takes two arguments: a name for the interval, and the interval itself.
+이 코드에서 표준 자바 스크립트 간격(interval)을 만든 다음 `ScheduleRegistry.addInterval()` 메서드에 전달합니다.
+이 메서드는 간격 이름과 간격 자체의 두 인수를 사용합니다.
 
-**Delete** a named interval using the `SchedulerRegistry.deleteInterval()` method, as follows:
+다음과 같이 `SchedulerRegistry.deleteInterval()` 메소드를 사용하여 명명된 간격을 **삭제**합니다.
 
 ```typescript
 deleteInterval(name: string) {
@@ -341,7 +341,7 @@ deleteInterval(name: string) {
 }
 ```
 
-**List** all intervals using the `SchedulerRegistry.getIntervals()` method as follows:
+다음과 같이 `SchedulerRegistry.getIntervals()` 메소드를 사용하여 모든 간격을 **나열**합니다.
 
 ```typescript
 getIntervals() {
@@ -352,20 +352,20 @@ getIntervals() {
 
 #### Dynamic timeouts
 
-Obtain a reference to a timeout with the `SchedulerRegistry.getTimeout()` method. As above, inject `SchedulerRegistry` using standard constructor injection:
+`SchedulerRegistry.getTimeout()` 메소드를 사용하여 제한 시간에 대한 참조를 확보하십시오. 위와 같이 표준 생성자 주입을 사용하여 `SchedulerRegistry`를 주입합니다.
 
 ```typescript
 constructor(private schedulerRegistry: SchedulerRegistry) {}
 ```
 
-And use it as follows:
+다음과 같이 사용하십시오.
 
 ```typescript
 const timeout = this.schedulerRegistry.getTimeout('notifications');
 clearTimeout(timeout);
 ```
 
-**Create** a new timeout dynamically using the `SchedulerRegistry.addTimeout()` method, as follows:
+다음과 같이 `SchedulerRegistry.addTimeout()` 메소드를 사용하여 동적으로 새 시간제한(timeout)을 **생성**합니다.
 
 ```typescript
 addTimeout(name: string, milliseconds: number) {
@@ -378,10 +378,10 @@ addTimeout(name: string, milliseconds: number) {
 }
 ```
 
-In this code, we create a standard JavaScript timeout, then pass it to the `ScheduleRegistry.addTimeout()` method.
-That method takes two arguments: a name for the timeout, and the timeout itself.
+이 코드에서 표준 JavaScript 시간제한을 생성한 다음 `ScheduleRegistry.addTimeout()` 메서드에 전달합니다.
+이 메서드는 두개의 인수, 즉 시간제한 이름과 시간제한 자체를 사용합니다.
 
-**Delete** a named timeout using the `SchedulerRegistry.deleteTimeout()` method, as follows:
+다음과 같이 `SchedulerRegistry.deleteTimeout()` 메서드를 사용하여 명명된 시간제한을 **삭제**합니다.
 
 ```typescript
 deleteTimeout(name: string) {
@@ -391,6 +391,7 @@ deleteTimeout(name: string) {
 ```
 
 **List** all timeouts using the `SchedulerRegistry.getTimeouts()` method as follows:
+다음과 같이 `SchedulerRegistry.getTimeouts()` 메소드를 사용하여 모든 제한시간을 **나열**합니다.
 
 ```typescript
 getTimeouts() {
@@ -401,4 +402,4 @@ getTimeouts() {
 
 #### Example
 
-A working example is available [here](https://github.com/nestjs/nest/tree/master/sample/27-scheduling).
+작동하는 예는 [여기](https://github.com/nestjs/nest/tree/master/sample/27-scheduling)에서 확인할 수 있습니다.

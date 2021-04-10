@@ -1,21 +1,21 @@
 ### Model-View-Controller
 
-Nest, by default, makes use of the [Express](https://github.com/expressjs/express) library under the hood. Hence, every technique for using the MVC (Model-View-Controller) pattern in Express applies to Nest as well.
+Nest는 기본적으로 [Express](https://github.com/expressjs/express) 라이브러리를 사용합니다. 따라서 Express에서 MVC(Model-View-Controller) 패턴을 사용하는 모든 기술은 Nest에도 적용됩니다.
 
-First, let's scaffold a simple Nest application using the [CLI](https://github.com/nestjs/nest-cli) tool:
+먼저 [CLI](https://github.com/nestjs/nest-cli) 도구를 사용하여 간단한 Nest 애플리케이션을 스캐폴딩해 보겠습니다.
 
 ```bash
 $ npm i -g @nestjs/cli
 $ nest new project
 ```
 
-In order to create an MVC app, we also need a [template engine](https://expressjs.com/en/guide/using-template-engines.html) to render our HTML views:
+MVC 앱을 만들려면 HTML 뷰를 렌더링할 [템플릿 엔진](https://expressjs.com/en/guide/using-template-engines.html)도 필요합니다.
 
 ```bash
 $ npm install --save hbs
 ```
 
-We've used the `hbs` ([Handlebars](https://github.com/pillarjs/hbs#readme)) engine, though you can use whatever fits your requirements. Once the installation process is complete, we need to configure the express instance using the following code:
+우리는 `hbs` ([Handlebars](https://github.com/pillarjs/hbs#readme)) 엔진을 사용했지만 요구 사항에 맞는 모든 것을 사용할 수 있습니다. 설치 프로세스가 완료되면 다음 코드를 사용하여 익스프레스 인스턴스를 구성해야합니다.
 
 ```typescript
 @@filename(main)
@@ -55,11 +55,11 @@ async function bootstrap() {
 bootstrap();
 ```
 
-We told [Express](https://github.com/expressjs/express) that the `public` directory will be used for storing static assets, `views` will contain templates, and the `hbs` template engine should be used to render HTML output.
+[Express](https://github.com/expressjs/express)에 `public` 디렉토리는 정적 자산을 저장하는 데 사용되고 `views`에는 템플릿이 포함되며 `hbs` 템플릿 엔진을 사용하여 HTML 출력을 렌더링합니다.
 
 #### Template rendering
 
-Now, let's create a `views` directory and `index.hbs` template inside it. In the template, we'll print a `message` passed from the controller:
+이제 `views` 디렉토리와 `index.hbs` 템플릿을 그 안에 만들어 보겠습니다. 템플릿에서 컨트롤러에서 전달된 `message`를 인쇄합니다.
 
 ```html
 <!DOCTYPE html>
@@ -74,7 +74,7 @@ Now, let's create a `views` directory and `index.hbs` template inside it. In the
 </html>
 ```
 
-Next, open the `app.controller` file and replace the `root()` method with the following code:
+다음으로 `app.controller` 파일을 열고 `root()` 메서드를 다음 코드로 바꿉니다.
 
 ```typescript
 @@filename(app.controller)
@@ -90,15 +90,15 @@ export class AppController {
 }
 ```
 
-In this code, we are specifying the template to use in the `@Render()` decorator, and the return value of the route handler method is passed to the template for rendering. Notice that the return value is an object with a property `message`, matching the `message` placeholder we created in the template.
+이 코드에서는 `@Render()` 데코레이터에서 사용할 템플릿을 지정하고 라우트 핸들러 메서드의 반환값을 렌더링을 위해 템플릿에 전달합니다. 반환값은 템플릿에서 만든 `message` 자리 표시자와 일치하는 `message` 속성을 가진 객체입니다.
 
-While the application is running, open your browser and navigate to `http://localhost:3000`. You should see the `Hello world!` message.
+애플리케이션이 실행되는 동안 브라우저를 열고 `http://localhost:3000`으로 이동합니다. `Hello world!` 메시지가 표시됩니다.
 
 #### Dynamic template rendering
 
-If the application logic must dynamically decide which template to render, then we should use the `@Res()` decorator, and supply the view name in our route handler, rather than in the `@Render()` decorator:
+애플리케이션 로직이 렌더링할 템플릿을 동적으로 결정해야하는 경우 `@Res()` 데코레이터를 사용하고 `@Render()` 데코레이터가 아닌 라우트 핸들러에 뷰 이름(view name)을 제공해야합니다.
 
-> info **Hint** When Nest detects the `@Res()` decorator, it injects the library-specific `response` object. We can use this object to dynamically render the template. Learn more about the `response` object API [here](https://expressjs.com/en/api.html).
+> info **힌트** Nest가 `@Res()` 데코레이터를 감지하면 라이브러리별 `response` 객체를 삽입합니다. 이 객체를 사용하여 템플릿을 동적으로 렌더링할 수 있습니다. `response` 객체 API에 대한 자세한 내용은 [여기](https://expressjs.com/en/api.html)를 참조하세요.
 
 ```typescript
 @@filename(app.controller)
@@ -122,17 +122,17 @@ export class AppController {
 
 #### Example
 
-A working example is available [here](https://github.com/nestjs/nest/tree/master/sample/15-mvc).
+작동하는 예는 [여기](https://github.com/nestjs/nest/tree/master/sample/15-mvc)에서 확인할 수 있습니다.
 
 #### Fastify
 
-As mentioned in this [chapter](/techniques/performance), we are able to use any compatible HTTP provider together with Nest. One such library is [Fastify](https://github.com/fastify/fastify). In order to create an MVC application with Fastify, we have to install the following packages:
+이 [장](/techniques/performance)에서 언급했듯이 Nest와 함께 호환되는 모든 HTTP 공급자를 사용할 수 있습니다. 이러한 라이브러리중 하나가 [Fastify](https://github.com/fastify/fastify)입니다. Fastify로 MVC 애플리케이션을 생성하려면 다음 패키지를 설치해야합니다.
 
 ```bash
 $ npm i --save fastify point-of-view handlebars
 ```
 
-The next steps cover almost the same process used with Express, with minor differences specific to the platform. Once the installation process is complete, open the `main.ts` file and update its contents:
+다음 단계는 플랫폼에 따라 약간의 차이를 제외하고 Express에서 사용되는 거의 동일한 프로세스를 다룹니다. 설치 프로세스가 완료되면 `main.ts` 파일을 열고 내용을 업데이트합니다.
 
 ```typescript
 @@filename(main)
@@ -182,7 +182,7 @@ async function bootstrap() {
 bootstrap();
 ```
 
-The Fastify API is slightly different but the end result of those methods calls remains the same. One difference to notice with Fastify is that the template name passed into the `@Render()` decorator must include a file extension.
+Fastify API는 약간 다르지만 이러한 메서드 호출의 최종 결과는 동일하게 유지됩니다. Fastify에서 주목해야할 한가지 차이점은 `@Render()` 데코레이터에 전달된 템플릿 이름에 파일 확장자가 포함되어야 한다는 것입니다.
 
 ```typescript
 @@filename(app.controller)
@@ -198,8 +198,8 @@ export class AppController {
 }
 ```
 
-While the application is running, open your browser and navigate to `http://localhost:3000`. You should see the `Hello world!` message.
+애플리케이션이 실행되는 동안 브라우저를 열고 `http://localhost:3000`으로 이동합니다. `Hello world!`메시지가 표시됩니다.
 
 #### Example
 
-A working example is available [here](https://github.com/nestjs/nest/tree/master/sample/17-mvc-fastify).
+작동하는 예는 [여기](https://github.com/nestjs/nest/tree/master/sample/17-mvc-fastify)에서 확인할 수 있습니다.

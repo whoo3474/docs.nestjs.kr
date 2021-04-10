@@ -1,22 +1,22 @@
 ### Database
 
-Nest is database agnostic, allowing you to easily integrate with any SQL or NoSQL database. You have a number of options available to you, depending on your preferences. At the most general level, connecting Nest to a database is simply a matter of loading an appropriate Node.js driver for the database, just as you would with [Express](https://expressjs.com/en/guide/database-integration.html) or Fastify.
+Nest는 데이터베이스에 구애받지 않으므로 모든 SQL 또는 NoSQL 데이터베이스와 쉽게 통합할 수 있습니다. 선호도에 따라 다양한 옵션을 사용할 수 있습니다. 가장 일반적인 수준에서 Nest를 데이터베이스에 연결하는 것은 [Express](https://expressjs.com/en/guide/database-integration.html) 또는 Fastify에서와 마찬가지로 데이터베이스에 적합한 Node.js 드라이버를 로드하기만 하면됩니다.
 
-You can also directly use any general purpose Node.js database integration **library** or ORM, such as [Sequelize](https://sequelize.org/) (navigate to the [Sequelize integration](/techniques/database#sequelize-integration) section), [Knex.js](https://knexjs.org/) ([tutorial](https://dev.to/nestjs/build-a-nestjs-module-for-knex-js-or-other-resource-based-libraries-in-5-minutes-12an)), [TypeORM](https://github.com/typeorm/typeorm), and [Prisma](https://www.github.com/prisma/prisma) ([recipe](/recipes/prisma)) , to operate at a higher level of abstraction.
+또한 [Sequelize](https://sequelize.org/)([Sequelize 통합](/techniques/database#sequelize-integration) 섹션으로 이동), [Knex.js](https://knexjs.org/)([tutorial](https://dev.to/nestjs/build-a-nestjs-module-for-knex-js-or-other-resource-based-libraries-in-5-minutes-12an)), [TypeORM](https://github.com/typeorm/typeorm) 및 [Prisma](https://www.github.com/prisma/prisma)([recipe](/recipes/prisma))와 같은 범용 Node.js 데이터베이스 통합 **라이브러리** 또는 ORM을 직접 사용하여 더 높은 수준의 추상화에서 작동 할 수 있습니다.
 
-For convenience, Nest provides tight integration with TypeORM and Sequelize out-of-the-box with the `@nestjs/typeorm` and `@nestjs/sequelize` packages respectively, which we'll cover in the current chapter, and Mongoose with `@nestjs/mongoose`, which is covered in [this chapter](/techniques/mongodb). These integrations provide additional NestJS-specific features, such as model/repository injection, testability, and asynchronous configuration to make accessing your chosen database even easier.
+편의를 위해 Nest는 현재 장에서 다룰 `@nestjs/typeorm` 및 `@nestjs/sequelize` 패키지를 사용하여 TypeORM 및 Sequelize와 기본적으로 긴밀한 통합을 제공하며, Mongoose는 `@nestjs/mongoose`, [이 장](/techniques/mongodb)에서 다룹니다. 이러한 통합은 모델/리포지토리 삽입, 테스트 가능성 및 비동기 구성과 같은 추가 NestJS 관련 기능을 제공하여 선택한 데이터베이스에 더욱 쉽게 액세스할 수 있도록 합니다.
 
 ### TypeORM Integration
 
-For integrating with SQL and NoSQL databases, Nest provides the `@nestjs/typeorm` package. Nest uses [TypeORM](https://github.com/typeorm/typeorm) because it's the most mature Object Relational Mapper (ORM) available for TypeScript. Since it's written in TypeScript, it integrates well with the Nest framework.
+SQL 및 NoSQL 데이터베이스와의 통합을 위해 Nest는 `@nestjs/typeorm` 패키지를 제공합니다. Nest는 TypeScript에 사용할 수 있는 가장 성숙된 ORM(Object Relational Mapper)이기 때문에 [TypeORM](https://github.com/typeorm/typeorm)을 사용합니다. TypeScript로 작성되었으므로 Nest 프레임워크와 잘 통합됩니다.
 
-To begin using it, we first install the required dependencies. In this chapter, we'll demonstrate using the popular [MySQL](https://www.mysql.com/) Relational DBMS, but TypeORM provides support for many relational databases, such as PostgreSQL, Oracle, Microsoft SQL Server, SQLite, and even NoSQL databases like MongoDB. The procedure we walk through in this chapter will be the same for any database supported by TypeORM. You'll simply need to install the associated client API libraries for your selected database.
+사용을 시작하려면 먼저 필요한 종속성을 설치합니다. 이 장에서는 널리 사용되는 [MySQL](https://www.mysql.com/) 관계형 DBMS를 사용하는 방법을 설명하지만 TypeORM은 PostgreSQL, Oracle, Microsoft SQL Server, SQLite, MongoDB와 같은 NoSQL 데이터베이스도 있습니다. 이 장에서 설명하는 절차는 TypeORM에서 지원하는 모든 데이터베이스에 대해 동일합니다. 선택한 데이터베이스에 연결된 클라이언트 API 라이브러리를 설치하기만 하면 됩니다.
 
 ```bash
 $ npm install --save @nestjs/typeorm typeorm mysql2
 ```
 
-Once the installation process is complete, we can import the `TypeOrmModule` into the root `AppModule`.
+설치 프로세스가 완료되면 `TypeOrmModule`을 루트 `AppModule`로 가져올 수 있습니다.
 
 ```typescript
 @@filename(app.module)
@@ -40,32 +40,32 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 export class AppModule {}
 ```
 
-> warning **Warning** Setting `synchronize: true` shouldn't be used in production - otherwise you can lose production data.
+> warning **경고** `synchronize: true` 설정은 프로덕션에서 사용해서는 안됩니다. 그렇지 않으면 프로덕션 데이터가 손실될 수 있습니다.
 
-The `forRoot()` method supports all the configuration properties exposed by the `createConnection()` function from the [TypeORM](https://typeorm.io/#/connection-options) package. In addition, there are several extra configuration properties described below.
+`forRoot()` 메소드는 [TypeORM](https://typeorm.io/#/connection-options) 패키지의 `createConnection()` 함수에 의해 노출되는 모든 구성 속성을 지원합니다. 또한 아래에 설명된 몇가지 추가 구성 속성이 있습니다.
 
 <table>
   <tr>
     <td><code>retryAttempts</code></td>
-    <td>Number of attempts to connect to the database (default: <code>10</code>)</td>
+    <td>데이터베이스 연결 시도 횟수 (기본값: <code>10</code>)</td>
   </tr>
   <tr>
     <td><code>retryDelay</code></td>
-    <td>Delay between connection retry attempts (ms) (default: <code>3000</code>)</td>
+    <td>연결 재시도 간격(밀리 초)(기본값: <code>3000</code>)</td>
   </tr>
   <tr>
     <td><code>autoLoadEntities</code></td>
-    <td>If <code>true</code>, entities will be loaded automatically (default: <code>false</code>)</td>
+    <td><code>true</code>이면 엔티티가 자동으로 로드됩니다(기본값: <code>false</code>).</td>
   </tr>
   <tr>
     <td><code>keepConnectionAlive</code></td>
-    <td>If <code>true</code>, connection will not be closed on application shutdown (default: <code>false</code>)</td>
+    <td><code>true</code>이면 애플리케이션 종료시 연결이 닫히지 않습니다(기본값: <code>false</code>).</td>
   </tr>
 </table>
 
-> info **Hint** Learn more about the connection options [here](https://typeorm.io/#/connection-options).
+> info **힌트** 연결 옵션에 대한 자세한 내용은 [여기](https://typeorm.io/#/connection-options)를 참조하세요.
 
-Alternatively, rather than passing a configuration object to `forRoot()`, we can create an `ormconfig.json` file in the project root directory.
+또는 구성 객체를 `forRoot()`에 전달하는 대신 프로젝트 루트 디렉토리에 `ormconfig.json` 파일을 만들 수 있습니다.
 
 ```json
 {
@@ -80,7 +80,7 @@ Alternatively, rather than passing a configuration object to `forRoot()`, we can
 }
 ```
 
-Then, we can call `forRoot()` without any options:
+그런 다음 옵션없이 `forRoot()`를 호출 할 수 있습니다.
 
 ```typescript
 @@filename(app.module)
@@ -93,9 +93,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 export class AppModule {}
 ```
 
-> warning **Warning** Static glob paths (e.g., `dist/**/*.entity{{ '{' }} .ts,.js{{ '}' }}`) won't work properly with [webpack](https://webpack.js.org/).
+> warning **경고** 정적 glob 경로 (예: `dist/**/*.entity{{ '{' }} .ts,.js{{ '}' }}`)는 [webpack에서 제대로 작동하지 않습니다.](https://webpack.js.org/).
 
-> info **Hint** Note that the `ormconfig.json` file is loaded by the `typeorm` library. Thus, any of the extra properties described above (which are supported internally by way of the `forRoot()` method - for example, `autoLoadEntities` and `retryDelay`) won't be applied. Luckily, TypeORM provides the [`getConnectionOptions`](https://typeorm.io/#/using-ormconfig/overriding-options-defined-in-ormconfig) function that reads connection options from the `ormconfig` file or environment variables. With this, you can still use the configuration file and set Nest-specific options, as follows:
+> info **힌트** `ormconfig.json` 파일은 `typeorm` 라이브러리에 의해 로드됩니다. 따라서 위에서 설명한 추가 속성( `forRoot()` 메서드를 통해 내부적으로 지원되는 속성(예: `autoLoadEntities` 및 `retryDelay`))은 적용되지 않습니다. 다행히 TypeORM은 `ormconfig` 파일 또는 환경 변수에서 연결 옵션을 읽는 [`getConnectionOptions`](https://typeorm.io/#/using-ormconfig/overriding-options-defined-in-ormconfig)함수를 제공합니다. 이를 통해 다음과 같이 구성 파일을 계속 사용하고 Nest 관련 옵션을 설정할 수 있습니다.
 > ```typescript
 > TypeOrmModule.forRootAsync({
 >   useFactory: async () =>
@@ -105,7 +105,7 @@ export class AppModule {}
 > })
 > ```
 
-Once this is done, the TypeORM `Connection` and `EntityManager` objects will be available to inject across the entire project (without needing to import any modules), for example:
+이 작업이 완료되면 TypeORM `Connection` 및 `EntityManager` 객체를 사용하여 전체 프로젝트에 삽입할 수 있습니다(모듈을 가져올 필요없이). 예:
 
 ```typescript
 @@filename(app.module)
@@ -133,9 +133,9 @@ export class AppModule {
 
 #### Repository pattern
 
-[TypeORM](https://github.com/typeorm/typeorm) supports the **repository design pattern**, so each entity has its own repository. These repositories can be obtained from the database connection.
+[TypeORM](https://github.com/typeorm/typeorm)은 **저장소 디자인 패턴**을 지원하므로 각 항목에 자체 저장소가 있습니다. 이러한 저장소는 데이터베이스 연결에서 얻을 수 있습니다.
 
-To continue the example, we need at least one entity. Let's define the `User` entity.
+예제를 계속하려면 하나 이상의 엔티티가 필요합니다. `User` 엔터티를 정의해 보겠습니다.
 
 ```typescript
 @@filename(user.entity)
@@ -157,11 +157,11 @@ export class User {
 }
 ```
 
-> info **Hint** Learn more about entities in the [TypeORM documentation](https://typeorm.io/#/entities).
+> info **힌트** [TypeORM 문서](https://typeorm.io/#/entities)에서 항목에 대해 자세히 알아보세요.
 
-The `User` entity file sits in the `users` directory. This directory contains all files related to the `UsersModule`. You can decide where to keep your model files, however, we recommend creating them near their **domain**, in the corresponding module directory.
+`User` 엔티티 파일은 `users` 디렉토리에 있습니다. 이 디렉토리는 `UsersModule`과 관련된 모든 파일을 포함합니다. 모델 파일을 보관할 위치를 결정할 수 있지만 해당 모듈 디렉토리의 **도메인** 근처에 파일을 만드는 것이 좋습니다.
 
-To begin using the `User` entity, we need to let TypeORM know about it by inserting it into the `entities` array in the module `forRoot()` method options (unless you use a static glob path):
+`User` 엔티티 사용을 시작하려면 모듈 `forRoot()` 메소드 옵션의 `entities` 배열에 삽입하여 TypeORM에 알려야합니다(정적 glob 경로를 사용하지 않는 한) :
 
 ```typescript
 @@filename(app.module)
@@ -186,7 +186,7 @@ import { User } from './users/user.entity';
 export class AppModule {}
 ```
 
-Next, let's look at the `UsersModule`:
+다음으로 `UsersModule`을 살펴 보겠습니다.
 
 ```typescript
 @@filename(users.module)
@@ -204,7 +204,7 @@ import { User } from './user.entity';
 export class UsersModule {}
 ```
 
-This module uses the `forFeature()` method to define which repositories are registered in the current scope. With that in place, we can inject the `UsersRepository` into the `UsersService` using the `@InjectRepository()` decorator:
+이 모듈은 `forFeature()` 메소드를 사용하여 현재 범위에 등록된 저장소를 정의합니다. 그런 다음 `@InjectRepository()` 데코레이터를 사용하여 `UsersRepository`를 `UsersService`에 삽입할 수 있습니다.
 
 ```typescript
 @@filename(users.service)
@@ -258,10 +258,10 @@ export class UsersService {
 }
 ```
 
-> warning **Notice** Don't forget to import the `UsersModule` into the root `AppModule`.
+> warning **알림** `UsersModule`을 루트 `AppModule`로 가져오는 것을 잊지 마십시오.
 
-If you want to use the repository outside of the module which imports `TypeOrmModule.forFeature`, you'll need to re-export the providers generated by it.
-You can do this by exporting the whole module, like this:
+`TypeOrmModule.forFeature`를 가져오는 모듈 외부의 저장소를 사용하려면 해당 저장소에서 생성한 프로바이더를 다시 내 보내야합니다.
+다음과 같이 전체 모듈을 내보내면 됩니다.
 
 ```typescript
 @@filename(users.module)
@@ -276,7 +276,7 @@ import { User } from './user.entity';
 export class UsersModule {}
 ```
 
-Now if we import `UsersModule` in `UserHttpModule`, we can use `@InjectRepository(User)` in the providers of the latter module.
+이제 `UserHttpModule`에서 `UsersModule`을 가져오면 후자의 모듈 공급자에서 `@InjectRepository(User)`를 사용할 수 있습니다.
 
 ```typescript
 @@filename(users-http.module)
@@ -295,26 +295,26 @@ export class UserHttpModule {}
 
 ### Relations
 
-Relations are associations established between two or more tables. Relations are based on common fields from each table, often involving primary and foreign keys.
+관계는 두개 이상의 테이블간에 설정된 연결입니다. 관계는 종종 기본 및 외래 키를 포함하는 각 테이블의 공통 필드를 기반으로 합니다.
 
-There are three types of relations:
+관계에는 세가지 유형이 있습니다.
 
 <table>
   <tr>
     <td><code>One-to-one</code></td>
-    <td>Every row in the primary table has one and only one associated row in the foreign table.  Use the <code>@OneToOne()</code> decorator to define this type of relation.</td>
+    <td>기본 테이블의 모든 행에는 외부 테이블에 연결된 행이 하나뿐입니다. 이러한 유형의 관계를 정의하려면 <code>@OneToOne()</code> 데코레이터를 사용하십시오.</td>
   </tr>
   <tr>
     <td><code>One-to-many / Many-to-one</code></td>
-    <td>Every row in the primary table has one or more related rows in the foreign table. Use the <code>@OneToMany()</code> and <code>@ManyToOne()</code> decorators to define this type of relation.</td>
+    <td>기본 테이블의 모든 행에는 외부 테이블에 하나 이상의 관련 행이 있습니다. 이러한 유형의 관계를 정의하려면 <code>@OneToMany()</code> 및 <code>@ManyToOne()</code> 데코레이터를 사용하십시오.</td>
   </tr>
   <tr>
     <td><code>Many-to-many</code></td>
-    <td>Every row in the primary table has many related rows in the foreign table, and every record in the foreign table has many related rows in the primary table. Use the <code>@ManyToMany()</code> decorator to define this type of relation.</td>
+    <td>기본 테이블의 모든 행에는 외부 테이블에 많은 관련 행이 있고 외부 테이블의 모든 레코드에는 기본 테이블에 많은 관련 행이 있습니다. 이러한 유형의 관계를 정의하려면 <code>@ManyToMany()</code> 데코레이터를 사용하십시오.</td>
   </tr>
 </table>
 
-To define relations in entities, use the corresponding **decorators**. For example, to define that each `User` can have multiple photos, use the `@OneToMany()` decorator.
+엔티티에서 관계를 정의하려면 해당 **데코레이터**를 사용합니다. 예를 들어 각 `User`가 여러장의 사진을 가질 수 있도록 정의하려면 `@OneToMany()` 데코레이터를 사용합니다.
 
 ```typescript
 @@filename(user.entity)
@@ -340,13 +340,13 @@ export class User {
 }
 ```
 
-> info **Hint** To learn more about relations in TypeORM, visit the [TypeORM documentation](https://typeorm.io/#/relations).
+> info **힌트** TypeORM의 관계에 대해 자세히 알아 보려면 [TypeORM 문서](https://typeorm.io/#/relations)를 방문하세요.
 
 #### Auto-load entities
 
-Manually adding entities to the `entities` array of the connection options can be tedious. In addition, referencing entities from the root module breaks application domain boundaries and causes leaking implementation details to other parts of the application. To solve this issue, static glob paths can be used (e.g., `dist/**/*.entity{{ '{' }} .ts,.js{{ '}' }}`).
+연결 옵션의 `entities` 배열에 엔티티를 수동으로 추가하는 것은 지루할 수 있습니다. 또한 루트 모듈에서 엔티티를 참조하면 애플리케이션 도메인 경계가 깨지고 구현 세부 사항이 애플리케이션의 다른 부분으로 유출됩니다. 이 문제를 해결하기 위해 정적 glob 경로를 사용할 수 있습니다(예: `dist/**/*. entity{{ '{' }} .ts,.js{{ '}' }}`).
 
-Note, however, that glob paths are not supported by webpack, so if you are building your application within a monorepo, you won't be able to use them. To address this issue, an alternative solution is provided. To automatically load entities, set the `autoLoadEntities` property of the configuration object (passed into the `forRoot()` method) to `true`, as shown below:
+그러나 glob 경로는 webpack에서 지원되지 않으므로 모노레포내에서 애플리케이션을 빌드하는 경우 사용할 수 없습니다. 이 문제를 해결하기 위해 대체 솔루션이 제공됩니다. 항목을 자동으로 로드하려면 아래와 같이 구성 개체의 `autoLoadEntities` 속성(`forRoot()` 메서드로 전달됨)을 `true`로 설정합니다.
 
 ```typescript
 @@filename(app.module)
@@ -364,13 +364,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 export class AppModule {}
 ```
 
-With that option specified, every entity registered through the `forFeature()` method will be automatically added to the `entities` array of the configuration object.
+이 옵션을 지정하면 `forFeature()` 메소드를 통해 등록된 모든 엔티티가 구성 객체의 `entities` 배열에 자동으로 추가됩니다.
 
-> warning **Warning** Note that entities that aren't registered through the `forFeature()` method, but are only referenced from the entity (via a relationship), won't be included by way of the `autoLoadEntities` setting.
+> warning **경고** `forFeature()` 메소드를 통해 등록되지 않았지만 엔티티에서만 참조되는 엔티티(관계를 통해)는 `autoLoadEntities` 설정을 통해 포함되지 않습니다.
 
 #### Separating entity definition
 
-You can define an entity and its columns right in the model, using decorators. But some people prefer to define entities and their columns inside separate files using the ["entity schemas"](https://typeorm.io/#/separating-entity-definition).
+데코레이터를 사용하여 모델에서 바로 엔티티와 해당열을 정의할 수 있습니다. 그러나 일부 사람들은 ["엔티티 스키마"](https://typeorm.io/#/separating-entity-definition)를 사용하여 별도의 파일내에 엔터티와 해당열을 정의하는 것을 선호합니다.
 
 ```typescript
 import { EntitySchema } from 'typeorm';
@@ -405,10 +405,10 @@ export const UserSchema = new EntitySchema<User>({
 });
 ```
 
-> warning error **Warning** If you provide the `target` option, the `name` option value has to be the same as the name of the target class.
-> If you do not provide the `target` you can use any name.
+> warning error **경고** `target` 옵션을 제공하는 경우 `name` 옵션 값은 대상 클래스의 이름과 동일해야 합니다.
+> `target`을 제공하지 않으면 아무 이름이나 사용할 수 있습니다.
 
-Nest allows you to use an `EntitySchema` instance wherever an `Entity` is expected, for example:
+Nest를 사용하면 `Entity`가 예상되는 모든 위치에서 `EntitySchema`인스턴스를 사용할 수 있습니다. 예를 들면 다음과 같습니다.
 
 ```typescript
 import { Module } from '@nestjs/common';
@@ -427,11 +427,11 @@ export class UsersModule {}
 
 #### Transactions
 
-A database transaction symbolizes a unit of work performed within a database management system against a database, and treated in a coherent and reliable way independent of other transactions. A transaction generally represents any change in a database ([learn more](https://en.wikipedia.org/wiki/Database_transaction)).
+데이터베이스 트랜잭션은 데이터베이스에 대해 데이터베이스 관리 시스템내에서 수행되는 작업 단위를 상징하며 다른 트랜잭션과 독립적으로 일관되고 신뢰할 수 있는 방식으로 처리됩니다. 트랜잭션은 일반적으로 데이터베이스의 모든 변경을 나타냅니다([자세히 알아보기](https://en.wikipedia.org/wiki/Database_transaction)).
 
-There are many different strategies to handle [TypeORM transactions](https://typeorm.io/#/transactions). We recommend using the `QueryRunner` class because it gives full control over the transaction.
+[TypeORM 트랜잭션](https://typeorm.io/#/transactions)를 처리하기 위한 다양한 전략이 있습니다. 트랜잭션을 완전히 제어 할 수 있는 `QueryRunner` 클래스를 사용하는 것이 좋습니다.
 
-First, we need to inject the `Connection` object into a class in the normal way:
+먼저 일반적인 방법으로 `Connection` 객체를 클래스에 삽입해야 합니다.
 
 ```typescript
 @Injectable()
@@ -440,9 +440,9 @@ export class UsersService {
 }
 ```
 
-> info **Hint** The `Connection` class is imported from the `typeorm` package.
+> info **힌트** `Connection` 클래스는 `typeorm` 패키지에서 가져옵니다.
 
-Now, we can use this object to create a transaction.
+이제 이 개체를 사용하여 트랜잭션을 만들 수 있습니다.
 
 ```typescript
 async createMany(users: User[]) {
@@ -465,9 +465,9 @@ async createMany(users: User[]) {
 }
 ```
 
-> info **Hint** Note that the `connection` is used only to create the `QueryRunner`. However, to test this class would require mocking the entire `Connection` object (which exposes several methods). Thus, we recommend using a helper factory class (e.g., `QueryRunnerFactory`) and defining an interface with a limited set of methods required to maintain transactions. This technique makes mocking these methods pretty straightforward.
+> info **힌트** `connection`은 `QueryRunner`를 생성하는 데만 사용됩니다. 그러나 이 클래스를 테스트하려면 전체 `Connection` 객체(여러 메서드를 노출함)를 모의해야(mocking) 합니다. 따라서 헬퍼 팩토리 클래스(예: `QueryRunnerFactory`)를 사용하고 트랜잭션을 유지하는 데 필요한 제한된 메서드 집합으로 인터페이스를 정의하는 것이 좋습니다. 이 기술은 이러한 방법을 매우 간단하게 모의합니다.
 
-Alternatively, you can use the callback-style approach with the `transaction` method of the `Connection` object ([read more](https://typeorm.io/#/transactions/creating-and-using-transactions)).
+또는 `Connection` 객체의 `transaction` 메소드와 함께 콜백 스타일 접근 방식을 사용할 수 있습니다.([자세히 알아보기](https://typeorm.io/#/transactions/creating-and-using-transactions))
 
 ```typescript
 async createMany(users: User[]) {
@@ -478,13 +478,13 @@ async createMany(users: User[]) {
 }
 ```
 
-Using decorators to control the transaction (`@Transaction()` and `@TransactionManager()`) is not recommended.
+데코레이터를 사용하여 트랜잭션 (`@Transaction()` 및 `@TransactionManager()`)을 제어하는 것은 권장되지 않습니다.
 
 <app-banner-shop></app-banner-shop>
 
 #### Subscribers
 
-With TypeORM [subscribers](https://typeorm.io/#/listeners-and-subscribers/what-is-a-subscriber), you can listen to specific entity events.
+TypeORM [구독자 subscribers](https://typeorm.io/#/listeners-and-subscribers/what-is-a-subscriber)를 사용하면 특정 엔티티 이벤트를 수신할 수 있습니다.
 
 ```typescript
 import {
@@ -511,9 +511,9 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
 }
 ```
 
-> error **Warning** Event subscribers can not be [request-scoped](/fundamentals/injection-scopes).
+> error **경고** 이벤트 구독자는 [요청 범위](/fundamentals/injection-scopes)일 수 없습니다.
 
-Now, add the `UserSubscriber` class to the `providers` array:
+이제 `providers` 배열에 `UserSubscriber` 클래스를 추가합니다.
 
 ```typescript
 import { Module } from '@nestjs/common';
@@ -531,19 +531,19 @@ import { UserSubscriber } from './user.subscriber';
 export class UsersModule {}
 ```
 
-> info **Hint** Learn more about entity subscribers [here](https://typeorm.io/#/listeners-and-subscribers/what-is-a-subscriber).
+> info **힌트** [여기](https://typeorm.io/#/listeners-and-subscribers/what-is-a-subscriber)에서 항목 구독자에 대해 자세히 알아보세요.
 
 #### Migrations
 
-[Migrations](https://typeorm.io/#/migrations) provide a way to incrementally update the database schema to keep it in sync with the application's data model while preserving existing data in the database. To generate, run, and revert migrations, TypeORM provides a dedicated [CLI](https://typeorm.io/#/migrations/creating-a-new-migration).
+[마이그레이션](https://typeorm.io/#/migrations)은 데이터베이스 스키마를 점진적으로 업데이트하여 데이터베이스의 기존 데이터를 보존하면서 애플리케이션의 데이터 모델과 동기화 상태를 유지하는 방법을 제공합니다. 마이그레이션을 생성, 실행 및 되돌리기 위해 TypeORM은 전용 [CLI](https://typeorm.io/#/migrations/creating-a-new-migration)를 제공합니다.
 
-Migration classes are separate from the Nest application source code. Their lifecycle is maintained by the TypeORM CLI. Therefore, you are not able to leverage dependency injection and other Nest specific features with migrations. To learn more about migrations, follow the guide in the [TypeORM documentation](https://typeorm.io/#/migrations/creating-a-new-migration).
+마이그레이션 클래스는 Nest 애플리케이션 소스 코드와 별개입니다. 라이프 사이클은 TypeORM CLI에 의해 유지됩니다. 따라서 마이그레이션과 함께 종속성 주입 및 기타 Nest 특정 기능을 활용할 수 없습니다. 마이그레이션에 대해 자세히 알아 보려면 [TypeORM 문서](https://typeorm.io/#/migrations/creating-a-new-migration)의 가이드를 따르세요.
 
 #### Multiple databases
 
-Some projects require multiple database connections. This can also be achieved with this module. To work with multiple connections, first create the connections. In this case, connection naming becomes **mandatory**.
+일부 프로젝트에는 여러 데이터베이스 연결이 필요합니다. 이것은 또한 이 모듈을 통해 달성할 수 있습니다. 여러 연결로 작업하려면 먼저 연결을 만듭니다. 이 경우 연결 이름 지정은 **필수**가 됩니다.
 
-Suppose you have an `Album` entity stored in its own database.
+자체 데이터베이스에 `Album` 항목이 저장되어 있다고 가정합니다.
 
 ```typescript
 const defaultOptions = {
@@ -573,9 +573,9 @@ const defaultOptions = {
 export class AppModule {}
 ```
 
-> warning **Notice** If you don't set the `name` for a connection, its name is set to `default`. Please note that you shouldn't have multiple connections without a name, or with the same name, otherwise they will get overridden.
+> warning **주의 알림** 연결에 `name`을 설정하지 않으면 연결 이름이 `기본값 default`으로 설정됩니다. 이름이 없거나 이름이 같은 연결이 여러개 있으면 안됩니다. 그렇지 않으면 연결이 재정의됩니다.
 
-At this point, you have `User` and `Album` entities registered with their own connection. With this setup, you have to tell the `TypeOrmModule.forFeature()` method and the `@InjectRepository()` decorator which connection should be used. If you do not pass any connection name, the `default` connection is used.
+이 시점에서 `User` 및 `Album` 엔티티가 자체 연결에 등록되어 있습니다. 이 설정으로 `TypeOrmModule.forFeature()` 메소드와 `@InjectRepository()` 데코레이터에게 어떤 연결을 사용해야하는지 알려 주어야합니다. 연결 이름을 전달하지 않으면 `default` 연결이 사용됩니다.
 
 ```typescript
 @Module({
@@ -587,7 +587,7 @@ At this point, you have `User` and `Album` entities registered with their own co
 export class AppModule {}
 ```
 
-You can also inject the `Connection` or `EntityManager` for a given connection:
+주어진 연결에 대해 `Connection` 또는 `EntityManager`를 삽입할 수도 있습니다.
 
 ```typescript
 @Injectable()
@@ -601,7 +601,7 @@ export class AlbumsService {
 }
 ```
 
-It's also possible to inject any `Connection` to the providers:
+프로바이더에게 `Connection`을 삽입하는 것도 가능합니다.
 
 ```typescript
 @Module({
@@ -620,9 +620,9 @@ export class AlbumsModule {}
 
 #### Testing
 
-When it comes to unit testing an application, we usually want to avoid making a database connection, keeping our test suites independent and their execution process as fast as possible. But our classes might depend on repositories that are pulled from the connection instance. How do we handle that? The solution is to create mock repositories. In order to achieve that, we set up [custom providers](/fundamentals/custom-providers). Each registered repository is automatically represented by an `<EntityName>Repository` token, where `EntityName` is the name of your entity class.
+애플리케이션의 단위 테스트에 관해서는 일반적으로 데이터베이스 연결을 피하고 테스트 스위트를 독립적으로 유지하고 실행 프로세스를 가능한 한 빨리 유지하려고 합니다. 그러나 우리의 클래스는 연결 인스턴스에서 가져온 저장소에 따라 달라질 수 있습니다. 어떻게 처리합니까? 해결책은 모의 저장소를 만드는 것입니다. 이를 달성하기 위해 [커스텀 프로바이더](/fundamentals/custom-providers)를 설정했습니다. 등록된 각 저장소는 자동으로 `<EntityName>Repository` 토큰으로 표시됩니다. 여기서 `EntityName`은 엔티티 클래스의 이름입니다.
 
-The `@nestjs/typeorm` package exposes the `getRepositoryToken()` function which returns a prepared token based on a given entity.
+`@nestjs/typeorm` 패키지는 주어진 엔티티를 기반으로 준비된 토큰을 반환하는 `getRepositoryToken()` 함수를 노출합니다.
 
 ```typescript
 @Module({
@@ -637,22 +637,22 @@ The `@nestjs/typeorm` package exposes the `getRepositoryToken()` function which 
 export class UsersModule {}
 ```
 
-Now a substitute `mockRepository` will be used as the `UsersRepository`. Whenever any class asks for `UsersRepository` using an `@InjectRepository()` decorator, Nest will use the registered `mockRepository` object.
+이제 대체 `mockRepository`가 `UsersRepository`로 사용됩니다. 클래스가 `@InjectRepository()` 데코레이터를 사용하여 `UsersRepository`를 요청할 때마다 Nest는 등록된 `mockRepository` 객체를 사용합니다.
 
 #### Custom repository
 
-TypeORM provides a feature called **custom repositories**. Custom repositories allow you to extend a base repository class, and enrich it with several special methods. To learn more about this feature, visit [this page](https://typeorm.io/#/custom-repository).
+TypeORM은 **사용자 지정 저장소**라는 기능을 제공합니다. 커스텀 리포지토리를 사용하면 기본 리포지토리 클래스를 확장하고 몇 가지 특수 메서드를 사용하여 강화할 수 있습니다. 이 기능에 대해 자세히 알아 보려면 [이 페이지](https://typeorm.io/#/custom-repository)를 방문하세요.
 
-In order to create your custom repository, use the `@EntityRepository()` decorator and extend the `Repository` class.
+커스텀 리포지토리를 만들려면 `@EntityRepository()` 데코레이터를 사용하고 `Repository` 클래스를 확장합니다.
 
 ```typescript
 @EntityRepository(Author)
 export class AuthorRepository extends Repository<Author> {}
 ```
 
-> info **Hint** Both `@EntityRepository()` and `Repository` are imported from the `typeorm` package.
+> info **힌트** `@EntityRepository()`와 `Repository`는 모두 `typeorm` 패키지에서 가져옵니다.
 
-Once the class is created, the next step is to delegate instantiation responsibility to Nest. For this, we have to pass the`AuthorRepository` class to the `TypeOrm.forFeature()` method.
+클래스가 생성되면 다음 단계는 인스턴스화 책임을 Nest에 위임하는 것입니다. 이를 위해 `AuthorRepository` 클래스를 `TypeOrm.forFeature()` 메소드에 전달해야 합니다.
 
 ```typescript
 @Module({
@@ -663,7 +663,7 @@ Once the class is created, the next step is to delegate instantiation responsibi
 export class AuthorModule {}
 ```
 
-Afterward, simply inject the repository using the following construction:
+그런 다음 다음 구성을 사용하여 저장소를 삽입하십시오.
 
 ```typescript
 @Injectable()
@@ -674,9 +674,9 @@ export class AuthorService {
 
 #### Async configuration
 
-You may want to pass your repository module options asynchronously instead of statically. In this case, use the `forRootAsync()` method, which provides several ways to deal with async configuration.
+저장소 모듈 옵션을 정적으로 전달하는 대신 비동기 적으로 전달할 수 있습니다. 이 경우 비동기 구성을 처리하는 여러 방법을 제공하는 `forRootAsync()` 메소드를 사용하십시오.
 
-One approach is to use a factory function:
+한가지 접근 방식은 팩토리 함수를 사용하는 것입니다.
 
 ```typescript
 TypeOrmModule.forRootAsync({
@@ -693,7 +693,7 @@ TypeOrmModule.forRootAsync({
 });
 ```
 
-Our factory behaves like any other [asynchronous provider](https://docs.nestjs.com/fundamentals/async-providers) (e.g., it can be `async` and it's able to inject dependencies through `inject`).
+우리 공장은 다른 [비동기 프로바이더](https://docs.nestjs.com/fundamentals/async-providers)처럼 작동합니다 (예: `async`일 수 있으며 `inject`를 통해 종속성을 삽입할 수 있음).
 
 ```typescript
 TypeOrmModule.forRootAsync({
@@ -712,7 +712,7 @@ TypeOrmModule.forRootAsync({
 });
 ```
 
-Alternatively, you can use the `useClass` syntax:
+또는 `useClass` 구문을 사용할 수 있습니다.
 
 ```typescript
 TypeOrmModule.forRootAsync({
@@ -720,7 +720,7 @@ TypeOrmModule.forRootAsync({
 });
 ```
 
-The construction above will instantiate `TypeOrmConfigService` inside `TypeOrmModule` and use it to provide an options object by calling `createTypeOrmOptions()`. Note that this means that the `TypeOrmConfigService` has to implement the `TypeOrmOptionsFactory` interface, as shown below:
+위의 구성은 `TypeOrmModule` 내에서 `TypeOrmConfigService`를 인스턴스화하고 `createTypeOrmOptions()`를 호출하여 옵션 객체를 제공하는 데 사용합니다. 이는 `TypeOrmConfigService`가 아래와 같이 `TypeOrmOptionsFactory` 인터페이스를 구현해야 함을 의미합니다.
 
 ```typescript
 @Injectable()
@@ -740,7 +740,7 @@ class TypeOrmConfigService implements TypeOrmOptionsFactory {
 }
 ```
 
-In order to prevent the creation of `TypeOrmConfigService` inside `TypeOrmModule` and use a provider imported from a different module, you can use the `useExisting` syntax.
+`TypeOrmModule` 내에서 `TypeOrmConfigService` 생성을 방지하고 다른 모듈에서 가져온 프로바이더를 사용하려면 `useExisting` 구문을 사용할 수 있습니다.
 
 ```typescript
 TypeOrmModule.forRootAsync({
@@ -749,28 +749,28 @@ TypeOrmModule.forRootAsync({
 });
 ```
 
-This construction works the same as `useClass` with one critical difference - `TypeOrmModule` will lookup imported modules to reuse an existing `ConfigService` instead of instantiating a new one.
+이 구성은 `useClass`와 동일하게 작동하지만 한가지 중요한 차이점이 있습니다. `TypeOrmModule`은 새 모듈을 인스턴스화하는 대신 기존 `ConfigService`를 재사용하기 위해 가져온 모듈을 조회합니다.
 
-> info **Hint** Make sure that the `name` property is defined at the same level as the `useFactory`, `useClass`, or `useValue` property. This will allow Nest to properly register the connection under the appropriate injection token.
+> info **힌트** `name` 속성이 `useFactory`, `useClass` 또는 `useValue` 속성과 동일한 수준에서 정의되었는지 확인하세요. 이렇게하면 Nest가 적절한 인젝션 토큰 아래에 연결을 올바르게 등록할 수 있습니다.
 
 #### Example
 
-A working example is available [here](https://github.com/nestjs/nest/tree/master/sample/05-sql-typeorm).
+작동하는 예제는 [여기](https://github.com/nestjs/nest/tree/master/sample/05-sql-typeorm)에서 확인할 수 있습니다.
 
 <app-banner-enterprise></app-banner-enterprise>
 
 ### Sequelize Integration
 
-An alternative to using TypeORM is to use the [Sequelize](https://sequelize.org/) ORM with the `@nestjs/sequelize` package. In addition, we leverage the [sequelize-typescript](https://github.com/RobinBuschmann/sequelize-typescript) package which provides a set of additional decorators to declaratively define entities.
+TypeORM 사용에 대한 대안은 `@nestjs/sequelize` 패키지와 함께 [Sequelize](https://sequelize.org/) ORM을 사용하는 것입니다. 또한 엔티티를 선언적으로 정의하기 위한 추가 데코레이터 세트를 제공하는 [sequelize-typescript](https://github.com/RobinBuschmann/sequelize-typescript) 패키지를 활용합니다.
 
-To begin using it, we first install the required dependencies. In this chapter, we'll demonstrate using the popular [MySQL](https://www.mysql.com/) Relational DBMS, but Sequelize provides support for many relational databases, such as PostgreSQL, MySQL, Microsoft SQL Server, SQLite, and MariaDB. The procedure we walk through in this chapter will be the same for any database supported by Sequelize. You'll simply need to install the associated client API libraries for your selected database.
+사용을 시작하려면 먼저 필요한 종속성을 설치합니다. 이 장에서는 널리 사용되는 [MySQL](https://www.mysql.com/) 관계형 DBMS를 사용하는 방법을 시연하지만 Sequelize는 PostgreSQL, MySQL, Microsoft SQL Server, SQLite 및 MariaDB와 같은 많은 관계형 데이터베이스를 지원합니다. 이 장에서 살펴 보는 절차는 Sequelize에서 지원하는 모든 데이터베이스에 대해 동일합니다. 선택한 데이터베이스에 연결된 클라이언트 API 라이브러리를 설치하기만하면 됩니다.
 
 ```bash
 $ npm install --save @nestjs/sequelize sequelize sequelize-typescript mysql2
 $ npm install --save-dev @types/sequelize
 ```
 
-Once the installation process is complete, we can import the `SequelizeModule` into the root `AppModule`.
+설치 프로세스가 완료되면 `SequelizeModule`을 루트 `AppModule`로 가져올 수 있습니다.
 
 ```typescript
 @@filename(app.module)
@@ -793,32 +793,32 @@ import { SequelizeModule } from '@nestjs/sequelize';
 export class AppModule {}
 ```
 
-The `forRoot()` method supports all the configuration properties exposed by the Sequelize constructor ([read more](https://sequelize.org/v5/manual/getting-started.html#setting-up-a-connection)). In addition, there are several extra configuration properties described below.
+`forRoot()` 메서드는 Sequelize 생성자에 의해 노출된 모든 구성 속성을 지원합니다 ([자세히 알아보기](https://sequelize.org/v5/manual/getting-started.html#setting-up-a-connection)). 또한 아래에 설명된 몇가지 추가 구성 속성이 있습니다.
 
 <table>
   <tr>
     <td><code>retryAttempts</code></td>
-    <td>Number of attempts to connect to the database (default: <code>10</code>)</td>
+    <td>데이터베이스 연결 시도 횟수 (기본값: <code>10</code>)</td>
   </tr>
   <tr>
     <td><code>retryDelay</code></td>
-    <td>Delay between connection retry attempts (ms) (default: <code>3000</code>)</td>
+    <td>연결 재시도 간격 (밀리 초) (기본값: <code>3000</code>)</td>
   </tr>
   <tr>
     <td><code>autoLoadModels</code></td>
-    <td>If <code>true</code>, models will be loaded automatically (default: <code>false</code>)</td>
+    <td><code>true</code>이면 모델이 자동으로 로드됩니다.(기본값: <code>false</code>)</td>
   </tr>
   <tr>
     <td><code>keepConnectionAlive</code></td>
-    <td>If <code>true</code>, connection will not be closed on the application shutdown (default: <code>false</code>)</td>
+    <td><code>true</code>인 경우 애플리케이션 종료시 연결이 닫히지 않습니다.(기본값: <code>false</code>)</td>
   </tr>
   <tr>
     <td><code>synchronize</code></td>
-    <td>If <code>true</code>, automatically loaded models will be synchronized (default: <code>false</code>)</td>
+    <td><code>true</code>이면 자동 로드된 모델이 동기화됩니다.(기본값: <code>false</code>)</td>
   </tr>
 </table>
 
-Once this is done, the `Sequelize` object will be available to inject across the entire project (without needing to import any modules), for example:
+이 작업이 완료되면 `Sequelize` 객체를 사용하여 전체 프로젝트에 삽입할 수 있습니다.(모듈을 가져올 필요없이) 예:
 
 ```typescript
 @@filename(app.service)
@@ -844,7 +844,7 @@ export class AppService {
 
 #### Models
 
-Sequelize implements the Active Record pattern. With this pattern, you use model classes directly to interact with the database. To continue the example, we need at least one model. Let's define the `User` model.
+Sequelize는 Active Record 패턴을 구현합니다. 이 패턴에서는 모델 클래스를 직접 사용하여 데이터베이스와 상호 작용합니다. 예제를 계속하려면 하나 이상의 모델이 필요합니다. `User` 모델을 정의해 보겠습니다.
 
 ```typescript
 @@filename(user.model)
@@ -863,11 +863,11 @@ export class User extends Model<User> {
 }
 ```
 
-> info **Hint** Learn more about the available decorators [here](https://github.com/RobinBuschmann/sequelize-typescript#column).
+> info **힌트** 사용 가능한 데코레이터에 대한 자세한 내용은 [여기](https://github.com/RobinBuschmann/sequelize-typescript#column)를 참조하세요.
 
-The `User` model file sits in the `users` directory. This directory contains all files related to the `UsersModule`. You can decide where to keep your model files, however, we recommend creating them near their **domain**, in the corresponding module directory.
+`User` 모델 파일은 `users` 디렉토리에 있습니다. 이 디렉토리는 `UsersModule`과 관련된 모든 파일을 포함합니다. 모델 파일을 보관할 위치를 결정할 수 있지만 해당 모듈 디렉토리의 **도메인** 근처에 파일을 만드는 것이 좋습니다.
 
-To begin using the `User` model, we need to let Sequelize know about it by inserting it into the `models` array in the module `forRoot()` method options:
+`User` 모델 사용을 시작하려면 모듈 `forRoot()` 메소드 옵션의 `models` 배열에 삽입하여 Sequelize에 알려야 합니다.
 
 ```typescript
 @@filename(app.module)
@@ -891,7 +891,7 @@ import { User } from './users/user.model';
 export class AppModule {}
 ```
 
-Next, let's look at the `UsersModule`:
+다음으로 `UsersModule`을 살펴 보겠습니다.
 
 ```typescript
 @@filename(users.module)
@@ -909,7 +909,7 @@ import { UsersService } from './users.service';
 export class UsersModule {}
 ```
 
-This module uses the `forFeature()` method to define which models are registered in the current scope. With that in place, we can inject the `UserModel` into the `UsersService` using the `@InjectModel()` decorator:
+이 모듈은 `forFeature()` 메소드를 사용하여 현재 범위에 등록된 모델을 정의합니다. 그런 다음 `@InjectModel()` 데코레이터를 사용하여 `UserModel`을 `UsersService`에 삽입할 수 있습니다.
 
 ```typescript
 @@filename(users.service)
@@ -972,10 +972,10 @@ export class UsersService {
 }
 ```
 
-> warning **Notice** Don't forget to import the `UsersModule` into the root `AppModule`.
+> warning **알림** `UsersModule`을 루트 `AppModule`로 가져오는 것을 잊지 마십시오.
 
-If you want to use the repository outside of the module which imports `SequelizeModule.forFeature`, you'll need to re-export the providers generated by it.
-You can do this by exporting the whole module, like this:
+`SequelizeModule.forFeature`를 가져오는 모듈 외부의 리포지토리를 사용하려면 생성된 프로바이더를 다시 내보내야합니다.
+다음과 같이 전체 모듈을 내보내면 됩니다.
 
 ```typescript
 @@filename(users.module)
@@ -990,7 +990,7 @@ import { User } from './user.entity';
 export class UsersModule {}
 ```
 
-Now if we import `UsersModule` in `UserHttpModule`, we can use `@InjectModel(User)` in the providers of the latter module.
+이제 `UserHttpModule`에서 `UsersModule`을 가져오면 후자의 모듈 공급자에서 `@InjectModel(User)`를 사용할 수 있습니다.
 
 ```typescript
 @@filename(users-http.module)
@@ -1009,26 +1009,26 @@ export class UserHttpModule {}
 
 ### Relations
 
-Relations are associations established between two or more tables. Relations are based on common fields from each table, often involving primary and foreign keys.
+관계는 두개 이상의 테이블간에 설정된 연결입니다. 관계는 종종 기본 및 외래 키를 포함하는 각 테이블의 공통 필드를 기반으로 합니다.
 
-There are three types of relations:
+관계에는 세 가지 유형이 있습니다.
 
 <table>
   <tr>
     <td><code>One-to-one</code></td>
-    <td>Every row in the primary table has one and only one associated row in the foreign table</td>
+    <td>기본 테이블의 모든 행에는 외부 테이블에 하나의 연관된 행만 있습니다.</td>
   </tr>
   <tr>
     <td><code>One-to-many / Many-to-one</code></td>
-    <td>Every row in the primary table has one or more related rows in the foreign table</td>
+    <td>기본 테이블의 모든 행에는 외부 테이블에 하나 이상의 관련 행이 있습니다.</td>
   </tr>
   <tr>
     <td><code>Many-to-many</code></td>
-    <td>Every row in the primary table has many related rows in the foreign table, and every record in the foreign table has many related rows in the primary table</td>
+    <td>기본 테이블의 모든 행에는 외부 테이블에 많은 관련 행이 있고 외부 테이블의 모든 레코드에는 기본 테이블에 많은 관련 행이 있습니다.</td>
   </tr>
 </table>
 
-To define relations in entities, use the corresponding **decorators**. For example, to define that each `User` can have multiple photos, use the `@HasMany()` decorator.
+엔티티에서 관계를 정의하려면 해당 **데코레이터**를 사용합니다. 예를 들어 각 `User`가 여러장의 사진을 가질 수 있도록 정의하려면 `@HasMany()` 데코레이터를 사용합니다.
 
 ```typescript
 @@filename(user.entity)
@@ -1051,11 +1051,11 @@ export class User extends Model<User> {
 }
 ```
 
-> info **Hint** To learn more about associations in Sequelize, read [this](https://github.com/RobinBuschmann/sequelize-typescript#model-association) chapter.
+> info **힌트** Sequelize의 연결에 대한 자세한 내용은 [이](https://github.com/RobinBuschmann/sequelize-typescript#model-association)장을 참조하세요.
 
 #### Auto-load models
 
-Manually adding models to the `models` array of the connection options can be tedious. In addition, referencing models from the root module breaks application domain boundaries and causes leaking implementation details to other parts of the application. To solve this issue, automatically load models by setting both `autoLoadModels` and `synchronize` properties of the configuration object (passed into the `forRoot()` method) to `true`, as shown below:
+연결 옵션의 `models` 배열에 모델을 수동으로 추가하는 것은 지루할 수 있습니다. 또한 루트 모듈에서 모델을 참조하면 애플리케이션 도메인 경계가 깨지고 구현 세부 정보가 애플리케이션의 다른 부분으로 유출됩니다. 이 문제를 해결하려면 아래와 같이 구성 객체의 `autoLoadModels` 및 `synchronize` 속성 (`forRoot()` 메서드로 전달됨)을 모두 `true`로 설정하여 모델을 자동으로 로드합니다.
 
 ```typescript
 @@filename(app.module)
@@ -1074,17 +1074,17 @@ import { SequelizeModule } from '@nestjs/sequelize';
 export class AppModule {}
 ```
 
-With that option specified, every model registered through the `forFeature()` method will be automatically added to the `models` array of the configuration object.
+이 옵션을 지정하면 `forFeature()` 메소드를 통해 등록된 모든 모델이 구성 객체의 `models` 배열에 자동으로 추가됩니다.
 
-> warning **Warning** Note that models that aren't registered through the `forFeature()` method, but are only referenced from the model (via an association), won't be included.
+> warning **경고** `forFeature()` 메서드를 통해 등록되지 않았지만 연결을 통해 모델에서만 참조되는 모델은 포함되지 않습니다.
 
 #### Transactions
 
-A database transaction symbolizes a unit of work performed within a database management system against a database, and treated in a coherent and reliable way independent of other transactions. A transaction generally represents any change in a database ([learn more](https://en.wikipedia.org/wiki/Database_transaction)).
+데이터베이스 트랜잭션은 데이터베이스에 대해 데이터베이스 관리 시스템 내에서 수행되는 작업 단위를 상징하며 다른 트랜잭션과 독립적으로 일관되고 신뢰할 수 있는 방식으로 처리됩니다. 트랜잭션은 일반적으로 데이터베이스의 모든 변경을 나타냅니다 ([자세히 알아보기](https://en.wikipedia.org/wiki/Database_transaction)).
 
-There are many different strategies to handle [Sequelize transactions](https://sequelize.org/v5/manual/transactions.html). Below is a sample implementation of a managed transaction (auto-callback).
+[Sequelize 트랜잭션](https://sequelize.org/v5/manual/transactions.html)을 처리하기위한 다양한 전략이 있습니다. 다음은 관리 트랜잭션(자동 콜백)의 샘플 구현입니다.
 
-First, we need to inject the `Sequelize` object into a class in the normal way:
+먼저 일반적인 방법으로 `Sequelize` 객체를 클래스에 삽입해야합니다.
 
 ```typescript
 @Injectable()
@@ -1093,9 +1093,9 @@ export class UsersService {
 }
 ```
 
-> info **Hint** The `Sequelize` class is imported from the `sequelize-typescript` package.
+> info **힌트** `Sequelize` 클래스는 `sequelize-typescript` 패키지에서 가져옵니다.
 
-Now, we can use this object to create a transaction.
+이제이 객체를 사용하여 트랜잭션을 만들 수 있습니다.
 
 ```typescript
 async createMany() {
@@ -1119,21 +1119,21 @@ async createMany() {
 }
 ```
 
-> info **Hint** Note that the `Sequelize` instance is used only to start the transaction. However, to test this class would require mocking the entire `Sequelize` object (which exposes several methods). Thus, we recommend using a helper factory class (e.g., `TransactionRunner`) and defining an interface with a limited set of methods required to maintain transactions. This technique makes mocking these methods pretty straightforward.
+> info **힌트** `Sequelize` 인스턴스는 트랜잭션을 시작하는 데만 사용됩니다. 그러나 이 클래스를 테스트하려면 전체 `Sequelize` 객체(여러 메서드를 노출함)를 모의해야합니다. 따라서 헬퍼 팩토리 클래스(예: `TransactionRunner`)를 사용하고 트랜잭션을 유지하는 데 필요한 제한된 메서드 집합으로 인터페이스를 정의하는 것이 좋습니다. 이 기술은 이러한 방법을 매우 간단하게 모의합니다.
 
 #### Migrations
 
-[Migrations](https://sequelize.org/v5/manual/migrations.html) provide a way to incrementally update the database schema to keep it in sync with the application's data model while preserving existing data in the database. To generate, run, and revert migrations, Sequelize provides a dedicated [CLI](https://sequelize.org/v5/manual/migrations.html#the-cli).
+[마이그레이션](https://sequelize.org/v5/manual/migrations.html)은 데이터베이스 스키마를 점진적으로 업데이트하여 데이터베이스의 기존 데이터를 유지하면서 애플리케이션의 데이터 모델과 동기화 상태를 유지하는 방법을 제공합니다. 마이그레이션을 생성, 실행 및 되돌리기 위해 Sequelize는 전용 [CLI](https://sequelize.org/v5/manual/migrations.html#the-cli)를 제공합니다.
 
-Migration classes are separate from the Nest application source code. Their lifecycle is maintained by the Sequelize CLI. Therefore, you are not able to leverage dependency injection and other Nest specific features with migrations. To learn more about migrations, follow the guide in the [Sequelize documentation](https://sequelize.org/v5/manual/migrations.html#the-cli).
+마이그레이션 클래스는 Nest 애플리케이션 소스 코드와 별개입니다. 수명주기는 Sequelize CLI에 의해 유지됩니다. 따라서 마이그레이션과 함께 종속성 주입 및 기타 Nest 특정 기능을 활용할 수 없습니다. 이전에 대해 자세히 알아 보려면 [Sequelize 문서](https://sequelize.org/v5/manual/migrations.html#the-cli)의 가이드를 따르세요.
 
 <app-banner-courses></app-banner-courses>
 
 #### Multiple databases
 
-Some projects require multiple database connections. This can also be achieved with this module. To work with multiple connections, first create the connections. In this case, connection naming becomes **mandatory**.
+일부 프로젝트에는 여러 데이터베이스 연결이 필요합니다. 이것은 또한 이 모듈을 통해 달성할 수 있습니다. 여러 연결로 작업하려면 먼저 연결을 만듭니다. 이 경우 연결 이름 지정은 **필수**가 됩니다.
 
-Suppose you have an `Album` entity stored in its own database.
+자체 데이터베이스에 `Album` 항목이 저장되어 있다고 가정합니다.
 
 ```typescript
 const defaultOptions = {
@@ -1163,9 +1163,9 @@ const defaultOptions = {
 export class AppModule {}
 ```
 
-> warning **Notice** If you don't set the `name` for a connection, its name is set to `default`. Please note that you shouldn't have multiple connections without a name, or with the same name, otherwise they will get overridden.
+> warning **알림** 연결에 `name`을 설정하지 않으면 연결 이름이 `기본값 default`으로 설정됩니다. 이름이 없거나 이름이 같은 연결이 여러개 있으면 안됩니다. 그렇지 않으면 연결이 재정의됩니다.
 
-At this point, you have `User` and `Album` models registered with their own connection. With this setup, you have to tell the `SequelizeModule.forFeature()` method and the `@InjectModel()` decorator which connection should be used. If you do not pass any connection name, the `default` connection is used.
+이 시점에서 `User` 및 `Album` 모델이 자체 연결로 등록되어 있습니다. 이 설정으로 `SequelizeModule.forFeature()` 메소드와 `@InjectModel()` 데코레이터에게 어떤 연결을 사용해야 하는지 알려주어야 합니다. 연결 이름을 전달하지 않으면 `default` 연결이 사용됩니다.
 
 ```typescript
 @Module({
@@ -1177,7 +1177,7 @@ At this point, you have `User` and `Album` models registered with their own conn
 export class AppModule {}
 ```
 
-You can also inject the `Sequelize` instance for a given connection:
+주어진 연결에 `Sequelize` 인스턴스를 삽입할 수도 있습니다.
 
 ```typescript
 @Injectable()
@@ -1189,7 +1189,7 @@ export class AlbumsService {
 }
 ```
 
-It's also possible to inject any `Sequelize` instance to the providers:
+`Sequelize` 인스턴스를 프로바이더에 삽입할 수도 있습니다.
 
 ```typescript
 @Module({
@@ -1208,9 +1208,9 @@ export class AlbumsModule {}
 
 #### Testing
 
-When it comes to unit testing an application, we usually want to avoid making a database connection, keeping our test suites independent and their execution process as fast as possible. But our classes might depend on models that are pulled from the connection instance. How do we handle that? The solution is to create mock models. In order to achieve that, we set up [custom providers](/fundamentals/custom-providers). Each registered model is automatically represented by a `<ModelName>Model` token, where `ModelName` is the name of your model class.
+애플리케이션의 단위 테스트에 관해서는 일반적으로 데이터베이스 연결을 피하고 테스트 스위트를 독립적으로 유지하고 실행 프로세스를 가능한 한 빨리 유지하려고 합니다. 그러나 우리의 클래스는 연결 인스턴스에서 가져온 모델에 따라 달라질 수 있습니다. 어떻게 처리합니까? 해결책은 모의 모델을 만드는 것입니다. 이를 달성하기 위해 [커스텀 프로바이더](/fundamentals/custom-providers)를 설정했습니다. 등록된 각 모델은 자동으로 `<ModelName>Model` 토큰으로 표시됩니다. 여기서 `ModelName`은 모델 클래스의 이름입니다.
 
-The `@nestjs/sequelize` package exposes the `getModelToken()` function which returns a prepared token based on a given model.
+`@estjs/sequelize` 패키지는 주어진 모델을 기반으로 준비된 토큰을 반환하는 `getModelToken ()` 함수를 노출합니다.
 
 ```typescript
 @Module({
@@ -1225,13 +1225,13 @@ The `@nestjs/sequelize` package exposes the `getModelToken()` function which ret
 export class UsersModule {}
 ```
 
-Now a substitute `mockModel` will be used as the `UserModel`. Whenever any class asks for `UserModel` using an `@InjectModel()` decorator, Nest will use the registered `mockModel` object.
+이제 대체 `mockModel`이 `UserModel`로 사용됩니다. 클래스가 `@InjectModel()` 데코레이터를 사용하여 `UserModel`을 요청할 때마다 Nest는 등록된 `mockModel` 객체를 사용합니다.
 
 #### Async configuration
 
-You may want to pass your `SequelizeModule` options asynchronously instead of statically. In this case, use the `forRootAsync()` method, which provides several ways to deal with async configuration.
+`SequelizeModule` 옵션을 정적으로 전달하는 대신 비동기 적으로 전달할 수 있습니다. 이 경우 비동기 구성을 처리하는 여러 방법을 제공하는 `forRootAsync()` 메소드를 사용하십시오.
 
-One approach is to use a factory function:
+한가지 접근 방식은 팩토리 함수를 사용하는 것입니다.
 
 ```typescript
 SequelizeModule.forRootAsync({
@@ -1247,7 +1247,7 @@ SequelizeModule.forRootAsync({
 });
 ```
 
-Our factory behaves like any other [asynchronous provider](https://docs.nestjs.com/fundamentals/async-providers) (e.g., it can be `async` and it's able to inject dependencies through `inject`).
+우리 팩토리는 다른 [비동기 프로바이더](https://docs.nestjs.com/fundamentals/async-providers)처럼 작동합니다 (예: `async`일 수 있으며 `inject`를 통해 종속성을 삽입할 수 있음).
 
 ```typescript
 SequelizeModule.forRootAsync({
@@ -1265,7 +1265,7 @@ SequelizeModule.forRootAsync({
 });
 ```
 
-Alternatively, you can use the `useClass` syntax:
+또는 `useClass` 구문을 사용할 수 있습니다.
 
 ```typescript
 SequelizeModule.forRootAsync({
@@ -1273,7 +1273,7 @@ SequelizeModule.forRootAsync({
 });
 ```
 
-The construction above will instantiate `SequelizeConfigService` inside `SequelizeModule` and use it to provide an options object by calling `createSequelizeOptions()`. Note that this means that the `SequelizeConfigService` has to implement the `SequelizeOptionsFactory` interface, as shown below:
+위의  `SequelizeModule` 내에서 `SequelizeConfigService`를 인스턴스화하고 `createSequelizeOptions()`를 호출하여 옵션 객체를 제공하는 데 사용합니다. 이는 `SequelizeConfigService`가 아래와 같이 `SequelizeOptionsFactory` 인터페이스를 구현해야 함을 의미합니다.
 
 ```typescript
 @Injectable()
@@ -1292,7 +1292,7 @@ class SequelizeConfigService implements SequelizeOptionsFactory {
 }
 ```
 
-In order to prevent the creation of `SequelizeConfigService` inside `SequelizeModule` and use a provider imported from a different module, you can use the `useExisting` syntax.
+`Sequelize Module` 내에서 `Sequelize Config Service` 생성을 방지하고 다른 모듈에서 가져온 프로바이더를 사용하려면 `useExisting` 구문을 사용할 수 있습니다.
 
 ```typescript
 SequelizeModule.forRootAsync({
@@ -1301,8 +1301,8 @@ SequelizeModule.forRootAsync({
 });
 ```
 
-This construction works the same as `useClass` with one critical difference - `SequelizeModule` will lookup imported modules to reuse an existing `ConfigService` instead of instantiating a new one.
+이 구성은 `useClass`와 동일하게 작동하지만 한가지 중요한 차이점이 있습니다. `SequelizeModule`은 새 모듈을 인스턴스화하는 대신 기존 `ConfigService`를 재사용하기 위해 가져온 모듈을 조회합니다.
 
 #### Example
 
-A working example is available [here](https://github.com/nestjs/nest/tree/master/sample/07-sequelize).
+작동하는 예는 [여기](https://github.com/nestjs/nest/tree/master/sample/07-sequelize)에서 확인할 수 있습니다.

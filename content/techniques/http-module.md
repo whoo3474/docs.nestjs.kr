@@ -1,8 +1,8 @@
 ### HTTP module
 
-[Axios](https://github.com/axios/axios) is richly featured HTTP client package that is widely used. Nest wraps Axios and exposes it via the built-in `HttpModule`. The `HttpModule` exports the `HttpService` class, which exposes Axios-based methods to perform HTTP requests. The library also transforms the resulting HTTP responses into `Observables`.
+[Axios](https://github.com/axios/axios)는 널리 사용되는 풍부한 기능의 HTTP 클라이언트 패키지입니다. Nest는 Axios를 래핑하고 내장된 `HttpModule`을 통해 노출합니다. `HttpModule`은 Axios 기반 메소드를 노출하여 HTTP 요청을 수행하는 `HttpService` 클래스를 내보냅니다. 라이브러리는 또한 결과 HTTP 응답을 `Observables`로 변환합니다.
 
-To use the `HttpService`, first import `HttpModule`.
+`HttpService`를 사용하려면 먼저 `HttpModule`을 가져옵니다.
 
 ```typescript
 @Module({
@@ -12,9 +12,9 @@ To use the `HttpService`, first import `HttpModule`.
 export class CatsModule {}
 ```
 
-Next, inject `HttpService` using normal constructor injection.
+다음으로 일반 생성자 주입을 사용하여 `HttpService`를 주입합니다.
 
-> info **Hint** `HttpModule` and `HttpService` are imported from `@nestjs/common` package.
+> info **힌트** `HttpModule` 및 `HttpService`는 `@nestjs/common` 패키지에서 가져옵니다.
 
 ```typescript
 @@filename()
@@ -40,11 +40,11 @@ export class CatsService {
 }
 ```
 
-All `HttpService` methods return an `AxiosResponse` wrapped in an `Observable` object.
+모든 `HttpService` 메소드는 `Observable` 객체에 래핑된 `AxiosResponse`를 반환합니다.
 
 #### Configuration
 
-[Axios](https://github.com/axios/axios) can be configured with a variety of options to customize the behavior of the `HttpService`. Read more about them [here](https://github.com/axios/axios#request-config). To configure the underlying Axios instance, pass an optional options object to the `register()` method of `HttpModule` when importing it. This options object will be passed directly to the underlying Axios constructor.
+다양한 옵션으로 [Axios](https://github.com/axios/axios)를 구성하여 `HttpService`의 동작을 맞춤 설정할 수 있습니다. [여기](https://github.com/axios/axios#request-config)에서 자세히 알아보세요. 기본 Axios 인스턴스를 구성하려면 가져올 때 선택적 옵션 객체를 `HttpModule`의 `register()` 메서드에 전달합니다. 이 옵션 객체는 기본 Axios 생성자에 직접 전달됩니다.
 
 ```typescript
 @Module({
@@ -61,9 +61,11 @@ export class CatsModule {}
 
 #### Async configuration
 
-When you need to pass module options asynchronously instead of statically, use the `registerAsync()` method. As with most dynamic modules, Nest provides several techniques to deal with async configuration.
 
 One technique is to use a factory function:
+모듈 옵션을 정적으로 전달하는 대신 비동기적으로 전달해야 하는 경우 `registerAsync()` 메소드를 사용하십시오. 대부분의 동적 모듈과 마찬가지로 Nest는 비동기 구성을 처리하는 몇가지 기술을 제공합니다.
+
+한가지 기술은 팩토리 기능을 사용하는 것입니다.
 
 ```typescript
 HttpModule.registerAsync({
@@ -74,7 +76,7 @@ HttpModule.registerAsync({
 });
 ```
 
-Like other factory providers, our factory function can be [async](https://docs.nestjs.com/fundamentals/custom-providers#factory-providers-usefactory) and can inject dependencies through `inject`.
+다른 팩토리 공급자와 마찬가지로 팩토리 함수는 [async](https://docs.nestjs.com/fundamentals/custom-providers#factory-providers-usefactory)일 수 있으며 `inject`를 통해 종속성을 주입할 수 있습니다.
 
 ```typescript
 HttpModule.registerAsync({
@@ -87,7 +89,7 @@ HttpModule.registerAsync({
 });
 ```
 
-Alternatively, you can configure the `HttpModule` using a class instead of a factory, as shown below.
+또는 아래와 같이 팩토리 대신 클래스를 사용하여 `HttpModule`을 구성할 수 있습니다.
 
 ```typescript
 HttpModule.registerAsync({
@@ -95,7 +97,7 @@ HttpModule.registerAsync({
 });
 ```
 
-The construction above instantiates `HttpConfigService` inside `HttpModule`, using it to create an options object. Note that in this example, the `HttpConfigService` has to implement `HttpModuleOptionsFactory` interface as shown below. The `HttpModule` will call the `createHttpOptions()` method on the instantiated object of the supplied class.
+위의 구성은 `HttpModule` 내부에서 `HttpConfigService`를 인스턴스화하여 옵션 객체를 생성하는데 사용합니다. 이 예에서 `HttpConfigService`는 아래와 같이 `HttpModuleOptionsFactory` 인터페이스를 구현해야합니다. `HttpModule`은 제공된 클래스의 인스턴스화된 객체에 대해 `createHttpOptions()` 메서드를 호출합니다.
 
 ```typescript
 @Injectable()
@@ -109,7 +111,7 @@ class HttpConfigService implements HttpModuleOptionsFactory {
 }
 ```
 
-If you want to reuse an existing options provider instead of creating a private copy inside the `HttpModule`, use the `useExisting` syntax.
+`HttpModule` 내에 비공개 사본을 생성하는 대신 기존 옵션 공급자를 재사용하려면 `useExisting` 구문을 사용하세요.
 
 ```typescript
 HttpModule.registerAsync({
