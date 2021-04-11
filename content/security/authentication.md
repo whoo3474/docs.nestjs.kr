@@ -826,7 +826,7 @@ export class JwtAuthGuard extends AuthGuard(['strategy_jwt_1', 'strategy_jwt_2',
 
 #### Enable authentication globally
 
-방대한 엔드 포인트를 기본적으로 보호해야 하는 경우 인증 가드를 [전역 가드](/guards#binding-guards)로 등록하고 각 컨트롤러 위에 `@UseGuards()` 데코레이터를 사용하는 대신 공개할 경로를 간단히 표시할 수 있습니다.
+대부분의 엔드포인트를 기본적으로 보호해야하는 경우 각 컨트롤러 상단에서 `@UseGuards()` 데코레이터를 사용하는 대신 [전역 가드](/guards#binding-guards)로 인증 가드를 등록할 수 있습니다. 공개할 라우트를 간단히 표시할 수 있습니다.
 
 먼저 다음 구성을 사용하여 `JwtAuthGuard`를 전역 가드로 등록합니다(모든 모듈에서).
 
