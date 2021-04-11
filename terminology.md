@@ -14,13 +14,14 @@ object: 객체
 package: 패키지
 property: 속성
 optional: 선택사항
+required: 필수항목
 setting: 설정, 세팅
 dynamic module: 동적모듈
 method: 메서드
 instantiate: 인스턴스화
 instance: 인스턴스
 credentials: 자격증명
-injection: 주입
+injection: 주입, 인젝션
 argument: 인수
 decorator: 데코레이터
 listener: 리스너
@@ -89,3 +90,12 @@ boilerplate:
 Healthcheck: 상태확인
 healthy or unhealthy: 정상 또는 비정상
 publisher: 게시자
+mock: 모의
+websocket: 웹소켓
+transporter: 전송자, 트랜스포터
+packet: 패킷
+prefetch:
+camel case:
+chunk:
+full-duplex: 전이중, 풀듀플렉스
+built-in:
