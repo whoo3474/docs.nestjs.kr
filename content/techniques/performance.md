@@ -22,6 +22,7 @@ $ npm i --save @nestjs/platform-fastify
 Fastify 플랫폼이 설치되면 `FastifyAdapter`를 사용할 수 있습니다.
 
 ```typescript
+@@filename(main)
 import { NestFactory } from '@nestjs/core';
 import {
   FastifyAdapter,
