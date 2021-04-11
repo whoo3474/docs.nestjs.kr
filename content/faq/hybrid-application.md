@@ -1,6 +1,6 @@
 ### Hybrid application
 
-A hybrid application is one that both listens for HTTP requests, as well as makes use of connected microservices. The `INestApplication` instance can be connected with `INestMicroservice` instances through the `connectMicroservice()` method.
+하이브리드 애플리케이션은 HTTP 요청을 수신하고 연결된 마이크로서비스를 사용하는 애플리케이션입니다. `INestApplication` 인스턴스는 `connectMicroservice()` 메소드를 통해 `INestMicroservice` 인스턴스와 연결할 수 있습니다.
 
 ```typescript
 const app = await NestFactory.create(AppModule);
@@ -12,7 +12,7 @@ await app.startAllMicroservicesAsync();
 await app.listen(3001);
 ```
 
-To connect multiple microservice instances, issue the call to `connectMicroservice()` for each microservice:
+여러 마이크로서비스 인스턴스를 연결하려면 각 마이크로서비스에 대해 `connectMicroservice()`를 호출합니다.
 
 ```typescript
 const app = await NestFactory.create(AppModule);
@@ -35,7 +35,7 @@ await app.startAllMicroservicesAsync();
 await app.listen(3001);
 ```
 
-To bind `@MessagePattern()` to only one transport strategy (for example, MQTT) in a hybrid application with multiple microservices, we can pass the second argument of type `Transport` which is an enum with all the built-in transport strategies defined.
+여러 마이크로서비스가 있는 하이브리드 애플리케이션에서 `@MessagePattern()`을 하나의 전송 전략(예: MQTT)에만 바인딩하려면 모든 기본 제공 전송 전략이 정의된 열거형 `Transport` 타입의 두번째 인수를 전달할 수 있습니다.
 
 ```typescript
 @@filename()
@@ -62,12 +62,12 @@ getTCPDate(data, context) {
 }
 ```
 
-> info **Hint** `@Payload()`, `@Ctx()`, `Transport` and `NatsContext` are imported from `@nestjs/microservices`.
+> info **힌트** `@Payload()`, `@Ctx()`, `Transport` 및 `NatsContext`는 `@nestjs/microservices`에서 가져옵니다.
 
 #### Sharing configuration
 
-By default a hybrid application will not inherit global pipes, interceptors, guards and filters configured for the main (HTTP-based) application.
-To inherit these configuration properties from the main application, set the `inheritAppConfig` property in the second argument (an optional options object) of the `connectMicroservice()` call, as follow:
+기본적으로 하이브리드 애플리케이션은 기본(HTTP 기반) 애플리케이션에 대해 구성된 글로벌 파이프, 인터셉터, 가드 및 필터를 상속하지 않습니다.
+기본 애플리케이션에서 이러한 구성 속성을 상속하려면 다음과 같이 `connectMicroservice()` 호출의 두번째 인수(선택적 옵션 객체)에 `inheritAppConfig` 속성을 설정합니다.
 
 ```typescript
 const microservice = app.connectMicroservice({

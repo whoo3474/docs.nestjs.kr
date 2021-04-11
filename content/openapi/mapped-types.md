@@ -1,14 +1,14 @@
 ### Mapped types
 
-As you build out features like **CRUD** (Create/Read/Update/Delete) it's often useful to construct variants on a base entity type. Nest provides several utility functions that perform type transformations to make this task more convenient.
+**CRUD**(만들기/읽기/업데이트/삭제)와 같은 기능을 구축할 때 기본 엔티티 타입에 대한 변형을 구성하는 것이 종종 유용합니다. Nest는 이 작업을 보다 편리하게 만들기 위해 타입 변환을 수행하는 여러 유틸리티 함수를 제공합니다.
 
 #### Partial
 
-When building input validation types (also called DTOs), it's often useful to build **create** and **update** variations on the same type. For example, the **create** variant may require all fields, while the **update** variant may make all fields optional.
+입력 유효성 검사 타입(DTO라고도 함)을 빌드할 때 동일한 유형에서 **생성** 및 **업데이트** 변형을 빌드하는 것이 유용한 경우가 많습니다. 예를 들어 **create** 변형에는 모든 필드가 필요할 수 있지만 **update** 변형은 모든 필드를 선택 사항으로 만들 수 있습니다.
 
-Nest provides the `PartialType()` utility function to make this task easier and minimize boilerplate.
+Nest는 이 작업을 더 쉽게 만들고 상용구를 최소화하기 위해 `PartialType()` 유틸리티 함수를 제공합니다.
 
-The `PartialType()` function returns a type (class) with all the properties of the input type set to optional. For example, suppose we have a **create** type as follows:
+`PartialType()` 함수는 입력 타입의 모든 속성이 선택사항으로 설정된 타입(클래스)을 반환합니다. 예를 들어 다음과 같은 **create** 타입이 있다고 가정합니다.
 
 ```typescript
 import { ApiProperty } from '@nestjs/swagger';
@@ -25,17 +25,17 @@ export class CreateCatDto {
 }
 ```
 
-By default, all of these fields are required. To create a type with the same fields, but with each one optional, use `PartialType()` passing the class reference (`CreateCatDto`) as an argument:
+기본적으로 이러한 필드는 모두 필수입니다. 동일한 필드를 사용하되 각 필드가 선택사항인 타입을 만들려면 클래스 참조(`CreateCatDto`)를 인수로 전달하는 `PartialType()`을 사용합니다.
 
 ```typescript
 export class UpdateCatDto extends PartialType(CreateCatDto) {}
 ```
 
-> info **Hint** The `PartialType()` function is imported from the `@nestjs/swagger` package.
+> info **힌트** `PartialType()` 함수는 `@nestjs/swagger` 패키지에서 가져옵니다.
 
 #### Pick
 
-The `PickType()` function constructs a new type (class) by picking a set of properties from an input type. For example, suppose we start with a type like:
+`PickType()` 함수는 입력 타입에서 속성 집합을 선택하여 새로운 타입(클래스)을 생성합니다. 예를 들어 다음과 같은 타입으로 시작한다고 가정합니다.
 
 ```typescript
 import { ApiProperty } from '@nestjs/swagger';
@@ -52,17 +52,17 @@ export class CreateCatDto {
 }
 ```
 
-We can pick a set of properties from this class using the `PickType()` utility function:
+`PickType()` 유틸리티 함수를 사용하여 이 클래스에서 속성 집합을 선택할 수 있습니다.
 
 ```typescript
 export class UpdateCatAgeDto extends PickType(CreateCatDto, ['age'] as const) {}
 ```
 
-> info **Hint** The `PickType()` function is imported from the `@nestjs/swagger` package.
+> info **힌트** `PickType()` 함수는 `@nestjs/swagger` 패키지에서 가져옵니다.
 
 #### Omit
 
-The `OmitType()` function constructs a type by picking all properties from an input type and then removing a particular set of keys. For example, suppose we start with a type like:
+`OmitType()` 함수는 입력 타입에서 모든 속성을 선택한 다음 특정 키 세트를 제거하여 타입을 구성합니다. 예를 들어 다음과 같은 타입으로 시작한다고 가정합니다.
 
 ```typescript
 import { ApiProperty } from '@nestjs/swagger';
@@ -79,17 +79,17 @@ export class CreateCatDto {
 }
 ```
 
-We can generate a derived type that has every property **except** `name` as shown below. In this construct, the second argument to `OmitType` is an array of property names.
+아래와 같이 `name`을 **제외**한 모든 속성을 가진 파생 유형을 생성할 수 있습니다. 이 구조에서 `OmitType`의 두번째 인수는 속성 이름의 배열입니다.
 
 ```typescript
 export class UpdateCatDto extends OmitType(CreateCatDto, ['name'] as const) {}
 ```
 
-> info **Hint** The `OmitType()` function is imported from the `@nestjs/swagger` package.
+> info **힌트** `OmitType()` 함수는 `@nestjs/swagger` 패키지에서 가져옵니다.
 
 #### Intersection
 
-The `IntersectionType()` function combines two types into one new type (class). For example, suppose we start with two types like:
+`IntersectionType()` 함수는 두 타입을 하나의 새로운 타입(클래스)으로 결합합니다. 예를 들어 다음과 같은 두 가지 타입으로 시작한다고 가정합니다.
 
 ```typescript
 import { ApiProperty } from '@nestjs/swagger';
@@ -108,7 +108,7 @@ export class AdditionalCatInfo {
 }
 ```
 
-We can generate a new type that combines all properties in both types.
+두 타입의 모든 속성을 결합하는 새 타입을 생성할 수 있습니다.
 
 ```typescript
 export class UpdateCatDto extends IntersectionType(
@@ -117,11 +117,11 @@ export class UpdateCatDto extends IntersectionType(
 ) {}
 ```
 
-> info **Hint** The `IntersectionType()` function is imported from the `@nestjs/swagger` package.
+> info **힌트** `IntersectionType()` 함수는 `@nestjs/swagger` 패키지에서 가져옵니다.
 
 #### Composition
 
-The type mapping utility functions are composable. For example, the following will produce a type (class) that has all of the properties of the `CreateCatDto` type except for `name`, and those properties will be set to optional:
+타입 매핑 유틸리티 함수는 구성 가능합니다. 예를 들어, 다음은 `name`을 제외한 `CreateCatDto` 타입의 모든 속성을 가진 타입(클래스)을 생성하며 이러한 속성은 선택사항으로 설정됩니다.
 
 ```typescript
 export class UpdateCatDto extends PartialType(

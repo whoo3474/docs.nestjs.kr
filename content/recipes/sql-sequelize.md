@@ -2,20 +2,20 @@
 
 ##### This chapter applies only to TypeScript
 
-> **Warning** In this article, you'll learn how to create a `DatabaseModule` based on the **Sequelize** package from scratch using custom components. As a consequence, this technique contains a lot of overhead that you can avoid by using the dedicated, out-of-the-box `@nestjs/sequelize` package. To learn more, see [here](/techniques/database#sequelize-integration).
+> **경고** 이 문서에서는 사용자 지정 구성요소를 사용하여 처음부터 **Sequelize** 패키지를 기반으로 `DatabaseModule`을 만드는 방법을 알아봅니다. 결과적으로 이 기술에는 기본 제공되는 전용 `@nestjs/sequelize` 패키지를 사용하여 피할 수 있는 많은 오버헤드가 포함됩니다. 자세한 내용은 [여기](/techniques/database#sequelize-integration)를 참조하세요.
 
-[Sequelize](https://github.com/sequelize/sequelize) is a popular Object Relational Mapper (ORM) written in a vanilla JavaScript, but there is a [sequelize-typescript](https://github.com/RobinBuschmann/sequelize-typescript) TypeScript wrapper which provides a set of decorators and other extras for the base sequelize.
+[Sequelize](https://github.com/sequelize/sequelize)는 바닐라 자바스크립트로 작성된 인기있는 ORM(Object Relational Mapper)이지만, 기본 sequelize에 대한 데코레이터 및 기타 추가 기능 세트를 제공하는 [sequelize-typescript](https://github.com/RobinBuschmann/sequelize-typescript) TypeScript 래퍼가 있습니다.
 
 #### Getting started
 
-To start the adventure with this library we have to install the following dependencies:
+이 라이브러리로 모험을 시작하려면 다음 종속성을 설치해야합니다.
 
 ```bash
 $ npm install --save sequelize sequelize-typescript mysql2
 $ npm install --save-dev @types/sequelize
 ```
 
-The first step we need to do is create a **Sequelize** instance with an options object passed into the constructor. Also, we need to add all models (the alternative is to use `modelPaths` property) and `sync()` our database tables.
+첫번째 단계는 생성자에 전달된 옵션 개체를 사용하여 **Sequelize** 인스턴스를 만드는 것입니다. 또한 모든 모델 (대안은 `modelPaths` 속성을 사용하는 것임)과 데이터베이스 테이블 `sync()`를 추가해야합니다.
 
 ```typescript
 @@filename(database.providers)
@@ -42,9 +42,9 @@ export const databaseProviders = [
 ];
 ```
 
-> info **Hint** Following best practices, we declared the custom provider in the separated file which has a `*.providers.ts` suffix.
+> info **힌트** 모범 사례에 따라 `*.providers.ts` 접미사가 있는 별도의 파일에서 사용자 지정 프로바이더를 선언했습니다.
 
-Then, we need to export these providers to make them **accessible** for the rest part of the application.
+그런 다음 애플리케이션의 나머지 부분에서 **액세스 가능**하도록 이러한 프로바이더를 내보내야합니다.
 
 ```typescript
 import { Module } from '@nestjs/common';
@@ -57,11 +57,11 @@ import { databaseProviders } from './database.providers';
 export class DatabaseModule {}
 ```
 
-Now we can inject the `Sequelize` object using `@Inject()` decorator. Each class that would depend on the `Sequelize` async provider will wait until a `Promise` is resolved.
+이제 `@Inject()` 데코레이터를 사용하여 `Sequelize` 객체를 삽입할 수 있습니다. `Sequelize` 비동기 프로바이더에 의존하는 각 클래스는 `Promise`가 해결될 때까지 기다립니다.
 
 #### Model injection
 
-In [Sequelize](https://github.com/sequelize/sequelize) the **Model** defines a table in the database. Instances of this class represent a database row. Firstly, we need at least one entity:
+[Sequelize](https://github.com/sequelize/sequelize)에서 **Model**은 데이터베이스의 테이블을 정의합니다. 이 클래스의 인스턴스는 데이터베이스 행을 나타냅니다. 첫째, 최소한 하나의 엔티티가 필요합니다.
 
 ```typescript
 @@filename(cat.entity)
@@ -80,7 +80,7 @@ export class Cat extends Model<Cat> {
 }
 ```
 
-The `Cat` entity belongs to the `cats` directory. This directory represents the `CatsModule`. Now it's time to create a **Repository** provider:
+`Cat` 엔티티는 `cats` 디렉토리에 속합니다. 이 디렉토리는 `CatsModule`을 나타냅니다. 이제 **Repository** 프로바이더를 만들 차례입니다.
 
 ```typescript
 @@filename(cats.providers)
@@ -94,11 +94,11 @@ export const catsProviders = [
 ];
 ```
 
-> warning **Warning** In the real-world applications you should avoid **magic strings**. Both `CATS_REPOSITORY` and `SEQUELIZE` should be kept in the separated `constants.ts` file.
+> warning **경고** 실제 애플리케이션에서는 **매직 스트링**을 피해야합니다. `CATS_REPOSITORY`와 `SEQUELIZE`는 분리된 `constants.ts` 파일에 보관해야 합니다.
 
-In Sequelize, we use static methods to manipulate the data, and thus we created an **alias** here.
+Sequelize에서는 정적 메서드를 사용하여 데이터를 조작하므로 여기서 **별칭 alias**을 만들었습니다.
 
-Now we can inject the `CATS_REPOSITORY` to the `CatsService` using the `@Inject()` decorator:
+이제 `@Inject()` 데코레이터를 사용하여 `CATS_REPOSITORY`를 `CatsService`에 삽입할 수 있습니다.
 
 ```typescript
 @@filename(cats.service)
@@ -117,9 +117,9 @@ export class CatsService {
 }
 ```
 
-The database connection is **asynchronous**, but Nest makes this process completely invisible for the end-user. The `CATS_REPOSITORY` provider is waiting for the db connection, and the `CatsService` is delayed until repository is ready to use. The entire application can start when each class is instantiated.
+데이터베이스 연결은 **비동기적**이지만 Nest는 이 프로세스를 최종 사용자에게 완전히 보이지 않게합니다. `CATS_REPOSITORY` 프로바이더는 db 연결을 기다리고 있으며 `CatsService`는 저장소를 사용할 준비가 될 때까지 지연됩니다. 각 클래스가 인스턴스화될 때 전체 애플리케이션이 시작될 수 있습니다.
 
-Here is a final `CatsModule`:
+다음은 마지막 `CatsModule`입니다.
 
 ```typescript
 @@filename(cats.module)
@@ -140,4 +140,4 @@ import { DatabaseModule } from '../database/database.module';
 export class CatsModule {}
 ```
 
-> info **Hint** Do not forget to import the `CatsModule` into the root `AppModule`.
+> info **힌트** `CatsModule`을 루트 `AppModule`로 가져오는 것을 잊지 마십시오.

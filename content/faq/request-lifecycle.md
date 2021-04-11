@@ -1,14 +1,14 @@
 ### Request lifecycle
 
-Nest applications handle requests and produce responses in a sequence we refer to as the **request lifecycle**. With the use of middleware, pipes, guards, and interceptors, it can be challenging to track down where a particular piece of code executes during the request lifecycle, especially as global, controller level, and route level components come into play. In general, a request flows through middleware to guards, then to interceptors, then to pipes and finally back to interceptors on the return path (as the response is generated).
+Nest 애플리케이션은 요청을 처리하고 **요청 수명주기 request lifecycle**라고하는 순서대로 응답을 생성합니다. 미들웨어, 파이프, 가드 및 인터셉터를 사용하면 특히 전역, 컨트롤러 수준 및 라우트 수준 구성요소가 작동할 때 요청 수명주기동안 특정 코드 조각이 실행되는 위치를 추적하는 것이 어려울 수 있습니다. 일반적으로 요청은 미들웨어를 통해 가드, 인터셉터, 파이프, 마지막으로 리턴 경로의 인터셉터 (응답이 생성됨)로 이동합니다.
 
 #### Middleware
 
-Middleware is executed in a particular sequence. First, Nest runs globally bound middleware (such as middleware bound with `app.use`) and then it runs [module bound middleware](/middleware), which are determined on paths. Middleware are run sequentially in the order they are bound, similar to the way middleware in Express works. In the case of middleware bound across different modules, the middleware bound to the root module will run first, and then middleware will run in the order that the modules are added to the imports array.
+미들웨어는 특정 순서로 실행됩니다. 먼저 Nest는 전역적으로 바인딩된 미들웨어(예: `app.use`로 바인딩된 미들웨어)를 실행한 다음 경로에 따라 결정되는 [module bound middleware](/middleware)를 실행합니다. 미들웨어는 Express의 미들웨어가 작동하는 방식과 유사하게 바인딩된 순서대로 순차적으로 실행됩니다. 다른 모듈에 바인딩된 미들웨어의 경우 루트 모듈에 바인딩된 미들웨어가 먼저 실행된 다음 모듈이 imports 배열에 추가된 순서대로 미들웨어가 실행됩니다.
 
 #### Guards
 
-Guard execution starts with global guards, then proceeds to controller guards, and finally to route guards. As with middleware, guards run in the order in which they are bound. For example:
+가드 실행은 글로벌 가드로 시작한 다음 컨트롤러 가드로 진행하고 마지막으로 가드를 라우팅합니다. 미들웨어와 마찬가지로 가드는 바인딩된 순서대로 실행됩니다. 예를 들면:
 
 ```typescript
 @UseGuards(Guard1, Guard2)
@@ -24,17 +24,19 @@ export class CatsController {
 }
 ```
 
-`Guard1` will execute before `Guard2` and both will execute before `Guard3`.
+`Guard1`은 `Guard2` 이전에 실행되고 둘 다 `Guard3` 이전에 실행됩니다.
 
-> info **Hint** When speaking about globally bound vs controller or locally bound, the difference is where the guard (or other component is bound). If you are using `app.useGlobalGuard()` or providing the component via a module, it is globally bound. Otherwise, it is bound to a controller if the decorator precedes a controller class, or to a route if the decorator proceeds a route declaration.
+> info **힌트** 전역 바인딩 대 컨트롤러 또는 로컬 바인딩에 대해 말할 때 차이점은 가드(또는 다른 구성요소가 바인딩된 위치)입니다. `app.useGlobalGuard()`를 사용하거나 모듈을 통해 구성요소를 제공하는 경우 전역적으로 바인딩됩니다. 그렇지 않으면 데코레이터가 컨트롤러 클래스보다 선행하는 경우 컨트롤러에 바인딩되고, 데코레이터가 라우트 선언을 진행하는 경우 라우트에 바인딩됩니다.
 
 #### Interceptors
 
-Interceptors, for the most part, follow the same pattern as guards, with one catch: as interceptors return [RxJS Observables](https://github.com/ReactiveX/rxjs), the observables will be resolved in a first in last out manner. So inbound requests will go through the standard global, controller, route level resolution, but the response side of the request (i.e., after returning from the controller method handler) will be resolved from route to controller to global. Also, any errors thrown by pipes, controllers, or services can be read in the `catchError` operator of an interceptor.
+대부분의 경우 인터셉터는 가드와 동일한 패턴을 따르며 한가지 캐치를 사용합니다. 인터셉터가 [RxJS Observables](https://github.com/ReactiveX/rxjs)를 반환하면 Observable이 선입후출(FILO) 방식으로 해결됩니다. 따라서 인바운드 요청은 표준 전역, 컨트롤러, 라우트 수준 확인을 거치지만 요청의 응답측(즉, 컨트롤러 메서드 처리기에서 반환된 후)은 라우트에서 컨트롤러로 전역으로 확인됩니다. 또한 파이프, 컨트롤러 또는 서비스에서 발생한 오류는 인터셉터의 `catchError` 연산자에서 읽을 수 있습니다.
+
+인터셉터는 대부분 가드와 동일한 패턴을 따릅니다. 한가지 캐치가 있습니다. 인터셉터가 [RxJS Observables]를 반환하면 Observable은 선입 선출에서 해결됩니다. 방법. 따라서 인바운드 요청은 표준 전역, 컨트롤러, 경로 수준 확인을 거치지 만 요청의 응답 측 (즉, 컨트롤러 메서드 처리기에서 반환 된 후)은 경로에서 컨트롤러로 전역으로 확인됩니다. 또한 파이프, 컨트롤러 또는 서비스에서 발생한 오류는 인터셉터의 'catchError'연산자에서 읽을 수 있습니다.
 
 #### Pipes
 
-Pipes follow the standard global to controller to route bound sequence, with the same first in first out in regards to the `@usePipes()` parameters. However, at a route parameter level, if you have multiple pipes running, they will run in the order of the last parameter with a pipe to the first. This also applies to the route level and controller level pipes. For example, if we have the following controller:
+파이프는 `@usePipes()` 매개변수와 관련하여 동일한 선입선출(FIFO) 방식으로 바운드 시퀀스를 라우팅하기 위해 컨트롤러에 대한 표준 전역을 따릅니다. 그러나 라우트 매개변수 수준에서 여러 개의 파이프가 실행중인 경우 파이프가 첫번째 파이프와 함께 마지막 매개변수의 순서로 실행됩니다. 이것은 루트 레벨 및 컨트롤러 레벨 파이프에도 적용됩니다. 예를 들어 다음 컨트롤러가 있는 경우:
 
 ```typescript
 @UsePipes(GeneralValidationPipe)
@@ -54,35 +56,35 @@ export class CatsController {
 }
 ```
 
-then the `GeneralValidationPipe` will run for the `query`, then the `params`, and then the `body` objects before moving on to the `RouteSpecificPipe`, which follows the same order. If any parameter-specific pipes were in place, they would run (again, from the last to first parameter) after the controller and route level pipes.
+그런 다음 `GeneralValidationPipe`가 `query`, `params`, `body` 객체를 실행한 다음 `RouteSpecificPipe`로 이동하기 전에 동일한 순서를 따릅니다. 매개변수별 파이프가 제자리에 있으면 컨트롤러 및 라우트 레벨 파이프 다음에 실행됩니다(마지막 매개변수에서 첫번째 매개변수까지).
 
 #### Filters
 
-Filters are the only component that do not resolve global first. Instead, filters resolve from the lowest level possible, meaning execution starts with any route bound filters and proceeding next to controller level, and finally to global filters. Note that exceptions cannot be passed from filter to filter; if a route level filter catches the exception, a controller or global level filter cannot catch the same exception. The only way to achieve an effect like this is to use inheritance between the filters.
+필터는 글로벌 먼저 확인하지 않는 유일한 구성 요소입니다. 대신 필터는 가능한 가장 낮은 수준에서 확인됩니다. 즉, 실행은 라우트 바운드 필터로 시작하고 컨트롤러 수준 다음으로 진행하고 마지막으로 전역 필터로 진행합니다. 예외는 필터간에 전달할 수 없습니다. 라우트 레벨 필터가 예외를 포착하면 컨트롤러 또는 전역 수준 필터가 동일한 예외를 포착할 수 없습니다. 이와 같은 효과를 얻을 수 있는 유일한 방법은 필터간에 상속을 사용하는 것입니다.
 
-> info **Hint** Filters are only executed if any uncaught exception occurs during the request process. Caught exceptions, such as those caught with a `try/catch` will not trigger Exception Filters to fire. As soon as an uncaught exception is encountered, the rest of the lifecycle is ignored and the request skips straight to the filter.
+> info **힌트** 필터는 요청 프로세스중에 포착되지 않은 예외가 발생하는 경우에만 실행됩니다. `try/catch`로 포착된 예외와 같은 포착된 예외는 예외 필터를 실행하지 않습니다. 포착되지 않은 예외가 발생하는 즉시 나머지 수명주기가 무시되고 요청이 필터로 바로 건너 뜁니다.
 
 #### Summary
 
-In general, the request lifecycle looks like the following:
+일반적으로 요청 수명주기는 다음과 같습니다.
 
-1. Incoming request
-2. Globally bound middleware
-3. Module bound middleware
-4. Global guards
-5. Controller guards
-6. Route guards
-7. Global interceptors (pre-controller)
-8. Controller interceptors (pre-controller)
-9. Route interceptors (pre-controller)
-10. Global pipes
-11. Controller pipes
-12. Route pipes
-13. Route parameter pipes
-14. Controller (method handler)
-15. Service (if exists)
-16. Route interceptor (post-request)
-17. Controller interceptor (post-request)
-18. Global interceptor (post-request)
-19. Exception filters (route, then controller, then global)
-20. Server response
+1. 들어오는 요청
+2. 글로벌 바운드 미들웨어
+3. 모듈 바운드 미들웨어
+4. 글로벌 가드
+5. 컨트롤러 가드
+6. 루트 가드
+7. 글로벌 인터셉터 (프리 컨트롤러)
+8. 컨트롤러 인터셉터 (프리 컨트롤러)
+9. 라우트 인터셉터 (프리 컨트롤러)
+10. 글로벌 파이프
+11. 컨트롤러 파이프
+12. 라우트 파이프
+13. 라우트 매개 변수 파이프
+14. 컨트롤러 (메소드 핸들러)
+15. 서비스 (존재하는 경우)
+16. 라우트 인터셉터 (요청 후)
+17. 컨트롤러 인터셉터 (사후 요청)
+18. 글로벌 인터셉터 (요청 후)
+19. 예외 필터 (라우트, 컨트롤러, 글로벌 순)
+20. 서버 응답

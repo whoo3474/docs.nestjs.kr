@@ -1,26 +1,26 @@
 ### Hot Reload
 
-The highest impact on your application's bootstrapping process is **TypeScript compilation**. Fortunately, with [webpack](https://github.com/webpack/webpack) HMR (Hot-Module Replacement), we don't need to recompile the entire project each time a change occurs. This significantly decreases the amount of time necessary to instantiate your application, and makes iterative development a lot easier.
+애플리케이션의 부트스트랩 프로세스에 가장 큰 영향을 미치는 것은 **TypeScript 컴파일**입니다. 다행히 [webpack](https://github.com/webpack/webpack) HMR(Hot-Module Replacement)을 사용하면 변경이 발생할 때마다 전체 프로젝트를 다시 컴파일 할 필요가 없습니다. 이렇게하면 애플리케이션을 인스턴스화하는데 필요한 시간이 크게 줄어들고 반복 개발이 훨씬 쉬워집니다.
 
-> warning **Warning** Note that `webpack` won't automatically copy your assets (e.g. `graphql` files) to the `dist` folder. Similarly, `webpack` is not compatible with glob static paths (e.g., the `entities` property in `TypeOrmModule`).
+> warning **경고** `webpack`은 자산(예: `graphql` 파일)을 `dist` 폴더에 자동으로 복사하지 않습니다. 마찬가지로 `webpack`은 glob 정적 경로(예: `TypeOrmModule`의 `entities` 속성)와 호환되지 않습니다.
 
 ### With CLI
 
-If you are using the [Nest CLI](https://docs.nestjs.com/cli/overview), the configuration process is pretty straightforward. The CLI wraps `webpack`, which allows use of the `HotModuleReplacementPlugin`.
+[Nest CLI](https://docs.nestjs.com/cli/overview)를 사용하는 경우 구성 프로세스가 매우 간단합니다. CLI는 `HotModuleReplacementPlugin`의 사용을 허용하는 `webpack`을 래핑합니다.
 
 #### Installation
 
-First install the required packages:
+먼저 필요한 패키지를 설치하십시오.
 
 ```bash
 $ npm i --save-dev webpack-node-externals run-script-webpack-plugin webpack
 ```
 
-> info **Hint** If you use **Yarn Berry** (not classic Yarn), install the `webpack-pnp-externals` package instead of the `webpack-node-externals`.
+> info **힌트** **Yarn Berry** (기존 Yarn 아님)를 사용하는 경우 `webpack-node-externals` 대신 `webpack-pnp-externals` 패키지를 설치하세요.
 
 #### Configuration
 
-Once the installation is complete, create a `webpack-hmr.config.js` file in the root directory of your application.
+설치가 완료되면 애플리케이션의 루트 디렉터리에v`webpack-hmr.config.js` 파일을 만듭니다.
 
 ```typescript
 const nodeExternals = require('webpack-node-externals');
@@ -47,13 +47,13 @@ module.exports = function (options, webpack) {
 };
 ```
 
-> info **Hint** With **Yarn Berry** (not classic Yarn), instead of using the `nodeExternals` in the `externals` configuration property, use the `WebpackPnpExternals` from `webpack-pnp-externals` package: `WebpackPnpExternals({{ '{' }} exclude: ['webpack/hot/poll?100'] {{ '}' }})`.
+> info **힌트** **Yarn Berry**(기존 Yarn 아님)를 사용하면 `externals` 구성 속성에서` nodeExternals`를 사용하는 대신 `webpack-pnp-externals` 패키지의 `WebpackPnpExternals({{ '{' }} exclude: ['webpack/hot/poll?100'] {{ '}' }})`.
 
-This function takes the original object containing the default webpack configuration as a first argument, and the reference to the underlying `webpack` package used by the Nest CLI as the second one. Also, it returns a modified webpack configuration with the `HotModuleReplacementPlugin`, `WatchIgnorePlugin`, and `RunScriptWebpackPlugin` plugins.
+이 함수는 기본 웹팩 구성이 포함된 원본 객체를 첫번째 인수로, Nest CLI에서 사용하는 기본 `webpack` 패키지에 대한 참조를 두번째 인수로 사용합니다. 또한 `HotModuleReplacementPlugin`, `WatchIgnorePlugin` 및 `RunScriptWebpackPlugin` 플러그인으로 수정된 웹팩 구성을 반환합니다.
 
 #### Hot-Module Replacement
 
-To enable **HMR**, open the application entry file (`main.ts`) and add the following webpack-related instructions:
+**HMR**을 활성화하려면 애플리케이션 항목 파일(`main.ts`)을 열고 다음 웹팩 관련 지침을 추가합니다.
 
 ```typescript
 declare const module: any;
@@ -70,13 +70,13 @@ async function bootstrap() {
 bootstrap();
 ```
 
-To simplify the execution process, add a script to your `package.json` file.
+실행 프로세스를 단순화하려면 `package.json` 파일에 스크립트를 추가하십시오.
 
 ```json
 "start:dev": "nest build --webpack --webpackPath webpack-hmr.config.js --watch"
 ```
 
-Now simply open your command line and run the following command:
+이제 명령 줄을 열고 다음 명령을 실행하기 만하면됩니다.
 
 ```bash
 $ npm run start:dev
@@ -84,21 +84,21 @@ $ npm run start:dev
 
 ### Without CLI
 
-If you are not using the [Nest CLI](https://docs.nestjs.com/cli/overview), the configuration will be slightly more complex (will require more manual steps).
+[Nest CLI](https://docs.nestjs.com/cli/overview)를 사용하지 않는 경우 구성이 약간 더 복잡해집니다(더 많은 수동 단계가 필요함).
 
 #### Installation
 
-First install the required packages:
+먼저 필요한 패키지를 설치하십시오.
 
 ```bash
 $ npm i --save-dev webpack webpack-cli webpack-node-externals ts-loader run-script-webpack-plugin
 ```
 
-> info **Hint** If you use **Yarn Berry** (not classic Yarn), install the `webpack-pnp-externals` package instead of the `webpack-node-externals`.
+> info **힌트** **Yarn Berry**(기존 Yarn 아님)를 사용하는 경우 `webpack-node-externals` 대신 `webpack-pnp-externals` 패키지를 설치하세요.
 
 #### Configuration
 
-Once the installation is complete, create a `webpack.config.js` file in the root directory of your application.
+설치가 완료되면 애플리케이션의 루트 디렉토리에 `webpack.config.js` 파일을 만듭니다.
 
 ##### With NPM or Yarn classic
 
@@ -140,13 +140,13 @@ module.exports = {
 };
 ```
 
-> info **Hint** With **Yarn Berry** (not classic Yarn), instead of using the `nodeExternals` in the `externals` configuration property, use the `WebpackPnpExternals` from `webpack-pnp-externals` package: `WebpackPnpExternals({{ '{' }} exclude: ['webpack/hot/poll?100'] {{ '}' }})`.
+> info **힌트** **Yarn Berry**(기존 Yarn 아님)를 사용하면` externals` 구성 속성에서 `nodeExternals`를 사용하는 대신 `webpack-pnp-externals` 패키지의 `WebpackPnpExternals`를 사용합니다. `WebpackPnpExternals({{ '{' }} exclude: ['webpack/hot/poll?100'] {{ '}' }})`.
 
-This configuration tells webpack a few essential things about your application: location of the entry file, which directory should be used to hold **compiled** files, and what kind of loader we want to use to compile source files. Generally, you should be able to use this file as-is, even if you don't fully understand all of the options.
+이 구성은 웹팩에 애플리케이션에 대한 몇가지 필수 사항을 알려줍니다. 엔트리 파일의 위치, **컴파일 된** 파일을 보관하는 데 사용해야하는 디렉토리, 소스 파일을 컴파일하는데 사용할 로더의 종류. 일반적으로 모든 옵션을 완전히 이해하지 못하더라도 이 파일을 있는 그대로 사용할 수 있어야 합니다.
 
 #### Hot-Module Replacement
 
-To enable **HMR**, open the application entry file (`main.ts`) and add the following webpack-related instructions:
+**HMR**을 활성화하려면 애플리케이션 항목 파일(`main.ts`)을 열고 다음 웹팩 관련 지침을 추가합니다.
 
 ```typescript
 declare const module: any;
@@ -163,13 +163,12 @@ async function bootstrap() {
 bootstrap();
 ```
 
-To simplify the execution process, add a script to your `package.json` file.
+실행 프로세스를 단순화하려면 `package.json` 파일에 스크립트를 추가하십시오.
 
 ```json
 "start:dev": "webpack --config webpack.config.js --watch"
 ```
 
-Now simply open your command line and run the following command:
 
 ```bash
 $ npm run start:dev
@@ -177,8 +176,8 @@ $ npm run start:dev
 
 #### Example
 
-A working example is available [here](https://github.com/nestjs/nest/tree/master/sample/08-webpack).
+작동하는 예제는 [여기](https://github.com/nestjs/nest/tree/master/sample/08-webpack)에서 확인할 수 있습니다.
 
 ### TypeORM
 
-If you're using `@nestjs/typeorm`, you'll need to add `keepConnectionAlive: true` to your TypeORM configuration.
+`@nestjs/typeorm`을 사용하는 경우 TypeORM 구성에 `keepConnectionAlive: true`를 추가해야합니다.

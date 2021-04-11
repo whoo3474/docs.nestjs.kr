@@ -2,7 +2,7 @@
 
 #### Global prefix
 
-To ignore a global prefix for routes set through `setGlobalPrefix()`, use `ignoreGlobalPrefix`:
+`setGlobalPrefix()`를 통해 설정된 경로에 대한 전역 접두사를 무시하려면 `ignoreGlobalPrefix`를 사용합니다.
 
 ```typescript
 const document = SwaggerModule.createDocument(app, options, {
@@ -12,11 +12,11 @@ const document = SwaggerModule.createDocument(app, options, {
 
 #### Multiple specifications
 
-The `SwaggerModule` provides a way to support multiple specifications. In other words, you can serve different documentation, with different UIs, on different endpoints.
+`SwaggerModule`은 여러 사양을 지원하는 방법을 제공합니다. 즉, 서로 다른 엔드 포인트에서 서로 다른 UI를 사용하여 서로 다른 문서를 제공할 수 있습니다.
 
-To support multiple specifications, your application must be written with a modular approach. The `createDocument()` method takes a 3rd argument, `extraOptions`, which is an object with a property named `include`. The `include` property takes a value which is an array of modules.
+여러 사양을 지원하려면 애플리케이션을 모듈 방식으로 작성해야합니다. `createDocument()` 메소드는 `include`라는 속성을 가진 객체인 세번째 인수 `extraOptions`를 사용합니다. `include` 속성은 모듈의 배열인 값을 받습니다.
 
-You can setup multiple specifications support as shown below:
+아래와 같이 여러 사양 지원을 설정할 수 있습니다.
 
 ```typescript
 import { NestFactory } from '@nestjs/core';
@@ -66,16 +66,16 @@ async function bootstrap() {
 bootstrap();
 ```
 
-Now you can start your server with the following command:
+이제 다음 명령을 사용하여 서버를 시작할 수 있습니다.
 
 ```bash
 $ npm run start
 ```
 
-Navigate to `http://localhost:3000/api/cats` to see the Swagger UI for cats:
+고양이용 Swagger UI를 보려면 `http://localhost:3000/api/cats`로 이동하십시오.
 
 <figure><img src="/assets/swagger-cats.png" /></figure>
 
-In turn, `http://localhost:3000/api/dogs` will expose the Swagger UI for dogs:
+차례로 `http://localhost:3000/api/dogs`는 강아지용 Swagger UI를 노출합니다.
 
 <figure><img src="/assets/swagger-dogs.png" /></figure>

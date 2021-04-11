@@ -1,6 +1,6 @@
 ### Decorators
 
-All of the available OpenAPI decorators have an `Api` prefix to distinguish them from the core decorators. Below is a full list of the exported decorators along with a designation of the level at which the decorator may be applied.
+사용 가능한 모든 OpenAPI 데코레이터에는 핵심 데코레이터와 구분하기 위해 `Api`접두사가 있습니다. 아래는 데코레이터가 적용될 수 있는 레벨의 지정과 함께 내보낸 데코레이터의 전체 목록입니다.
 
 |                          |                     |
 | ------------------------ | ------------------- |

@@ -1,6 +1,6 @@
 ### HTTPS
 
-To create an application that uses the HTTPS protocol, set the `httpsOptions` property in the options object passed to the `create()` method of the `NestFactory` class:
+HTTPS 프로토콜을 사용하는 애플리케이션을 만들려면 `NestFactory` 클래스의 `create()` 메서드에 전달된 옵션 객체에서 `httpsOptions` 속성을 설정합니다.
 
 ```typescript
 const httpsOptions = {
@@ -13,7 +13,7 @@ const app = await NestFactory.create(AppModule, {
 await app.listen(3000);
 ```
 
-If you use the `FastifyAdapter`, create the application as follows:
+`FastifyAdapter`를 사용하는 경우 다음과 같이 애플리케이션을 만듭니다.
 
 ```typescript
 const app = await NestFactory.create<NestFastifyApplication>(
@@ -24,7 +24,7 @@ const app = await NestFactory.create<NestFastifyApplication>(
 
 #### Multiple simultaneous servers
 
-The following recipe shows how to instantiate a Nest application that listens on multiple ports (for example, on a non-HTTPS port and an HTTPS port) simultaneously.
+다음 레시피는 여러 포트(예: 비 HTTPS 포트 및 HTTPS 포트)에서 동시에 수신하는 Nest 애플리케이션을 인스턴스화하는 방법을 보여줍니다.
 
 ```typescript
 const httpsOptions = {
@@ -43,6 +43,6 @@ http.createServer(server).listen(3000);
 https.createServer(httpsOptions, server).listen(443);
 ```
 
-> info **Hint** The `ExpressAdapter` is imported from the `@nestjs/platform-express` package. The `http` and `https` packages are native Node.js packages.
+> info **힌트** `ExpressAdapter`는 `@nestjs/platform-express` 패키지에서 가져옵니다. `http` 및 `https` 패키지는 기본 Node.js 패키지입니다.
 
-> **Warning** This recipe does not work with [GraphQL Subscriptions](/graphql/subscriptions).
+> **경고** 이 레시피는 [GraphQL 구독](/graphql/subscriptions)에서 작동하지 않습니다.

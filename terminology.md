@@ -53,3 +53,39 @@ plugin: 플러그인
 warning: 경고
 framework: 프레임워크
 parameter: 매개변수
+observer: 관찰자
+emitter: 이미터, 방출기
+lifecycle: 라이프사이클, 수명주기
+hook: 후크
+distpatch: 전달
+fire: 실행
+subscriber: 구독자
+namespaces: 네임스페이스
+wildcard: 와일드카드
+delimiter: 구분기호, 딜리미터
+type safety: 타입 안전
+placeholder: 자리표시자, 플레이스홀더
+chapter: 챕터, 장
+pipeline: 파이프라인
+annotate:
+specification: 사양
+Schema: 스키마
+raw: 원시
+definition: 정의
+resource: 리소스
+generator: 생성기
+entity: 앤타타
+component: 구성요소, 컴포넌트
+level: 레벨, 수준
+error: 오류
+message: 메세지
+overhead: 오버헤드
+repository: 리포지토리, 저장소
+query: 쿼리
+mutation: 변이, 뮤테이션, 변형
+schematic: 회로도, 스키메틱
+resolver: 리졸버, 해석기
+boilerplate:
+Healthcheck: 상태확인
+healthy or unhealthy: 정상 또는 비정상
+publisher: 게시자

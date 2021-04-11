@@ -1,55 +1,56 @@
 ### Prisma
 
-[Prisma](https://www.prisma.io) is an [open-source](https://github.com/prisma/prisma) ORM for Node.js and TypeScript. It is used as an **alternative** to writing plain SQL, or using another database access tool such as SQL query builders (like [knex.js](https://knexjs.org/)) or ORMs (like [TypeORM](https://typeorm.io/) and [Sequelize](https://sequelize.org/)). Prisma currently supports PostgreSQL, MySQL, SQL Server and SQLite.
+[Prisma](https://www.prisma.io)는 Node.js 및 TypeScript를 위한 x[오픈 소스](https://github.com/prisma/prisma) ORM입니다. 일반 SQL을 작성하거나 SQL 쿼리 빌더(예: [knex.js](https://knexjs.org/)) 또는 ORM (예 : [TypeORM](https://typeorm.io/) 및 [Sequelize](https://sequelize.org/))과 같은 다른 데이터베이스 액세스 도구를 사용하는 **대안**으로 사용됩니다. Prisma는 현재 PostgreSQL, MySQL, SQL Server 및 SQLite를 지원합니다.
 
-While Prisma can be used with plain JavaScript, it embraces TypeScript and provides a level to type-safety that goes beyond the guarantees other ORMs in the TypeScript ecosystem. You can find an in-depth comparison of the type-safety guarantees of Prisma and TypeORM [here](https://www.prisma.io/docs/concepts/more/comparisons/prisma-and-typeorm#type-safety).
+Prisma는 일반 JavaScript와 함께 사용할 수 있지만 TypeScript를 수용하고 TypeScript 에코 시스템의 다른 ORM을 보장하는 수준을 넘어서는 타입 안전성 수준을 제공합니다. Prisma와 TypeORM의 형식 안전성 보장에 대한 심층 비교는 [여기](https://www.prisma.io/docs/concepts/more/comparisons/prisma-and-typeorm#type-safety)에서 확인할 수 있습니다. .
 
-> info **Note** If you want to get a quick overview of how Prisma works, you can follow the [Quickstart](https://www.prisma.io/docs/getting-started/quickstart) or read the [Introduction](https://www.prisma.io/docs/understand-prisma/introduction) in the [documentation](https://www.prisma.io/docs/). There also are ready-to-run examples for [REST](https://github.com/prisma/prisma-examples/tree/latest/typescript/rest-nestjs) and [GraphQL](https://github.com/prisma/prisma-examples/tree/latest/typescript/graphql-nestjs) in the [`prisma-examples`](https://github.com/prisma/prisma-examples/) repo. 
+> info **참고** Prisma 작동 방식에 대한 간략한 개요를 보려면 [빠른 시작](https://www.prisma.io/docs/getting-started/quickstart)을 따르거나 [문서](https://www.prisma.io/docs/)의 [소개](https://www.prisma.io/docs/understand-prisma/introduction)를 읽으십시오. [`prisma-examples`](https://github.com/prisma/prisma-examples/) repo에 [REST](https://github.com/prisma/prisma-examples/tree/latest/typescript/rest-nestjs) 및 [GraphQL](https://github.com/prisma/prisma-examples/tree/latest/typescript/graphql-nestjs)에 대한 바로 실행 가능한 예제가 있습니다.
 
 #### Getting started
 
-In this recipe, you'll learn how to get started with NestJS and Prisma from scratch. You are going to build a sample NestJS application with a REST API that can read and write data in a database.
+이 레시피에서는 NestJS 및 Prisma를 처음부터 시작하는 방법을 배웁니다. 데이터베이스에서 데이터를 읽고 쓸 수 있는 REST API로 샘플 NestJS 애플리케이션을 빌드할 것입니다.
 
-For the purpose of this guide, you'll use a [SQLite](https://sqlite.org/) database to save the overhead of setting up a database server. Note that you can still follow this guide, even if you're using PostgreSQL or MySQL – you'll get extra instructions for using these databases at the right places.
+이 가이드에서는 [SQLite](https://sqlite.org/) 데이터베이스를 사용하여 데이터베이스 서버를 설정하는 오버헤드를 줄일 수 있습니다. PostgreSQL 또는 MySQL을 사용하는 경우에도 이 가이드를 계속 따를 수 있습니다. 올바른 위치에서 이러한 데이터베이스를 사용하기 위한 추가 지침을 얻을 수 있습니다.
 
-> info **Note** If you already have an existing project and consider migrating to Prisma, you can follow the guide for [adding Prisma to an existing project](https://www.prisma.io/docs/getting-started/setup-prisma/add-to-existing-project-typescript-postgres). If you are migrating from TypeORM, you can read the guide [Migrating from TypeORM to Prisma](https://www.prisma.io/docs/guides/migrate-to-prisma/migrate-from-typeorm).
+> info **참고** 이미 기존 프로젝트가 있고 Prisma로 마이그레이션을 고려하는 경우 [기존 프로젝트에 Prisma 추가](https://www.prisma.io/docs/getting-started/setup-prisma/add-to-existing-project-typescript-postgres) 가이드를 따를 수 있습니다. TypeORM에서 마이그레이션하는 경우 [TypeORM에서 Prisma로 마이그레이션](https://www.prisma.io/docs/guides/migrate-to-prisma/migrate-from-typeorm) 가이드를 읽을 수 있습니다.
 
 
 #### Create your NestJS project
 
-To get started, install the NestJS CLI and create your app skeleton with the following commands:
+시작하려면 NestJS CLI를 설치하고 다음 명령어로 앱 스켈레톤을 만드세요.
 
 ```bash
 $ npm install -g @nestjs/cli
 $ nest new hello-prisma
 ```
 
-See the [First steps](https://docs.nestjs.com/first-steps) page to learn more about the project files created by this command. Note also that you can now run `npm start` to start your application. The REST API running at `http://localhost:3000/` currently serves a single route that's implemented in `src/app.controller.ts`. Over the course of this guide, you'll implement additional routes to store and retrieve data about _users_ and _posts_.
+이 명령으로 생성된 프로젝트 파일에 대한 자세한 내용은 [첫 번째 단계](https://docs.nestjs.com/first-steps) 페이지를 참조하세요. 이제 `npm start`를 실행하여 애플리케이션을 시작할 수도 있습니다. `http://localhost:3000/`에서 실행되는 REST API는 현재 `src/app.controller.ts`에 구현된 단일 라우트를 제공합니다. 이 가이드의 과정에서 _users_ 및 _posts_ 에 대한 데이터를 저장하고 검색하기 위한 추가 라우트를 구현합니다.
 
 #### Set up Prisma
 
-Start by installing the Prisma CLI as a development dependency in your project:
+프로젝트에서 Prisma CLI를 개발 종속성으로 설치하여 시작하십시오.
+
 
 ```bash
 $ cd hello-prisma
 $ npm install prisma --save-dev
 ```
 
-In the following steps, we'll be utilizing the [Prisma CLI](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-cli). As a best practice, it's recommended to invoke the CLI locally by prefixing it with `npx`:
+다음 단계에서는 [Prisma CLI](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-cli)를 활용합니다. 모범 사례로 `npx`를 접두사로 붙여서 CLI를 로컬에서 호출하는 것이 좋습니다.
 
 ```bash
 $ npx prisma
 ```
 
-<details><summary>Expand if you're using Yarn</summary>
+<details><summary>Yarn을 사용하는 경우 확장</summary>
 
-If you're using Yarn, then you can install the Prisma CLI as follows:
+Yarn을 사용하는 경우 다음과 같이 Prisma CLI를 설치할 수 있습니다.
 
 ```bash
 $ yarn add prisma --dev
 ```
 
-Once installed, you can invoke it by prefixing it with `yarn`:
+일단 설치되면 `yarn` 접두사를 붙여 호출할 수 있습니다.
 
 ```bash
 $ yarn prisma
@@ -57,20 +58,20 @@ $ yarn prisma
 
 </details>
 
-Now create your initial Prisma setup using the `init` command of the Prisma CLI:
+이제 Prisma CLI의 `init` 명령을 사용하여 초기 Prisma 설정을 만듭니다.
 
 ```bash
 $ npx prisma init
 ```
 
-This command creates a new `prisma` directory with the following contents:
+이 명령은 다음 내용으로 새 `prisma` 디렉토리를 만듭니다.
 
-- `schema.prisma`: Specifies your database connection and contains the database schema
-- `.env`: A [dotenv](https://github.com/motdotla/dotenv) file, typically used to store your database credentials in a group of environment variables
+- `schema.prisma`: 데이터베이스 연결을 지정하고 데이터베이스 스키마를 포함합니다.
+- `.env`: [dotenv](https://github.com/motdotla/dotenv) 파일, 일반적으로 환경 변수 그룹에 데이터베이스 자격증명을 저장하는데 사용됩니다.
 
 #### Set the database connection
 
-Your database connection is configured in the `datasource` block in your `schema.prisma` file. By default it's set to `postgresql`, but since you're using a SQLite database in this guide you need to adjust the `provider` field of the `datasource` block to `sqlite`:
+데이터베이스 연결은 `schema.prisma` 파일의 `datasource` 블록에서 구성됩니다. 기본적으로 `postgresql`로 설정되어 있지만 이 가이드에서는 SQLite 데이터베이스를 사용하고 있으므로 `datasource`블록의 `provider`필드를 `sqlite`로 조정해야합니다.
 
 ```groovy
 datasource db {
@@ -83,21 +84,21 @@ generator client {
 }
 ```
 
-Now, open up `.env` and adjust the `DATABASE_URL` environment variable to look as follows:
+이제 `.env`를 열고 `DATABASE_URL` 환경 변수를 다음과 같이 조정합니다.
 
 ```bash
 DATABASE_URL="file:./dev.db"
 ```
 
-SQLite databases are simple files; no server is required to use a SQLite database. So instead of configuring a connection URL with a _host_ and _port_, you can just point it to a local file which in this case is called `dev.db`. This file will be created in the next step.
+SQLite 데이터베이스는 간단한 파일입니다. SQLite 데이터베이스를 사용하는데 서버가 필요하지 않습니다. 따라서 _host_ 및 _port_ 를 사용하여 연결 URL을 구성하는 대신 이 경우 `dev.db`라고 하는 로컬 파일을 가리킬 수 있습니다. 이 파일은 다음 단계에서 생성됩니다.
 
-<details><summary>Expand if you're using PostgreSQL or MySQL</summary>
+<details><summary>PostgreSQL 또는 MySQL을 사용하는 경우 확장</summary>
 
-With PostgreSQL and MySQL, you need to configure the connection URL to point to the _database server_. You can learn more about the required connection URL format [here](https://www.prisma.io/docs/reference/database-reference/connection-urls).
+PostgreSQL 및 MySQL을 사용하는 경우 _database server_ 를 가리키도록 연결 URL을 구성해야 합니다. 필요한 연결 URL 형식에 대한 자세한 내용은 [여기](https://www.prisma.io/docs/reference/database-reference/connection-urls)를 참조하세요.
 
 **PostgreSQL**
 
-If you're using PostgreSQL, you have to adjust the `schema.prisma` and `.env` files as follows:
+PostgreSQL을 사용하는 경우 `schema.prisma` 및 `.env` 파일을 다음과 같이 조정해야합니다.
 
 **`schema.prisma`**
 
@@ -118,17 +119,17 @@ generator client {
 DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=SCHEMA"
 ```
 
-Replace the placeholders spelled in all uppercase letters with your database credentials. Note that if you're unsure what to provide for the `SCHEMA` placeholder, it's most likely the default value `public`:
+모두 대문자로된 자리표시자를 데이터베이스 자격증명으로 바꿉니다. `SCHEMA` 자리표시자에 무엇을 제공해야 할지 확실하지 않은 경우 기본값인 `public` 일 가능성이 높습니다.
 
 ```bash
 DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=public"
 ```
 
-If you want to learn how to set up a PostgreSQL database, you can follow this guide on [setting up a free PostgreSQL database on Heroku](https://dev.to/prisma/how-to-setup-a-free-postgresql-database-on-heroku-1dc1).
+PostgreSQL 데이터베이스를 설정하는 방법을 배우려면 [Heroku에서 무료 PostgreSQL 데이터베이스 설정](https://dev.to/prisma/how-to-setup-a-free-postgresql-database-on-heroku-1dc1)에 대한 이 가이드를 따르세요.
 
 **MySQL**
 
-If you're using MySQL, you have to adjust the `schema.prisma` and `.env` files as follows:
+MySQL을 사용하는 경우 다음과 같이 `schema.prisma` 및 `.env` 파일을 조정해야합니다.
 
 **`schema.prisma`**
 
@@ -149,15 +150,15 @@ generator client {
 DATABASE_URL="mysql://USER:PASSWORD@HOST:PORT/DATABASE"
 ```
 
-Replace the placeholders spelled in all uppercase letters with your database credentials.
+모두 대문자로된 자리표시자를 데이터베이스 자격증명으로 바꿉니다.
 
 </details>
 
 #### Create two database tables with Prisma Migrate
 
-In this section, you'll create two new tables in your database using [Prisma Migrate](https://www.prisma.io/docs/concepts/components/prisma-migrate). Prisma Migrate generates SQL migration files for your declarative data model definition in the Prisma schema. These migration files are fully customizable so that you can configure any additional features of the underlying database or include additional commands, e.g. for seeding.
+이 섹션에서는 [Prisma Migrate](https://www.prisma.io/docs/concepts/components/prisma-migrate)를 사용하여 데이터베이스에 두개의 새 테이블을 생성합니다. Prisma Migrate는 Prisma 스키마의 선언적 데이터 모델 정의에 대한 SQL 마이그레이션 파일을 생성합니다. 이러한 마이그레이션 파일은 완전히 사용자 정의할 수 있으므로 기본 데이터베이스의 추가기능을 구성하거나 추가명령을 포함할 수 있습니다. 파종을 위해.
 
-Add the following two models to your `schema.prisma` file:
+`schema.prisma` 파일에 다음 두모델을 추가합니다.
 
 ```groovy
 model User {
@@ -177,13 +178,13 @@ model Post {
 }
 ```
 
-With your Prisma models in place, you can generate your SQL migration files and run them against the database. Run the following commands in your terminal:
+Prisma 모델을 사용하면 SQL 마이그레이션 파일을 생성하고 데이터베이스에 대해 실행할 수 있습니다. 터미널에서 다음 명령을 실행하십시오.
 
 ```bash
 $ npx prisma migrate dev --name init
 ```
 
-This `prisma migrate dev` command generates SQL files and directly runs them against the database. In this case, the following migration files was created in the existing `prisma` directory:
+이 `prisma migrate dev` 명령은 SQL 파일을 생성하고 데이터베이스에 대해 직접 실행합니다. 이 경우 기존 `prisma` 디렉토리에 다음 마이그레이션 파일이 생성되었습니다.
 
 ```bash
 $ tree prisma
@@ -195,9 +196,9 @@ prisma
 └── schema.prisma
 ```
 
-<details><summary>Expand to view the generated SQL statements</summary>
+<details><summary>생성된 SQL 문을 보려면 확장하십시오.</summary>
 
-The following tables were created in your SQLite database:
+SQLite 데이터베이스에 다음 테이블이 생성되었습니다.
 
 ```sql
 -- CreateTable
@@ -226,25 +227,25 @@ CREATE UNIQUE INDEX "User.email_unique" ON "User"("email");
 
 #### Install and generate Prisma Client
 
-Prisma Client is a type-safe database client that's _generated_ from your Prisma model definition. Because of this approach, Prisma Client can expose [CRUD](https://www.prisma.io/docs/concepts/components/prisma-client/crud) operations that are _tailored_ specifically to your models.
+Prisma Client는 Prisma 모델 정의에서 _생성된_ 타입이 안전한 데이터베이스 클라이언트입니다. 이러한 접근 방식으로 인해 Prisma Client는 모델에 특별히 _맞춘_ [CRUD](https://www.prisma.io/docs/concepts/components/prisma-client/crud) 작업을 노출할 수 있습니다.
 
-To install Prisma Client in your project, run the following command in your terminal:
+프로젝트에 Prisma Client를 설치하려면 터미널에서 다음 명령을 실행하십시오.
 
 ```bash
 $ npm install @prisma/client
 ```
 
-Note that during installation, Prisma automatically invokes the `prisma generate` command for you. In the future, you need to run this command after _every_ change to your Prisma models to update your generated Prisma Client.
+설치하는 동안 Prisma는 자동으로 `prisma generate` 명령을 호출합니다. 앞으로 생성된 Prisma 클라이언트를 업데이트하려면 Prisma 모델을 변경할 _때마다_ 이 명령을 실행해야합니다.
 
-> info **Note** The `prisma generate` command reads your Prisma schema and updates the generated Prisma Client library inside `node_modules/@prisma/client`.
+> info **참고** `prisma generate` 명령은 Prisma 스키마를 읽고 `node_modules/@prisma/client` 내에서 생성된 Prisma Client 라이브러리를 업데이트합니다.
 
 #### Use Prisma Client in your NestJS services
 
-You're now able to send database queries with Prisma Client. If you want to learn more about building queries with Prisma Client, check out the [API documentation](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/crud).
+이제 Prisma Client로 데이터베이스 쿼리를 보낼 수 있습니다. Prisma Client로 쿼리를 작성하는 방법에 대해 자세히 알아보려면 [API 문서](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/crud)를 확인하세요.
 
-When setting up your NestJS application, you'll want to abstract away the Prisma Client API for database queries within a service. To get started, you can create a new `PrismaService` that takes care of instantiating `PrismaClient` and connecting to your database.
+NestJS 애플리케이션을 설정할 때 서비스내의 데이터베이스 쿼리를 위해 Prisma Client API를 추상화하고 싶을 것입니다. 시작하려면 `PrismaClient`를 인스턴스화하고 데이터베이스에 연결하는 새로운 `PrismaService`를 만들 수 있습니다.
 
-Inside the `src` directory, create a new file called `prisma.service.ts` and add the following code to it:
+`src` 디렉토리 내에 `prisma.service.ts`라는 새 파일을 만들고 다음 코드를 추가합니다.
 
 ```typescript
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
@@ -263,9 +264,9 @@ export class PrismaService extends PrismaClient
 }
 ```
 
-Next, you can write services that you can use to make database calls for the `User` and `Post` models from your Prisma schema.
+다음으로 Prisma 스키마에서 `User` 및 `Post` 모델에 대한 데이터베이스 호출을 수행하는데 사용할 수 있는 서비스를 작성할 수 있습니다.
 
-Still inside the `src` directory, create a new file called `user.service.ts` and add the following code to it:
+여전히 `src` 디렉토리 안에 `user.service.ts`라는 새 파일을 만들고 다음 코드를 추가합니다.
 
 ```typescript
 import { Injectable } from '@nestjs/common';
@@ -327,11 +328,11 @@ export class UserService {
 }
 ```
 
-Notice how you're using Prisma Client's generated types to ensure that the methods that are exposed by your service are properly typed. You therefore save the boilerplate of typing your models and creating additional interface or DTO files.
+Prisma Client의 생성된 타입을 사용하여 서비스에 의해 노출되는 메소드가 올바르게 입력되었는지 확인하십시오. 따라서 모델을 입력하고 추가 인터페이스 또는 DTO 파일을 생성하는 상용구를 저장합니다.
 
-Now do the same for the `Post` model.
+이제 `Post` 모델에 대해서도 똑같이하십시오.
 
-Still inside the `src` directory, create a new file called `post.service.ts` and add the following code to it:
+여전히 `src` 디렉토리 안에 `post.service.ts`라는 새 파일을 만들고 다음 코드를 추가합니다.
 
 ```typescript
 import { Injectable } from '@nestjs/common';
@@ -393,13 +394,13 @@ export class PostService {
 }
 ```
 
-Your `UserService` and `PostService` currently wrap the CRUD queries that are available in Prisma Client. In a real world application, the service would also be the place to add business logic to your application. For example, you could have a method called `updatePassword` inside the `UserService` that would be responsible for updating the password of a user.
+`UserService` 및 `PostService`는 현재 Prisma Client에서 사용할 수 있는 CRUD 쿼리를 래핑합니다. 실제 애플리케이션에서 서비스는 애플리케이션에 비즈니스 로직을 추가하는 장소이기도 합니다. 예를 들어 사용자의 비밀번호를 업데이트하는 `UserService` 내부에 `updatePassword`라는 메소드가 있을 수 있습니다.
 
 ##### Implement your REST API routes in the main app controller
 
-Finally, you'll use the services you created in the previous sections to implement the different routes of your app. For the purpose of this guide, you'll put all your routes into the already existing `AppController` class.
+마지막으로 이전 섹션에서 만든 서비스를 사용하여 앱의 다양한 라우트를 구현합니다. 이 가이드의 목적에 따라 모든 라우트를 기존의 `AppController` 클래스에 넣습니다.
 
-Replace the contents of the `app.controller.ts` file with the following code:
+`app.controller.ts` 파일의 내용을 다음 코드로 바꿉니다.
 
 ```typescript
 import {
@@ -518,11 +519,11 @@ This controller implements the following routes:
 
 #### Summary
 
-In this recipe, you learned how to use Prisma along with NestJS to implement a REST API. The controller that implements the routes of the API is calling a `PrismaService` which in turn uses Prisma Client to send queries to a database to fulfill the data needs of incoming requests.
+이 레시피에서는 NestJS와 함께 Prisma를 사용하여 REST API를 구현하는 방법을 배웠습니다. API의 라우트를 구현하는 컨트롤러는 `PrismaService`를 호출하고, 이 서비스는 차례로 Prisma Client를 사용하여 들어오는 요청의 데이터 요구 사항을 충족하기 위해 데이터베이스에 쿼리를 전송합니다.
 
-If you want to learn more about using NestJS with Prisma, be sure to check out the following resources:
+Prisma에서 NestJS를 사용하는 방법에 대해 자세히 알아 보려면 다음 리소스를 확인하세요.
 
 - [NestJS & Prisma](https://www.prisma.io/nestjs)
-- [Ready-to-run example projects for REST & GraphQL](https://github.com/prisma/prisma-examples/)
-- [Production-ready starter kit](https://github.com/fivethree-team/nestjs-prisma-starter#instructions)
-- [Video: Accessing Databases using NestJS with Prisma (5min)](https://www.youtube.com/watch?v=UlVJ340UEuk&ab_channel=Prisma) by [Marc Stammerjohann](https://github.com/marcjulian)
+- [REST 및 GraphQL을 위한 바로 실행 가능한 예제 프로젝트](https://github.com/prisma/prisma-examples/)
+- [프러덕션 준비가 된 스타터 키트](https://github.com/fivethree-team/nestjs-prisma-starter#instructions)
+- [비디오: Prisma와 함께 NestJS를 사용하여 데이터베이스에 액세스 (5 분)](https://www.youtube.com/watch?v=UlVJ340UEuk&ab_channel=Prisma) by [Marc Stammerjohann](https://github.com/marcjulian)

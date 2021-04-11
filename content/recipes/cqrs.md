@@ -1,17 +1,17 @@
 ### CQRS
 
-The flow of simple [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) (Create, Read, Update and Delete) applications can be described using the following steps:
+간단한 [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete)(만들기, 읽기, 업데이트 및 삭제) 애플리케이션의 흐름은 다음 단계를 사용하여 설명 할 수 있습니다.
 
-1. The **controllers** layer handles HTTP requests and delegates tasks to the services layer.
-2. The **services layer** is where most of the business logic lives.
-3. Services use **repositories / DAOs** to change / persist entities.
-4. Entities act as containers for the values, with setters and getters.
+1. **컨트롤러** 계층은 HTTP 요청을 처리하고 작업을 서비스 계층에 위임합니다.
+2. **서비스 계층**은 대부분의 비즈니스 로직이 있는 곳입니다.
+3. 서비스는 **저장소 / DAO**를 사용하여 엔티티를 변경/유지합니다.
+4. 엔티티는 setter 및 getter와 함께 값에 대한 컨테이너 역할을 합니다.
 
-In most cases, for small and medium-sized applications, this pattern is sufficient. However, when our requirements become more complex, the **CQRS** model may be more appropriate and scalable. To facilitate that model, Nest provides a lightweight [CQRS module](https://github.com/nestjs/cqrs). This chapter describes how to use it.
+대부분의 경우 중소 규모 애플리케이션의 경우이 패턴으로 충분합니다. 그러나 요구사항이 더 복잡해지면 **CQRS** 모델이 더 적절하고 확장 가능할 수 있습니다. 이 모델을 용이하게하기 위해 Nest는 가벼운 [CQRS 모듈](https://github.com/nestjs/cqrs)을 제공합니다. 이 장에서는 사용 방법에 대해 설명합니다.
 
 #### Installation
 
-First install the required package:
+먼저 필요한 패키지를 설치하십시오.
 
 ```bash
 $ npm install --save @nestjs/cqrs
@@ -19,7 +19,7 @@ $ npm install --save @nestjs/cqrs
 
 #### Commands
 
-In this model, each action is called a **Command**. When a command is dispatched, the application reacts to it. Commands can be dispatched from the services layer, or directly from controllers/gateways. Commands are consumed by **Command Handlers**.
+이 모델에서는 각 작업을 **명령**이라고 합니다. 명령이 전달되면 애플리케이션이 이에 반응합니다. 명령은 서비스 계층에서 발송하거나 컨트롤러/게이트웨이에서 직접 발송할 수 있습니다. 명령은 **명령 핸들러 Command Handlers**에서 사용됩니다.
 
 ```typescript
 @@filename(heroes-game.service)
@@ -49,7 +49,7 @@ export class HeroesGameService {
 }
 ```
 
-Here's a sample service that dispatches `KillDragonCommand`. Let's see how the command looks:
+다음은 `KillDragonCommand`를 전달하는 샘플 서비스입니다. 명령이 어떻게 보이는지 보겠습니다.
 
 ```typescript
 @@filename(kill-dragon.command)
@@ -68,7 +68,7 @@ export class KillDragonCommand {
 }
 ```
 
-The `CommandBus` is a **stream** of commands. It delegates commands to the equivalent handlers. Each command must have a corresponding **Command Handler**:
+`CommandBus`는 명령의 **스트림**입니다. 명령을 동등한 핸들러에 위임합니다. 각 명령에는 해당 **명령 핸들러**가 있어야합니다.
 
 ```typescript
 @@filename(kill-dragon.handler)
@@ -102,11 +102,11 @@ export class KillDragonHandler {
 }
 ```
 
-With this approach, every application state change is driven by the occurrence of a **Command**. The logic is encapsulated in handlers. With this approach, we can simply add behavior like logging or persisting commands in the database (e.g., for diagnostics purposes).
+이 접근 방식을 사용하면 모든 애플리케이션 상태 변경이 **명령 Command** 발생에 의해 주도됩니다. 로직은 핸들러에 캡슐화됩니다. 이 접근 방식을 사용하면 로깅 또는 데이터베이스에 명령 유지(예: 진단 목적)와 같은 동작을 간단히 추가할 수 있습니다.
 
 #### Events
 
-Command handlers neatly encapsulate logic. While beneficial, the application structure is still not flexible enough, not **reactive**. To remedy this, we also introduce **events**.
+명령 핸들러는 논리를 깔끔하게 캡슐화합니다. 유용하지만 애플리케이션 구조는 **반응성 reactive**이 아니라 여전히 충분히 유연하지 않습니다. 이를 해결하기 위해 **이벤트**도 소개합니다.
 
 ```typescript
 @@filename(hero-killed-dragon.event)
@@ -125,7 +125,7 @@ export class HeroKilledDragonEvent {
 }
 ```
 
-Events are asynchronous. They are dispatched either by **models** or directly using `EventBus`. In order to dispatch events, models have to extend the `AggregateRoot` class.
+이벤트는 비동기적입니다. **모델**에 의해 또는 `EventBus`를 사용하여 직접 전달됩니다. 이벤트를 전달하려면 모델이 `AggregateRoot` 클래스를 확장해야합니다.
 
 ```typescript
 @@filename(hero.model)
@@ -153,7 +153,7 @@ export class Hero extends AggregateRoot {
 }
 ```
 
-The `apply()` method does not dispatch events yet because there's no relationship between the model and the `EventPublisher` class. How do we associate the model and the publisher? By using a publisher `mergeObjectContext()` method inside our command handler.
+`apply()` 메소드는 모델과 `EventPublisher` 클래스간에 관계가 없기 때문에 아직 이벤트를 전달하지 않습니다. 모델과 게시자를 어떻게 연결합니까? 명령 핸들러 내에서 게시자 `mergeObjectContext ()` 메서드를 사용합니다.
 
 ```typescript
 @@filename(kill-dragon.handler)
@@ -193,22 +193,22 @@ export class KillDragonHandler {
 }
 ```
 
-Now everything works as expected. Notice that we need to `commit()` events since they're not being dispatched immediately. Obviously, an object doesn't have to exist up front. We can easily merge type context as well:
+이제 모든 것이 예상대로 작동합니다. 이벤트는 즉시 전달되지 않으므로 `commit()` 이벤트가 필요합니다. 분명히, 객체가 앞에 존재할 필요는 없습니다. 타입 컨텍스트도 쉽게 병합할 수 있습니다.
 
 ```typescript
 const HeroModel = this.publisher.mergeClassContext(Hero);
 new HeroModel('id');
 ```
 
-Now the model has the ability to publish events. Additionally, we can emit events manually using `EventBus`:
+이제 모델에 이벤트를 게시하는 기능이 있습니다. 또한 `EventBus`를 사용하여 수동으로 이벤트를 내보낼 수 있습니다.
 
 ```typescript
 this.eventBus.publish(new HeroKilledDragonEvent());
 ```
 
-> info **Hint** The `EventBus` is an injectable class.
+> info **힌트** `EventBus`는 주입 가능한 클래스입니다.
 
-Each event can have multiple **Event Handlers**.
+각 이벤트에는 여러 **이벤트 핸들러**가 있을 수 있습니다.
 
 ```typescript
 @@filename(hero-killed-dragon.handler)
@@ -222,13 +222,13 @@ export class HeroKilledDragonHandler implements IEventHandler<HeroKilledDragonEv
 }
 ```
 
-Now we can move the **write logic** into the event handlers.
+이제 **쓰기 로직**을 이벤트 핸들러로 이동할 수 있습니다.
 
 #### Sagas
 
-This type of **Event-Driven Architecture** improves application **reactiveness and scalability**. Now, when we have events, we can simply react to them in various ways. **Sagas** are the final building block from an architectural point of view.
+이러한 유형의 **이벤트 기반 아키텍처**는 애플리케이션 **반응성 및 확장성**을 향상시킵니다. 이제 이벤트가 있을 때 다양한 방식으로 간단히 반응할 수 있습니다. **Sagas**는 건축적 관점에서 볼 때 마지막 빌딩 블록입니다.
 
-Sagas are an extremely powerful feature. A single saga may listen for 1..\* events. Using the [RxJS](https://github.com/ReactiveX/rxjs) library, it can combine, merge, filter or apply other `RxJS` operators on the event stream. Each saga returns an Observable which contains a command. This command is dispatched **asynchronously**.
+Sagas는 매우 강력한 기능입니다. 단일 사가는 1..\* 이벤트를 수신 할 수 있습니다. [RxJS](https://github.com/ReactiveX/rxjs) 라이브러리를 사용하여 이벤트 스트림에서 다른 `RxJS` 연산자를 결합, 병합, 필터링 또는 적용할 수 있습니다. 각 saga는 명령을 포함하는 Observable을 반환합니다. 이 명령어는 **비동기적으로** 전달됩니다.
 
 ```typescript
 @@filename(heroes-game.saga)
@@ -255,17 +255,17 @@ export class HeroesGameSagas {
 }
 ```
 
-> info **Hint** The `ofType` operator is exported from the `@nestjs/cqrs` package.
+> info **힌트** `ofType` 연산자는 `@nestjs/cqrs` 패키지에서 내보내집니다.
 
-We declared a rule - when any hero kills the dragon, the ancient item should be dropped. With this in place, `DropAncientItemCommand` will be dispatched and processed by the appropriate handler.
+우리는 규칙을 선언했습니다. 영웅이 드래곤을 죽이면 고대 아이템을 드롭해야 합니다. 이것이 제자리에 있으면 `DropAncientItemCommand`가 적절한 핸들러에 의해 전달되고 처리됩니다.
 
 #### Queries
 
-The `CqrsModule` can also be used for handling queries. The `QueryBus` follows the same pattern as the `CommandsBus`. Query handlers should implement the `IQueryHandler` interface and be marked with the `@QueryHandler()` decorator.
+`CqrsModule`은 쿼리 처리에도 사용할 수 있습니다. `QueryBus`는 `CommandsBus`와 동일한 패턴을 따릅니다. 쿼리 핸들러는 `IQueryHandler` 인터페이스를 구현하고 `@QueryHandler()` 데코레이터로 표시되어야합니다.
 
 #### Setup
 
-Finally, let's look at how to set up the whole CQRS mechanism.
+마지막으로 전체 CQRS 메커니즘을 설정하는 방법을 살펴 보겠습니다.
 
 ```typescript
 @@filename(heroes-game.module)
@@ -288,8 +288,8 @@ export class HeroesGameModule {}
 
 #### Summary
 
-`CommandBus`, `QueryBus` and `EventBus` are **Observables**. This means that you can easily subscribe to the whole stream and enrich your application with **Event Sourcing**.
+`CommandBus`, `QueryBus` 및 `EventBus`는 **Observables**입니다. 즉, 전체 스트림을 쉽게 구독하고 **이벤트 소싱**으로 애플리케이션을 풍부하게 만들 수 있습니다.
 
 #### Example
 
-A working example is available [here](https://github.com/kamilmysliwiec/nest-cqrs-example).
+작동하는 예는 [여기](https://github.com/kamilmysliwiec/nest-cqrs-example)에서 확인할 수 있습니다.
