@@ -10,18 +10,18 @@
     </a>
   </div>
   <h3 id="custom-transporters">Custom transporters</h3>
-<p>Nest provides a variety of <strong>transporters</strong> out-of-the-box, as well as an API allowing developers to build new custom transport strategies.
-Transporters enable you to connect components over a network using a pluggable communications layer and a very simple application-level message protocol (read full <a rel='nofollow' target='_blank' href="https://dev.to/nestjs/integrate-nestjs-with-external-services-using-microservice-transporters-part-1-p3">article</a>).</p>
+<p>Nest는 개발자가 새로운 맞춤형 전송 전략을 구축할 수 있는 API뿐만 아니라 즉시 사용할 수 있는 다양한 <strong>트랜스포터</strong>를 제공합니다.
+트랜스포터를 사용하면 플러그형 통신 계층과 매우 간단한 애플리케이션 수준 메시지 프로토콜을 사용하여 네트워크를 통해 구성요소를 연결할 수 있습니다 (전체 <a rel='nofollow' target='_blank' href="https://dev.to/nestjs/integrate-nestjs-with-external-services-using-microservice-transporters-part-1-p3">기사</a> 읽기).</p>
 <blockquote class="
-info "><strong>Hint</strong> Building a microservice with Nest does not necessarily mean you must use the <code>@nestjs/microservices</code> package. For example, if you want to communicate with external services (let&#39;s say other microservices written in different languages), you may not need all the features provided by <code>@nestjs/microservice</code> library.
-In fact, if you don&#39;t need decorators (<code>@EventPattern</code> or <code>@MessagePattern</code>) that let you declaratively define subscribers, running a <a routerLink="/application-context">Standalone Application</a> and manually maintaining connection/subscribing to channels should be enough for most use-cases and will provide you with more flexibility.
+info "><strong>힌트</strong> Nest로 마이크로서비스를 구축한다고해서 반드시 <code>@nestjs/microservices</code> 패키지를 사용해야하는 것은 아닙니다. 예를 들어, 외부 서비스(다른 언어로 작성된 다른 마이크로서비스)와 통신하려는 경우 <code>@nestjs/microservice</code> 라이브러리에서 제공하는 모든 기능이 필요하지 않을 수 있습니다.
+사실, 가입자를 선언적으로 정의할 수있는 데코레이터(<code>@EventPattern</code> 또는 <code>@MessagePattern</code>)가 필요하지 않은 경우 <a routerLink="/application-context">Standalone Application</a>을 실행하고 수동으로 채널에 대한 연결/구독을 유지해야합니다. 대부분의 사용 사례에 충분하며 더 많은 유연성을 제공합니다.
 </blockquote>
-<p>With a custom transporter, you can integrate any messaging system/protocol (including Google Cloud Pub/Sub, Amazon Kinesis, and others) or extend the existing one, adding extra features on top (for example, <a rel='nofollow' target='_blank' href="https://github.com/mqttjs/MQTT.js/blob/master/README.md#qos">QoS</a> for MQTT).</p>
+<p>커스텀 전송자를 사용하면 모든 메시징 시스템/프로토콜(Google Cloud Pub/Sub, Amazon Kinesis등 포함)을 통합하거나 기존 항목을 확장하여 추가 기능(예: MQTT용 <a rel='nofollow' target='_blank' href="https://github.com/mqttjs/MQTT.js/blob/master/README.md#qos">QoS</a>)을 추가 할 수 있습니다.</p>
 <blockquote class="
-info "><strong>Hint</strong> To better understand how Nest microservices work and how you can extend the capabilities of existing transporters, we recommend reading the <a rel='nofollow' target='_blank' href="https://dev.to/johnbiundo/series/4724">NestJS Microservices in Action</a> and <a rel='nofollow' target='_blank' href="https://dev.to/nestjs/part-1-introduction-and-setup-1a2l">Advanced NestJS Microservices</a> article series.
+info "><strong>힌트</strong> Nest 마이크로서비스의 작동 방식과 기존 전송기의 기능을 확장하는 방법을 더 잘 이해하려면 <a rel='nofollow' target='_blank' href="https://dev.to/johnbiundo/series/4724">NestJS Microservices in Action</a> 및 <a rel='nofollow' target='_blank' href="https://dev.to/nestjs/part-1-introduction-and-setup-1a2l">Advanced NestJS Microservices</a> 기사 시리즈를 읽어 보는 것이 좋습니다.
 </blockquote>
 <h4 appAnchor id="creating-a-strategy"><span>Creating a strategy</span></h4>
-<p>First, let&#39;s define a class representing our custom transporter.</p>
+<p>먼저 커스텀 트랜스포터를 나타내는 클래스를 정의하겠습니다.</p>
 <pre><code class="language-typescript">
 import &#123; CustomTransportStrategy, Server &#125; from &#39;@nestjs/microservices&#39;;
 
@@ -42,12 +42,12 @@ class GoogleCloudPubSubServer
 &#125;
 </code></pre>
 <blockquote class="
-warning "><strong>Warning</strong> Please, note we won&#39;t be implementing a fully-featured Google Cloud Pub/Sub server in this chapter as this would require diving into transporter specific technical details.
+warning "><strong>경고</strong> 이 장에서는 모든 기능을 갖춘 Google Cloud Pub/Sub 서버를 구현하지 않을 것입니다.이 경우 전송업체(transporter)별 기술 세부 정보를 살펴 봐야합니다.
 </blockquote>
-<p>In our example above, we declared the <code>GoogleCloudPubSubServer</code> class and provided <code>listen()</code> and <code>close()</code> methods enforced by the <code>CustomTransportStrategy</code> interface.
-Also, our class extends the <code>Server</code> class imported from the <code>@nestjs/microservices</code> package that provides a few useful methods, for example, methods used by Nest runtime to register message handlers. Alternatively, in case you want to extend the capabilities of an existing transport strategy, you could extend the corresponding server class, for example, <code>ServerRedis</code>.
-Conventionally, we added the <code>&quot;Server&quot;</code> suffix to our class as it will be responsible for subscribing to messages/events (and responding to them, if necessary).</p>
-<p>With this in place, we can now use our custom strategy instead of using a built-in transporter, as follows:</p>
+<p>위의 예에서는 <code>GoogleCloudPubSubServer</code> 클래스를 선언하고 <code>CustomTransportStrategy</code> 인터페이스에 의해 시행되는 <code>listen()</code> 및 <code>close()</code> 메소드를 제공했습니다.
+또한 우리 클래스는 <code>@nestjs/microservices</code> 패키지에서 가져온 <code>Server</code> 클래스를 확장하여 몇가지 유용한 메서드를 제공합니다. 예를 들어 Nest 런타임에서 메시지 핸들러를 등록하는데 사용하는 메서드가 있습니다. 또는 기존 전송 전략의 기능을 확장하려는 경우 해당 서버 클래스(예: <code>ServerRedis</code>)를 확장할 수 있습니다.
+일반적으로 메시지/이벤트 구독(필요한 경우 응답)을 담당하므로 클래스에 <code>&quot;Server&quot;</code> 접미사를 추가했습니다.</p>
+<p>이를 통해 이제 다음과 같이 기본제공(built-in) 전송기를 사용하는 대신 사용자 지정 전략을 사용할 수 있습니다.</p>
 <pre><code class="language-typescript">
 const app = await NestFactory.createMicroservice&lt;MicroserviceOptions&gt;(
   AppModule,
@@ -56,34 +56,32 @@ const app = await NestFactory.createMicroservice&lt;MicroserviceOptions&gt;(
   &#125;,
 );
 </code></pre>
-<p>Basically, instead of passing the normal transporter options object with <code>transport</code> and <code>options</code> properties, we pass a single property, <code>strategy</code>, whose value is an instance of our custom transporter class.</p>
-<p>Back to our <code>GoogleCloudPubSubServer</code> class, in a real-world application, we would be establishing a connection to our message broker/external service and registering subscribers/listening to specific channels in <code>listen()</code> method (and then removing subscriptions &amp; closing the connection in the <code>close()</code> teardown method),
-but since this requires a good understanding of how Nest microservices communicate with each other, we recommend reading this <a rel='nofollow' target='_blank' href="https://dev.to/nestjs/part-1-introduction-and-setup-1a2l">article series</a>.
-In this chapter instead, we&#39;ll focus on the capabilities the <code>Server</code> class provides and how you can leverage them to build custom strategies.</p>
-<p>For example, let&#39;s say that somewhere in our application, the following message handler is defined:</p>
+<p>기본적으로 <code>transport</code> 및 <code>options</code> 속성이 있는 일반 트랜스포터 옵션 객체를 전달하는 대신 값이 맞춤 트랜스포터 클래스의 인스턴스인 단일 속성인 <code>strategy</code>를 전달합니다.</p>
+<p><code>GoogleCloudPubSubServer</code> 클래스로 돌아가 실제 애플리케이션에서 메시지 브로커/외부 서비스에 대한 연결을 설정하고 <code>listen()</code> 메서드에서 구독자 등록/특정 채널 청취(그런 다음 구독 제거 및 종료 <code>close()</code> 해체 메서드의 연결), 하지만 이를 위해서는 Nest 마이크로서비스가 서로 통신하는 방식을 잘 이해해야 하므로 이 <a rel='nofollow' target='_blank' href="https://dev.to/nestjs/part-1-introduction-and-setup-1a2l">문서 시리즈</a>를 읽는 것이 좋습니다. 대신 이 장에서는 <code>Server</code> 클래스가 제공하는 기능과 이를 활용하여 맞춤형 전략을 구축하는 방법에 초점을 맞출 것입니다.</p>
+<p>예를 들어, 애플리케이션 어딘가에 다음 메시지 핸들러가 정의되어 있다고 가정해 보겠습니다.</p>
 <pre><code class="language-typescript">
 @MessagePattern(&#39;echo&#39;)
 echo(@Payload() data: object) &#123;
   return data;
 &#125;
 </code></pre>
-<p>This message handler will be automatically registered by Nest runtime. With <code>Server</code> class, you can see what message patterns have been registered and also, access and execute the actual methods that were assigned to them.
-To test this out, let&#39;s add a simple <code>console.log</code> inside <code>listen()</code> method before <code>callback</code> function is called:</p>
+<p>이 메시지 핸들러는 Nest 런타임에 의해 자동으로 등록됩니다. <code>Server</code> 클래스를 이용하면 어떤 메시지 패턴이 등록되었는지 확인할 수 있으며, 할당된 실제 메소드에 접근하여 실행할 수 있습니다.
+이것을 테스트하기 위해, <code>callback</code> 함수가 호출되기 전에 <code>listen()</code> 메소드 안에 간단한 <code>console.log</code>를 추가해 봅시다 :</p>
 <pre><code class="language-typescript">
 listen(callback: () =&gt; void) &#123;
   console.log(this.messageHandlers);
   callback();
 &#125;
 </code></pre>
-<p>After your application restarts, you&#39;ll see the following log in your terminal:</p>
+<p>애플리케이션이 다시 시작되면 터미널에 다음 로그가 표시됩니다.</p>
 <pre><code class="language-typescript">
 Map &#123; &#39;echo&#39; =&gt; [AsyncFunction] &#123; isEventHandler: false &#125; &#125;
 </code></pre>
 <blockquote class="
-info "><strong>Hint</strong> If we used the <code>@EventPattern</code> decorator, you would see the same output, but with the <code>isEventHandler</code> property set to <code>true</code>.
+info "><strong>힌트</strong> <code>@EventPattern</code> 데코레이터를 사용하면 동일한 출력이 표시되지만 <code>isEventHandler</code> 속성이 <code>true</code>로 설정되어 있습니다.
 </blockquote>
-<p>As you can see, the <code>messageHandlers</code> property is a <code>Map</code> collection of all message (and event) handlers, in which patterns are being used as keys.
-Now, you can use a key (for example, <code>&quot;echo&quot;</code>) to receive a reference to the message handler:</p>
+<p>보시다시피 <code>messageHandlers</code> 속성은 패턴이 키로 사용되는 모든 메시지(및 이벤트) 핸들러의 <code>Map</code> 모음입니다.
+이제 키(예: <code>&quot;echo&quot;</code>)를 사용하여 메시지 핸들러에 대한 참조를 받을 수 있습니다.</p>
 <pre><code class="language-typescript">
 async listen(callback: () =&gt; void) &#123;
   const echoHandler = this.messageHandlers.get(&#39;echo&#39;);
@@ -91,17 +89,17 @@ async listen(callback: () =&gt; void) &#123;
   callback();
 &#125;
 </code></pre>
-<p>Once we execute the <code>echoHandler</code> passing an arbitrary string as an argument (<code>&quot;Hello world!&quot;</code> here), we should see it in the console:</p>
+<p>임의의 문자열을 인수로 전달하는 <code>echoHandler</code>를 실행하면(여기서는 <code>&quot;Hello world!&quot;</code>) 콘솔에서 확인할 수 있습니다.</p>
 <pre><code class="language-json">
 Hello world!
 </code></pre>
-<p>Which means that our method handler was properly executed.</p>
+<p>이는 우리의 메소드 핸들러가 제대로 실행되었음을 의미합니다.</p>
 <h4 appAnchor id="client-proxy"><span>Client proxy</span></h4>
-<p>As we mentioned in the first section, you don&#39;t necessarily need to use the <code>@nestjs/microservices</code> package to create microservices, but if you decide to do so and you need to integrate a custom strategy, you will need to provide a &quot;client&quot; class too.</p>
+<p>첫번째 섹션에서 언급했듯이 반드시 <code>@nestjs/microservices</code> 패키지를 사용하여 마이크로서비스를 생성할 필요는 없지만 그렇게 하기로 결정하고 사용자 지정 전략을 통합해야하는 경우 다음을 제공해야합니다. &quot;클라이언트&quot; 클래스도 마찬가지입니다.</p>
 <blockquote class="
-info "><strong>Hint</strong> Again, implementing a fully-featured client class compatible with all <code>@nestjs/microservices</code> features (e.g., streaming) requires a good understading of communication techniques used by the framework. To learn more, check out this <a rel='nofollow' target='_blank' href="https://dev.to/nestjs/part-4-basic-client-component-16f9">article</a>.
+info "><strong>힌트</strong> 다시 말하지만, 모든 <code>@nestjs/microservices</code> 기능 (예: 스트리밍)과 호환되는 모든 기능을 갖춘 클라이언트 클래스를 구현하려면 프레임워크에서 사용하는 통신 기술을 잘 이해해야합니다. 자세한 내용은 이 <a rel='nofollow' target='_blank' href="https://dev.to/nestjs/part-4-basic-client-component-16f9">기사</a>를 확인하십시오.
 </blockquote>
-<p>To communicate with an external service/emit &amp; publish messages (or events) you can either use a library-specific SDK package, or implement a custom client class that extends the <code>ClientProxy</code>, as follows:</p>
+<p>외부 서비스/발신 및 메시지(또는 이벤트)와 통신하려면 라이브러리별 SDK 패키지를 사용하거나 다음과 같이 <code>ClientProxy</code>를 확장하는 사용자 지정 클라이언트 클래스를 구현할 수 있습니다.</p>
 <pre><code class="language-typescript">
 import &#123; ClientProxy, ReadPacket, WritePacket &#125; from &#39;@nestjs/microservices&#39;;
 
@@ -116,11 +114,11 @@ class GoogleCloudPubSubClient extends ClientProxy &#123;
 &#125;
 </code></pre>
 <blockquote class="
-warning "><strong>Warning</strong> Please, note we won&#39;t be implementing a fully-featured Google Cloud Pub/Sub client in this chapter as this would require diving into transporter specific technical details.
+warning "><strong>경고</strong> 이 장에서는 모든 기능을 갖춘 Google Cloud Pub/Sub 클라이언트를 구현하지 않을 것입니다.이 경우 전송 업체별 기술 세부 정보를 살펴봐야합니다.
 </blockquote>
-<p>As you can see, <code>ClientProxy</code> class requires us to provide several methods for establishing &amp; closing the connection and publishing messages (<code>publish</code>) and events (<code>dispatchEvent</code>).
-Note, if you don&#39;t need a request-response communication style support, you can leave the <code>publish()</code> method empty. Likewise, if you don&#39;t need to support event-based communication, skip the <code>dispatchEvent()</code> method.</p>
-<p>To observe what and when those methods are executed, let&#39;s add multiple <code>console.log</code> calls, as follows:</p>
+<p>보시다시피 <code>ClientProxy</code> 클래스는 연결을 설정 및 종료하고 메시지(<code>publish</code>)와 이벤트(<code>dispatchEvent</code>)를 게시하기 위한 여러 메서드를 제공해야합니다.
+요청-응답 통신 스타일 지원이 필요하지 않은 경우 <code>publish()</code> 메서드를 비워둘 수 있습니다. 마찬가지로 이벤트 기반 통신을 지원할 필요가 없으면 <code>dispatchEvent()</code> 메서드를 건너뜁니다.</p>
+<p>이러한 메소드가 실행되는 내용과 시기를 관찰하기 위해 다음과 같이 여러 <code>console.log</code> 호출을 추가해 보겠습니다.</p>
 <pre><code class="language-typescript">
 class GoogleCloudPubSubClient extends ClientProxy &#123;
   async connect(): Promise&lt;any&gt; &#123;
@@ -150,20 +148,20 @@ class GoogleCloudPubSubClient extends ClientProxy &#123;
   &#125;
 &#125;
 </code></pre>
-<p>With this in place, let&#39;s create an instance of <code>GoogleCloudPubSubClient</code> class and run the <code>send()</code> method (which you might have seen in earlier chapters), subscribing to the returned observable stream.</p>
+<p>이를 통해 <code>GoogleCloudPubSubClient</code> 클래스의 인스턴스를 만들고 반환된 관찰 가능한 스트림을 구독하여 <code>send()</code> 메서드(이전 장에서 보셨을 것임)를 실행해 보겠습니다.</p>
 <pre><code class="language-typescript">
 const googlePubSubClient = new GoogleCloudPubSubClient();
 googlePubSubClient
   .send(&#39;pattern&#39;, &#39;Hello world!&#39;)
   .subscribe((response) =&gt; console.log(response));
 </code></pre>
-<p>Now, you should see the following output in your terminal:</p>
+<p>이제 터미널에 다음 출력이 표시됩니다.</p>
 <pre><code class="language-typescript">
 connect
 message: &#123; pattern: &#39;pattern&#39;, data: &#39;Hello world!&#39; &#125;
 Hello world! // &lt;-- after 5 seconds
 </code></pre>
-<p>To test if our &quot;teardown&quot; method (which our <code>publish()</code> method returns) is properly executed, let&#39;s apply a timeout operator to our stream, setting it to 2 seconds to make sure it throws earlier then our <code>setTimeout</code> calls the <code>callback</code> function.</p>
+<p>&quot;teardown&quot; 메서드(<code>publish()</code> 메서드가 반환하는)가 제대로 실행되는지 테스트하기 위해 스트림에 타임아웃 연산자를 적용하고 <code>setTimeout</code>이 <code>callback</code> 함수를 호출하는 것보다 일찍 발생하는지 확인하기 위해 2초로 설정합니다. .</p>
 <pre><code class="language-typescript">
 const googlePubSubClient = new GoogleCloudPubSubClient();
 googlePubSubClient
@@ -175,20 +173,20 @@ googlePubSubClient
   );
 </code></pre>
 <blockquote class="
-info "><strong>Hint</strong> The <code>timeout</code> operator is imported from the <code>rxjs/operators</code> package.
+info "><strong>힌트</strong> <code>timeout</code> 연산자는 <code>rxjs/operators</code> 패키지에서 가져옵니다.
 </blockquote>
-<p>With <code>timeout</code> operator applied, your terminal output should look as follows:</p>
+<p><code>timeout</code> 연산자가 적용된 상태에서 터미널 출력은 다음과 같아야합니다.</p>
 <pre><code class="language-typescript">
 connect
 message: &#123; pattern: &#39;pattern&#39;, data: &#39;Hello world!&#39; &#125;
 teardown // &lt;-- teardown
 Timeout has occurred
 </code></pre>
-<p>To dispatch an event (instead of sending a message), use the <code>emit()</code> method:</p>
+<p>이벤트를 전달하려면(메시지를 보내는 대신) <code>emit()</code> 메서드를 사용합니다.</p>
 <pre><code class="language-typescript">
 googlePubSubClient.emit(&#39;event&#39;, &#39;Hello world!&#39;);
 </code></pre>
-<p>And that&#39;s what you should see in the console:</p>
+<p>그리고 이것이 콘솔에 표시되어야하는 것입니다.</p>
 <pre><code class="language-typescript">
 connect
 event to dispatch:  &#123; pattern: &#39;event&#39;, data: &#39;Hello world!&#39; &#125;

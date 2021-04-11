@@ -1,16 +1,16 @@
 ### Overview
 
-In addition to traditional (sometimes called monolithic) application architectures, Nest natively supports the microservice architectural style of development. Most of the concepts discussed elsewhere in this documentation, such as dependency injection, decorators, exception filters, pipes, guards and interceptors, apply equally to microservices. Wherever possible, Nest abstracts implementation details so that the same components can run across HTTP-based platforms, WebSockets, and Microservices. This section covers the aspects of Nest that are specific to microservices.
+기존(모놀리식이라고도 함) 애플리케이션 아키텍처 외에도 Nest는 기본적으로 마이크로서비스 아키텍처 스타일의 개발을 지원합니다. 종속성 주입, 데코레이터, 예외 필터, 파이프, 가드 및 인터셉터와 같이 이 문서의 다른 부분에서 논의된 대부분의 개념은 마이크로 서비스에 동일하게 적용됩니다. 가능한 경우 Nest는 HTTP 기반 플랫폼, WebSocket 및 마이크로서비스에서 동일한 구성요소를 실행할 수 있도록 구현 세부정보를 추상화합니다. 이 섹션에서는 마이크로서비스와 관련된 Nest의 측면을 다룹니다.
 
-In Nest, a microservice is fundamentally an application that uses a different **transport** layer than HTTP.
+Nest에서 마이크로서비스는 기본적으로 HTTP와 다른 **전송** 계층을 사용하는 애플리케이션입니다.
 
 <figure><img src="/assets/Microservices_1.png" /></figure>
 
-Nest supports several built-in transport layer implementations, called **transporters**, which are responsible for transmitting messages between different microservice instances. Most transporters natively support both **request-response** and **event-based** message styles. Nest abstracts the implementation details of each transporter behind a canonical interface for both request-response and event-based messaging. This makes it easy to switch from one transport layer to another -- for example to leverage the specific reliability or performance features of a particular transport layer -- without impacting your application code.
+Nest는 여러 마이크로서비스 인스턴스간에 메시지를 전송하는 **전송자 transporter**라고 하는 여러가지 기본제공 전송 계층 구현을 지원합니다. 대부분의 전송자는 기본적으로 **요청-응답** 및 **이벤트 기반** 메시지 스타일을 모두 지원합니다. Nest는 요청-응답 및 이벤트 기반 메시징 모두에 대해 표준 인터페이스 뒤에 있는 각 전송자의 구현 세부정보를 추상화합니다. 따라서 애플리케이션 코드에 영향을 주지않고 특정 전송 레이어의 특정 안정성 또는 성능 기능을 활용하기 위해 한 전송 레이어에서 다른 전송 레이어로 쉽게 전환할 수 있습니다.
 
 #### Installation
 
-To start building microservices, first install the required package:
+마이크로 서비스 빌드를 시작하려면 먼저 필요한 패키지를 설치하세요.
 
 ```bash
 $ npm i --save @nestjs/microservices
@@ -18,7 +18,7 @@ $ npm i --save @nestjs/microservices
 
 #### Getting started
 
-To instantiate a microservice, use the `createMicroservice()` method of the `NestFactory` class:
+마이크로 서비스를 인스턴스화하려면 `NestFactory` 클래스의 `createMicroservice()` 메소드를 사용하십시오.
 
 ```typescript
 @@filename(main)
@@ -50,54 +50,53 @@ async function bootstrap() {
 bootstrap();
 ```
 
-> info **Hint** Microservices use the **TCP** transport layer by default.
+> info **힌트** 마이크로서비스는 기본적으로 **TCP** 전송 레이어를 사용합니다.
 
-The second argument of the `createMicroservice()` method is an `options` object. This object may consist of two members:
+`createMicroservice()` 메소드의 두번째 인수는 `options` 객체입니다. 이 객체는 두개의 멤버로 구성될 수 있습니다.
 
 <table>
   <tr>
     <td><code>transport</code></td>
-    <td>Specifies the transporter (for example, <code>Transport.NATS</code>)</td>
+    <td>전송자를 지정합니다(예: <code>Transport.NATS</code>).</td>
   </tr>
   <tr>
     <td><code>options</code></td>
-    <td>A transporter-specific options object that determines transporter behavior</td>
+    <td>전송자 동작을 결정하는 전송자별 옵션 개체</td>
   </tr>
 </table>
 <p>
-  The <code>options</code> object is specific to the chosen transporter. The <strong>TCP</strong> transporter exposes
-  the properties described below.  For other transporters (e.g, Redis, MQTT, etc.), see the relevant chapter for a description of the available options.
+  <code>options</code> 객체는 선택한 전송자에 따라 다릅니다. <strong>TCP</strong> 전송자는 아래 설명된 속성을 노출합니다. 다른 전송자(예: Redis, MQTT 등)의 경우 사용가능한 옵션에 대한 설명은 관련장을 참조하십시오.
 </p>
 <table>
   <tr>
     <td><code>host</code></td>
-    <td>Connection hostname</td>
+    <td>연결 호스트 이름</td>
   </tr>
   <tr>
     <td><code>port</code></td>
-    <td>Connection port</td>
+    <td>연결 포트</td>
   </tr>
   <tr>
     <td><code>retryAttempts</code></td>
-    <td>Number of times to retry message (default: <code>0</code>)</td>
+    <td>메시지 재시도 횟수(기본값: <code>0</code>)</td>
   </tr>
   <tr>
     <td><code>retryDelay</code></td>
-    <td>Delay between message retry attempts (ms) (default: <code>0</code>)</td>
+    <td>메시지 재시도 간격(밀리 초)(기본값: <code>0</code>)</td>
   </tr>
 </table>
 
 #### Patterns
 
-Microservices recognize both messages and events by **patterns**. A pattern is a plain value, for example, a literal object or a string. Patterns are automatically serialized and sent over the network along with the data portion of a message. In this way, message senders and consumers can coordinate which requests are consumed by which handlers.
+마이크로서비스는 **패턴**으로 메시지와 이벤트를 모두 인식합니다. 패턴은 리터럴 객체 또는 문자열과 같은 일반값입니다. 패턴은 자동으로 직렬화되어 메시지의 데이터 부분과 함께 네트워크를 통해 전송됩니다. 이러한 방식으로 메시지 보낸 사람과 소비자는 핸들러가 어떤 요청을 사용하는지 조정할 수 있습니다.
 
 #### Request-response
 
-The request-response message style is useful when you need to **exchange** messages between various external services. With this paradigm, you can be certain that the service has actually received the message (without the need to manually implement a message ACK protocol). However, the request-response paradigm is not always the best choice. For example, streaming transporters that use log-based persistence, such as [Kafka](https://docs.confluent.io/3.0.0/streams/) or [NATS streaming](https://github.com/nats-io/node-nats-streaming), are optimized for solving a different range of issues, more aligned with an event messaging paradigm (see [event-based messaging](https://docs.nestjs.com/microservices/basics#event-based) below for more details).
+요청-응답 메시지 스타일은 다양한 외부 서비스간에 메시지를 **교환**해야할 때 유용합니다. 이 패러다임을 사용하면 서비스가 실제로 메시지를 수신했는지 확인할 수 있습니다(메시지 ACK 프로토콜을 수동으로 구현할 필요없이). 그러나 요청-응답 패러다임이 항상 최선의 선택은 아닙니다. 예를 들어 [Kafka](https://docs.confluent.io/3.0.0/streams/) 또는 [NATS streaming](https://github.com/nats-io/node-nats-streaming)과 같이 로그 기반 지속성을 사용하는 스트리밍 전송기는 다양한 문제를 해결하는 데 최적화되어 있으며 이벤트 메시징 패러다임에 더 잘 부합합니다(자세한 내용은 아래의 [이벤트 기반 메시징](/microservices/basics#event-based) 참조).
 
-To enable the request-response message type, Nest creates two logical channels - one is responsible for transferring the data while the other waits for incoming responses. For some underlying transports, such as [NATS](https://nats.io/), this dual-channel support is provided out-of-the-box. For others, Nest compensates by manually creating separate channels. There can be overhead for this, so if you do not require a request-response message style, you should consider using the event-based method.
+요청-응답 메시지 유형을 활성화하기 위해 Nest는 두개의 논리 채널을 만듭니다. 하나는 데이터 전송을 담당하고 다른 하나는 수신 응답을 기다립니다. [NATS](https://nats.io/)와 같은 일부 기본 전송의 경우 이 이중 채널 지원은 기본적으로 제공됩니다. 다른 경우 Nest는 별도의 채널을 수동으로 생성하여 보상합니다. 이에 대한 오버헤드가 있을 수 있으므로 요청-응답 메시지 스타일이 필요하지 않은 경우 이벤트 기반 방법 사용을 고려해야합니다.
 
-To create a message handler based on the request-response paradigm use the `@MessagePattern()` decorator, which is imported from the `@nestjs/microservices` package. This decorator should be used only within the [controller](https://docs.nestjs.com/controllers) classes since they are the entry points for your application. Using them inside providers won't have any effect as they are simply ignored by Nest runtime.
+요청-응답 패러다임을 기반으로 메시지 핸들러를 생성하려면 `@nestjs/microservices` 패키지에서 가져온 `@MessagePattern()` 데코레이터를 사용합니다. 이 데코레이터는 애플리케이션의 진입점이므로 [controller](/controllers) 클래스내에서만 사용해야합니다. 프로바이더 내부에서 사용하는 것은 단순히 Nest 런타임에서 무시되므로 아무런 효과가 없습니다.
 
 ```typescript
 @@filename(math.controller)
@@ -124,11 +123,11 @@ export class MathController {
 }
 ```
 
-In the above code, the `accumulate()` **message handler** listens for messages that fulfill the `{{ '{' }} cmd: 'sum' {{ '}' }}` message pattern. The message handler takes a single argument, the `data` passed from the client. In this case, the data is an array of numbers which are to be accumulated.
+위 코드에서 `accumulate()` **메시지 핸들러**는 `{{ '{' }} cmd: 'sum' {{ '}' }}` 메시지 패턴을 충족하는 메시지를 수신합니다. 메시지 핸들러는 클라이언트에서 전달된 `data`인 단일인수를 사용합니다. 이 경우 데이터는 누적될 숫자의 배열입니다.
 
 #### Asynchronous responses
 
-Message handlers are able to respond either synchronously or **asynchronously**. Hence, `async` methods are supported.
+메시지 핸들러는 동기식 또는 **비동기식**으로 응답할 수 있습니다. 따라서 `async` 메소드가 지원됩니다.
 
 ```typescript
 @@filename()
@@ -143,7 +142,7 @@ async accumulate(data) {
 }
 ```
 
-A message handler is also able to return an `Observable`, in which case the result values will be emitted until the stream is completed.
+메시지 핸들러는 `Observable`을 반환할 수도 있습니다. 이 경우 스트림이 완료될 때까지 결과값이 내보내집니다.
 
 ```typescript
 @@filename()
@@ -158,15 +157,15 @@ accumulate(data: number[]): Observable<number> {
 }
 ```
 
-In the example above, the message handler will respond **3 times** (with each item from the array).
+위의 예에서 메시지 핸들러는 **3번**(배열의 각 항목에 대해) 응답합니다.
 
 #### Event-based
 
-While the request-response method is ideal for exchanging messages between services, it is less suitable when your message style is event-based - when you just want to publish **events** without waiting for a response. In that case, you do not want the overhead required by request-response for maintaining two channels.
+요청-응답 방법은 서비스간에 메시지를 교환하는데 이상적이지만 메시지 스타일이 이벤트 기반인 경우(응답을 기다리지 않고 **이벤트**만 게시하려는 경우) 적합하지 않습니다. 이 경우 두 채널을 유지하기 위해 요청-응답에 필요한 오버헤드를 원하지 않습니다.
 
-Suppose you would like to simply notify another service that a certain condition has occurred in this part of the system. This is the ideal use case for the event-based message style.
+시스템의 이 부분에서 특정 조건이 발생했음을 다른 서비스에 간단히 알리고싶다고 가정합니다. 이것은 이벤트 기반 메시지 스타일의 이상적인 사용 사례입니다.
 
-To create an event handler, we use the `@EventPattern()` decorator, which is imported from the `@nestjs/microservices` package.
+이벤트 핸들러를 생성하기 위해 `@nestjs/microservices` 패키지에서 가져온 `@EventPattern()`v데코레이터를 사용합니다.
 
 ```typescript
 @@filename()
@@ -181,13 +180,13 @@ async handleUserCreated(data) {
 }
 ```
 
-The `handleUserCreated()` **event handler** listens for the `'user_created'` event. The event handler takes a single argument, the `data` passed from the client (in this case, an event payload which has been sent over the network).
+`handleUserCreated()` **이벤트 핸들러**는 `'user_created'` 이벤트를 수신합니다. 이벤트 핸들러는 클라이언트에서 전달된 `data`(이 경우 네트워크를 통해 전송된 이벤트 페이로드)인 단일인수를 받습니다.
 
 <app-banner-enterprise></app-banner-enterprise>
 
 #### Decorators
 
-In more sophisticated scenarios, you may want to access more information about the incoming request. For example, in the case of NATS with wildcard subscriptions, you may want to get the original subject that the producer has sent the message to. Likewise, in Kafka you may want to access the message headers. In order to accomplish that, you can use built-in decorators as follows:
+더 복잡한 시나리오에서는 들어오는 요청에 대한 추가정보에 액세스할 수 있습니다. 예를 들어 와일드카드 구독이 있는 NATS의 경우 생산자(producer)가 메시지를 보낸 원래 제목을 가져올 수 있습니다. 마찬가지로 Kafka에서 메시지 헤더에 액세스할 수 있습니다. 이를 수행하기 위해 다음과 같이 내장 데코레이터를 사용할 수 있습니다.
 
 ```typescript
 @@filename()
@@ -205,17 +204,17 @@ getDate(data, context) {
 }
 ```
 
-> info **Hint** `@Payload()`, `@Ctx()` and `NatsContext` are imported from `@nestjs/microservices`.
+> info **힌트** `@Payload()`, `@Ctx()` 및 `NatsContext`는 `@nestjs/microservices`에서 가져옵니다.
 
 #### Client
 
-A client Nest application can exchange messages or publish events to a Nest microservice using the `ClientProxy` class. This class defines several methods, such as `send()` (for request-response messaging) and `emit()` (for event-driven messaging) that let you communicate with a remote microservice. Obtain an instance of this class in one of the following ways.
+클라이언트 Nest 애플리케이션은 `ClientProxy` 클래스를 사용하여 Nest 마이크로서비스에 메시지를 교환하거나 이벤트를 게시할 수 있습니다. 이 클래스는 원격 마이크로서비스와 통신할 수 있는 `send()` (요청-응답 메시징용) 및 `emit()`(이벤트 기반 메시징용)과 같은 여러 메서드를 정의합니다. 다음 방법중 하나로 이 클래스의 인스턴스를 얻습니다.
 
-One technique is to import the `ClientsModule`, which exposes the static `register()` method. This method takes an argument which is an array of objects representing microservice transporters. Each such object has a `name` property, an optional `transport` property (default is `Transport.TCP`), and an optional transporter-specific `options` property.
+한가지 기술은 정적 `register()` 메서드를 노출하는 `ClientsModule`을 가져오는 것입니다. 이 메서드는 마이크로서비스 전송자를 나타내는 객체의 배열인 인수를 사용합니다. 이러한 각 객체에는 `name` 속성, 선택적 `transport` 속성(기본값은 `Transport.TCP`) 및 선택적 전송자별 `options`속성이 있습니다.
 
-The `name` property serves as an **injection token** that can be used to inject an instance of a `ClientProxy` where needed. The value of the `name` property, as an injection token, can be an arbitrary string or JavaScript symbol, as described [here](https://docs.nestjs.com/fundamentals/custom-providers#non-class-based-provider-tokens).
+`name` 속성은 필요한 곳에 `ClientProxy`의 인스턴스를 삽입하는데 사용할 수 있는 **주입 토큰** 역할을합니다. 인젝션 토큰인 `name` 속성의 값은 [여기](/fundamentals/custom-providers#non-class-based-provider-tokens)에 설명된대로 임의의 문자열 또는 JavaScript 기호 일 수 있습니다.
 
-The `options` property is an object with the same properties we saw in the `createMicroservice()` method earlier.
+`options` 속성은 앞서 `createMicroservice()` 메서드에서 본 것과 동일한 속성을 가진 객체입니다.
 
 ```typescript
 @Module({
@@ -228,7 +227,7 @@ The `options` property is an object with the same properties we saw in the `crea
 })
 ```
 
-Once the module has been imported, we can inject an instance of the `ClientProxy` configured as specified via the `'MATH_SERVICE'` transporter options shown above, using the `@Inject()` decorator.
+모듈을 가져온 후에는 `@Inject()` 데코레이터를 사용하여 위에 표시된 `'MATH_SERVICE'` 트랜스포터 옵션을 통해 지정된대로 구성된 `ClientProxy`의 인스턴스를 삽입할 수 있습니다.
 
 ```typescript
 constructor(
@@ -236,9 +235,9 @@ constructor(
 ) {}
 ```
 
-> info **Hint** The `ClientsModule` and `ClientProxy` classes are imported from the `@nestjs/microservices` package.
+> info **힌트** `ClientsModule` 및 `ClientProxy` 클래스는 `@nestjs/microservices` 패키지에서 가져옵니다.
 
-At times we may need to fetch the transporter configuration from another service (say a `ConfigService`), rather than hard-coding it in our client application. To do this, we can register a [custom provider](/techniques/custom-providers) using the `ClientProxyFactory` class. This class has a static `create()` method, which accepts a transporter options object, and returns a customized `ClientProxy` instance.
+때때로 우리는 클라이언트 애플리케이션에서 하드코딩하는 대신 다른 서비스(예: `ConfigService`)에서 전송자 구성을 가져와야할 수 있습니다. 이를 위해 `ClientProxyFactory` 클래스를 사용하여 [custom provider](/techniques/custom-providers)를 등록할 수 있습니다. 이 클래스에는 트랜스포터 옵션 객체를 받아들이고 사용자 정의된 `ClientProxy` 인스턴스를 반환하는 정적 `create()` 메서드가 있습니다.
 
 ```typescript
 @Module({
@@ -256,20 +255,20 @@ At times we may need to fetch the transporter configuration from another service
 })
 ```
 
-> info **Hint** The `ClientProxyFactory` is imported from the `@nestjs/microservices` package.
+> info **힌트** `ClientProxyFactory`는 `@nestjs/microservices` 패키지에서 가져옵니다.
 
-Another option is to use the `@Client()` property decorator.
+또 다른 옵션은 `@Client()` 속성 데코레이터를 사용하는 것입니다.
 
 ```typescript
 @Client({ transport: Transport.TCP })
 client: ClientProxy;
 ```
 
-> info **Hint** The `@Client()` decorator is imported from the `@nestjs/microservices` package.
+> info **힌트** `@Client()` 데코레이터는 `@nestjs/microservices` 패키지에서 가져옵니다.
 
-Using the `@Client()` decorator is not the preferred technique, as it is harder to test and harder to share a client instance.
+`@Client()` 데코레이터를 사용하는 것은 테스트하기가 더 어렵고 클라이언트 인스턴스를 공유하기가 더 어렵기 때문에 선호되는 기술이 아닙니다.
 
-The `ClientProxy` is **lazy**. It doesn't initiate a connection immediately. Instead, it will be established before the first microservice call, and then reused across each subsequent call. However, if you want to delay the application bootstrapping process until a connection is established, you can manually initiate a connection using the `ClientProxy` object's `connect()` method inside the `OnApplicationBootstrap` lifecycle hook.
+`ClientProxy`는 **lazy**입니다. 즉시 연결을 시작하지 않습니다. 대신 첫번째 마이크로서비스 호출전에 설정한 다음 각 후속 호출에서 재사용됩니다. 그러나 연결이 설정될 때까지 애플리케이션 부트스트랩 프로세스를 지연시키려면 `OnApplicationBootstrap` 수명주기 후크내에서 `ClientProxy` 객체의 `connect()` 메서드를 사용하여 수동으로 연결을 시작할 수 있습니다.
 
 ```typescript
 @@filename()
@@ -278,11 +277,11 @@ async onApplicationBootstrap() {
 }
 ```
 
-If the connection cannot be created, the `connect()` method will reject with the corresponding error object.
+연결을 만들 수 없는 경우 `connect()` 메서드는 해당 오류 객체와 함께 거부됩니다.
 
 #### Sending messages
 
-The `ClientProxy` exposes a `send()` method. This method is intended to call the microservice and returns an `Observable` with its response. Thus, we can subscribe to the emitted values easily.
+`ClientProxy`는 `send()` 메소드를 노출합니다. 이 메서드는 마이크로서비스를 호출하기 위한 것이며 응답과 함께 `Observable`을 반환합니다. 따라서 방출된 값을 쉽게 구독할 수 있습니다.
 
 ```typescript
 @@filename()
@@ -299,11 +298,11 @@ accumulate() {
 }
 ```
 
-The `send()` method takes two arguments, `pattern` and `payload`. The `pattern` should match one defined in a `@MessagePattern()` decorator. The `payload` is a message that we want to transmit to the remote microservice. This method returns a **cold `Observable`**, which means that you have to explicitly subscribe to it before the message will be sent.
+`send()` 메소드는 `pattern`과 `payload`라는 두개의 인수를 받습니다. `pattern`은 `@MessagePattern()` 데코레이터에 정의된 것과 일치해야합니다. `payload`는 원격 마이크로서비스로 전송하려는 메시지입니다. 이 메소드는 **cold `Observable`**을 반환합니다. 즉, 메시지를 보내기전에 명시적으로 구독해야합니다.
 
 #### Publishing events
 
-To send an event, use the `ClientProxy` object's `emit()` method. This method publishes an event to the message broker.
+이벤트를 보내려면 `ClientProxy` 객체의 `emit()` 메서드를 사용하세요. 이 메서드는 메시지 브로커에 이벤트를 게시합니다.
 
 ```typescript
 @@filename()
@@ -316,17 +315,17 @@ async publish() {
 }
 ```
 
-The `emit()` method takes two arguments, `pattern` and `payload`. The `pattern`should match one defined in an `@EventPattern()` decorator. The `payload` is an event payload that we want to transmit to the remote microservice. This method returns a **hot `Observable`** (unlike the cold `Observable` returned by `send()`), which means that whether or not you explicitly subscribe to the observable, the proxy will immediately try to deliver the event.
+`emit()` 메서드는 `pattern`과 `payload`라는 두개의 인수를 받습니다. `pattern`은 `@EventPattern()` 데코레이터에 정의된 것과 일치해야합니다. `payload`는 원격 마이크로서비스로 전송하려는 이벤트 페이로드입니다. 이 메소드는 **hot `Observable`**을 반환합니다 (`send()`에 의해 반환된 콜드 `Observable`과 달리). 이는 Observable을 명시적으로 구독하는지 여부에 관계없이 프록시가 즉시 이벤트 전달을 시도함을 의미합니다.
 
 <app-banner-shop></app-banner-shop>
 
 #### Scopes
 
-For people coming from different programming language backgrounds, it might be unexpected to learn that in Nest, almost everything is shared across incoming requests. We have a connection pool to the database, singleton services with global state, etc. Remember that Node.js doesn't follow the request/response Multi-Threaded Stateless Model in which every request is processed by a separate thread. Hence, using singleton instances is fully **safe** for our applications.
+다른 프로그래밍 언어 배경을 가진 사람들의 경우 Nest에서 거의 모든 것이 들어오는 요청에서 공유된다는 사실을 배우는 것은 예상치 못한 일입니다. 데이터베이스에 대한 연결 풀, 전역 상태의 싱글톤 서비스 등이 있습니다. Node.js는 모든 요청이 별도의 스레드에 의해 처리되는 요청/응답 다중 스레드 상태 비 저장 모델을 따르지 않습니다. 따라서 싱글톤 인스턴스를 사용하는 것은 애플리케이션에 완전히 **안전**합니다.
 
-However, there are edge-cases when request-based lifetime of the handler may be the desired behavior, for instance per-request caching in GraphQL applications, request tracking or multi-tenancy. Learn how to control scopes [here](/fundamentals/injection-scopes).
+그러나 요청 기반 핸들러의 수명이 바람직한 동작일 수 있는 경우가 있습니다(예: GraphQL 애플리케이션의 요청별 캐싱, 요청 추적 또는 다중 테넌시). [여기](/fundamentals/injection-scopes)에서 범위를 제어하는 방법을 알아보세요.
 
-Request-scoped handlers and providers can inject `RequestContext` using the `@Inject()` decorator in combination with `CONTEXT` token:
+요청 범위 핸들러 및 제공자는 `CONTEXT` 토큰과 함께 `@Inject()` 데코레이터를 사용하여 `RequestContext`를 삽입할 수 있습니다.
 
 ```typescript
 import { Injectable, Scope, Inject } from '@nestjs/common';
@@ -338,7 +337,7 @@ export class CatsService {
 }
 ```
 
-This provides access to the `RequestContext` object, which has two properties:
+이렇게 하면 두가지 속성이 있는 `RequestContext` 객체에 대한 액세스가 제공됩니다.
 
 ```typescript
 export interface RequestContext<T = any> {
@@ -347,13 +346,13 @@ export interface RequestContext<T = any> {
 }
 ```
 
-The `data` property is the message payload sent by the message producer. The `pattern` property is the pattern used to identify an appropriate handler to handle the incoming message.
+`data` 속성은 메시지 생성자가 보낸 메시지 페이로드입니다. `pattern` 속성은 수신 메시지를 처리하기위한 적절한 핸들러를 식별하는데 사용되는 패턴입니다.
 
 #### Handling timeouts
 
-In distributed systems, sometimes microservices might be down or not available. To avoid infinitely long waiting, you can use Timeouts. A timeout is an incredibly useful pattern when communicating with other services. To apply timeouts to your microservice calls, you can use the `RxJS` timeout operator. If the microservice does not respond to the request within a certain time, an exception is thrown, which can be caught and handled appropriately.
+분산 시스템에서는 때때로 마이크로서비스가 다운되거나 사용 불가능할 수 있습니다. 무한히 오래 기다리지 않으려면 제한시간을 사용할 수 있습니다. 타임아웃은 다른 서비스와 통신할 때 매우 유용한 패턴입니다. 마이크로서비스 호출에 타임아웃을 적용하려면 `RxJS` 타임아웃 연산자를 사용할 수 있습니다. 마이크로서비스가 특정 시간 내에 요청에 응답하지 않으면 예외가 발생하여 적절히 포착하고 처리할 수 있습니다.
 
-To solve this problem you have to use [rxjs](https://github.com/ReactiveX/rxjs) package. Just use the `timeout` operator in the pipe:
+이 문제를 해결하려면 [rxjs](https://github.com/ReactiveX/rxjs) 패키지를 사용해야합니다. 파이프에서 `timeout` 연산자를 사용하십시오.
 
 ```typescript
 @@filename()
@@ -368,6 +367,6 @@ this.client
       .toPromise();
 ```
 
-> info **Hint** The `timeout` operator is imported from the `rxjs/operators` package.
+> info **힌트** `timeout` 연산자는 `rxjs/operators` 패키지에서 가져옵니다.
 
-After 5 seconds, if the microservice isn't responding, it will throw an error.
+5초 후 마이크로서비스가 응답하지 않으면 오류가 발생합니다.

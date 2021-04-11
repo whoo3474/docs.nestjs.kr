@@ -1,12 +1,12 @@
 ### Redis
 
-The [Redis](https://redis.io/) transporter implements the publish/subscribe messaging paradigm and leverages the [Pub/Sub](https://redis.io/topics/pubsub) feature of Redis. Published messages are categorized in channels, without knowing what subscribers (if any) will eventually receive the message. Each microservice can subscribe to any number of channels. In addition, more than one channel can be subscribed to at a time. Messages exchanged through channels are **fire-and-forget**, which means that if a message is published and there are no subscribers interested in it, the message is removed and cannot be recovered. Thus, you don't have a guarantee that either messages or events will be handled by at least one service. A single message can be subscribed to (and received) by multiple subscribers.
+[Redis](https://redis.io/) 전송자는 게시/구독 메시징 패러다임을 구현하고 Redis의 [Pub/Sub](https://redis.io/topics/pubsub) 기능을 활용합니다. 게시된 메시지는 어떤 구독자(있는 경우)가 결국 메시지를 받을지 알지 못한 채 채널로 분류됩니다. 각 마이크로서비스는 원하는 수의 채널을 구독할 수 있습니다. 또한 한번에 두개 이상의 채널을 구독할 수 있습니다. 채널을 통해 교환되는 메시지는 **실행 후 삭제**입니다. 즉, 메시지가 게시되고 관심있는 구독자가 없으면 메시지가 제거되고 복구할 수 없습니다. 따라서 메시지 나 이벤트가 하나 이상의 서비스에서 처리된다는 보장이 없습니다. 여러 구독자가 단일 메시지를 구독(및 수신)할 수 있습니다.
 
 <figure><img src="/assets/Redis_1.png" /></figure>
 
 #### Installation
 
-To start building Redis-based microservices, first install the required package:
+Redis 기반 마이크로서비스 빌드를 시작하려면 먼저 필요한 패키지를 설치하세요.
 
 ```bash
 $ npm i --save redis
@@ -14,7 +14,7 @@ $ npm i --save redis
 
 #### Overview
 
-To use the Redis transporter, pass the following options object to the `createMicroservice()` method:
+Redis 전송자를 사용하려면 다음 옵션 객체를 `createMicroservice()` 메서드에 전달합니다.
 
 ```typescript
 @@filename(main)
@@ -33,11 +33,11 @@ const app = await NestFactory.createMicroservice(AppModule, {
 });
 ```
 
-> info **Hint** The `Transport` enum is imported from the `@nestjs/microservices` package.
+> info **힌트** `Transport` 열거형은 `@nestjs/microservices` 패키지에서 가져옵니다.
 
 #### Options
 
-The `options` property is specific to the chosen transporter. The <strong>Redis</strong> transporter exposes the properties described below.
+`options` 속성은 선택한 전송자에 따라 다릅니다. **Redis** 전송자는 아래 설명된 속성을 노출합니다.
 
 <table>
   <tr>
@@ -46,21 +46,21 @@ The `options` property is specific to the chosen transporter. The <strong>Redis<
   </tr>
   <tr>
     <td><code>retryAttempts</code></td>
-    <td>Number of times to retry message (default: <code>0</code>)</td>
+    <td>메시지 재시도 횟수(기본값: <code>0</code>)</td>
   </tr>
   <tr>
     <td><code>retryDelay</code></td>
-    <td>Delay between message retry attempts (ms) (default: <code>0</code>)</td>
+    <td>메시지 재시도 간격(밀리 초)(기본값: <code>0</code>)</td>
   </tr>
 </table>
 
-All the properties supported by the official [redis](https://www.npmjs.com/package/redis#options-object-properties) client are also supported by this transporter.
+공식 [redis](https://www.npmjs.com/package/redis#options-object-properties) 클라이언트에서 지원하는 모든 속성도 이 트랜스포터에서 지원됩니다.
 
 #### Client
 
-Like other microservice transporters, you have <a href="https://docs.nestjs.com/microservices/basics#client">several options</a> for creating a Redis `ClientProxy` instance.
+다른 마이크로서비스 전송자와 마찬가지로 Redis `ClientProxy` 인스턴스를 만들기 위한 [여러 옵션](/microservices/basics#client)이 있습니다.
 
-One method for creating an instance is to use the `ClientsModule`. To create a client instance with the `ClientsModule`, import it and use the `register()` method to pass an options object with the same properties shown above in the `createMicroservice()` method, as well as a `name` property to be used as the injection token. Read more about `ClientsModule` <a href="https://docs.nestjs.com/microservices/basics#client">here</a>.
+인스턴스를 만드는 한가지 방법은 `ClientsModule`을 사용하는 것입니다. `ClientsModule`을 사용하여 클라이언트 인스턴스를 만들려면 가져와서 `register()` 메서드를 사용하여 위의 `createMicroservice()` 메서드에 표시된 것과 동일한 속성과 `name` 속성을 가진 옵션 객체를 전달합니다. 주입 토큰으로 사용됩니다. [여기](/microservices/basics#client)에서 `ClientsModule`에 대해 자세히 알아보세요.
 
 ```typescript
 @Module({
@@ -79,11 +79,11 @@ One method for creating an instance is to use the `ClientsModule`. To create a c
 })
 ```
 
-Other options to create a client (either `ClientProxyFactory` or `@Client()`) can be used as well. You can read about them <a href="https://docs.nestjs.com/microservices/basics#client">here</a>.
+클라이언트를 만드는 다른 옵션(`ClientProxyFactory` 또는 `@Client()`)도 사용할 수 있습니다. [여기](/microservices/basics#client)에서 이에 대해 읽을 수 있습니다.
 
 #### Context
 
-In more sophisticated scenarios, you may want to access more information about the incoming request. When using the Redis transporter, you can access the `RedisContext` object.
+더 복잡한 시나리오에서는 들어오는 요청에 대한 추가 정보에 액세스할 수 있습니다. Redis 전송자를 사용하는 경우 `RedisContext` 객체에 액세스할 수 있습니다.
 
 ```typescript
 @@filename()
@@ -99,4 +99,4 @@ getNotifications(data, context) {
 }
 ```
 
-> info **Hint** `@Payload()`, `@Ctx()` and `RedisContext` are imported from the `@nestjs/microservices` package.
+> info **힌트** `@Payload()`, `@Ctx()` 및 `RedisContext`는 `@nestjs/microservices` 패키지에서 가져옵니다.
