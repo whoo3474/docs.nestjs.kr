@@ -851,7 +851,7 @@ Sequelize는 Active Record 패턴을 구현합니다. 이 패턴에서는 모델
 import { Column, Model, Table } from 'sequelize-typescript';
 
 @Table
-export class User extends Model<User> {
+export class User extends Model {
   @Column
   firstName: string;
 
@@ -1036,7 +1036,7 @@ import { Column, Model, Table, HasMany } from 'sequelize-typescript';
 import { Photo } from '../photos/photo.model';
 
 @Table
-export class User extends Model<User> {
+export class User extends Model {
   @Column
   firstName: string;
 
