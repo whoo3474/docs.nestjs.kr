@@ -121,7 +121,7 @@ create(@Body() createUserDto: CreateUserDto) {
 
 > info **힌트** TypeScript는 **제네릭 또는 인터페이스**에 대한 메타데이터를 저장하지 않으므로 DTO에서 사용할 때 `ValidationPipe`가 들어오는 데이터의 유효성을 제대로 검사하지 못할 수 있습니다. 이러한 이유로 DTO에서 구체적인 클래스를 사용하는 것이 좋습니다.
 
-> info **힌트** DTO를 가져올 때 런타임시 삭제되므로 타입 전용 가져오기를 사용할 수 없습니다. 즉, `import type { CreateUserDto } `대신` import { CreateUserDto }`를 기억하세요.
+> info **힌트** DTO를 가져올 때 런타임시 삭제되므로 타입 전용 가져오기를 사용할 수 없습니다. 즉, `import type {{ '{' }} CreateUserDto {{ '}' }}` 대신 `import {{ '{' }} CreateUserDto {{ '}' }}`를 기억하세요.
 
 이제 `CreateUserDto`에 몇가지 유효성 검사 규칙을 추가할 수 있습니다. 이 작업은 [여기](https://github.com/typestack/class-validator#validation-decorators)에 자세히 설명된 `class-validator` 패키지에서 제공하는 데코레이터를 사용하여 수행합니다. 이러한 방식으로 `CreateUserDto`를 사용하는 모든 라우트는 이러한 유효성 검사 규칙을 자동으로 적용합니다.
 
