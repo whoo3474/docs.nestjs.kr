@@ -1,6 +1,6 @@
 timeout: 타임아웃, 시간제한, 제한시간
 constructor: 생성자, 컨스트럭터
-provider: 공급자, 프로바이더
+provider: 공급자, 프로바이더, 제공업체
 route: 라우트
 path: 경로
 task: 타스크
@@ -28,7 +28,7 @@ listener: 리스너
 application: 애플리케이션, 응용프로그램
 service: 서비스
 user-defined: 사용자 정의
-custom: 커스텀
+custom: 커스텀, 사용자지정
 event: 이벤트
 state: 상태
 interact: 상호작용
@@ -45,7 +45,7 @@ bootstrap: 부트스트랩
 logger: 로거
 exception: 예외
 timestamp: 타임스탬프
-Custom implementation: 사용자 정의 구현
+Custom implementation: 사용자정의 구현
 singleton: 싱글톤
 middleware: 미들웨어
 global: 전역, 글로발
@@ -98,4 +98,5 @@ prefetch:
 camel case:
 chunk:
 full-duplex: 전이중, 풀듀플렉스
-built-in:
+built-in: 내장된, 기본제공
+signature: 시그니처, 서명

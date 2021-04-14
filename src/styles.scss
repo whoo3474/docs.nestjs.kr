@@ -3,6 +3,8 @@
 @import './scss/hljs.scss';
 @import './scss/variables.scss';
 @import './scss/utils.scss';
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gothic+A1:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 :root {
   // scroll-behavior: smooth;
@@ -12,7 +14,8 @@ body {
   font-size: 16px;
   font-weight: 400;
   // letter-spacing: 0.2px;
-  font-family: 'Source Sans Pro', 'Helvetica Neue', sans-serif;
+  // font-family: 'Gothic A1', sans-serif;
+  font-family: 'Noto Sans KR','Source Sans Pro', 'Helvetica Neue', sans-serif;
   background-color: #fdfdfd;
   font-display: swap;
   color: $grey-color;
@@ -81,6 +84,17 @@ blockquote {
     strong,
     a {
       color: #ed8529;
+    }
+  }
+
+  &.translation_note {
+    background: #c6f3ce;
+    &::before {
+      background: #2b9252;
+    }
+    strong,
+    a {
+      color: #033f18;
     }
   }
 
