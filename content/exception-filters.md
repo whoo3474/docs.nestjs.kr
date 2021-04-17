@@ -182,7 +182,7 @@ export class HttpExceptionFilter {
 
 `catch()` 메서드의 매개변수를 살펴 보겠습니다. `exception` 매개변수는 현재 처리중인 예외 객체입니다. `host` 매개변수는 `ArgumentsHost` 객체입니다. `ArgumentsHost`는 [실행 컨텍스트 장](/fundamentals/execution-context)\* 에서 자세히 살펴볼 강력한 유틸리티 객체입니다. 이 코드 샘플에서는 이를 사용하여 원래 요청 핸들러(예외가 발생한 컨트롤러에서)로 전달되는 `Request` 및 `Response` 객체에 대한 참조를 얻습니다. 이 코드 샘플에서는 원하는 `Request` 및 `Response` 객체를 가져오기 위해 `ArgumentsHost`에 몇가지 헬퍼 메서드를 사용했습니다. [여기](/fundamentals/execution-context)에서 `ArgumentsHost`대해 자세히 알아보세요.
 
-\*이 수준의 추상화에 대한 이유는 `ArgumentsHost`가 모든 컨텍스트(예: 현재 작업중인 HTTP 서버 컨텍스트뿐만 아니라 마이크로서비스 및 WebSockets)에서 작동하기 때문입니다. 실행 컨텍스트 장에서는 `ArgumentsHost`와 그 헬퍼 함수를 사용하여 **모든** 실행 컨텍스트에 대한 적절한 [기본 인수](https://docs.nestjs.com/fundamentals/execution-context#host-methods)에 액세스하는 방법을 알아봅니다. 이를 통해 모든 컨텍스트에서 작동하는 일반 예외필터를 작성할 수 있습니다.
+\*이 수준의 추상화에 대한 이유는 `ArgumentsHost`가 모든 컨텍스트(예: 현재 작업중인 HTTP 서버 컨텍스트뿐만 아니라 마이크로서비스 및 WebSockets)에서 작동하기 때문입니다. 실행 컨텍스트 장에서는 `ArgumentsHost`와 그 헬퍼 함수를 사용하여 **모든** 실행 컨텍스트에 대한 적절한 [기본 인수](/fundamentals/execution-context#host-methods)에 액세스하는 방법을 알아봅니다. 이를 통해 모든 컨텍스트에서 작동하는 일반 예외필터를 작성할 수 있습니다.
 
 <app-banner-courses></app-banner-courses>
 

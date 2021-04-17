@@ -129,7 +129,7 @@ CacheModule.register({
 
 #### Global cache overrides
 
-전역 캐시가 활성화된 동안 캐시 항목은 라우트 경로에 따라 자동 생성되는 `CacheKey` 아래에 저장됩니다. 특정 캐시 설정 (`@CacheKey()` 및 `@CacheTTL()`)을 메서드별로 재정의하여 개별 컨트롤러 메서드에 대한 사용자 지정 캐싱 전략을 허용할 수 있습니다. [다른 캐시 저장소](https://docs.nestjs.com/techniques/caching#different-stores)를 사용하는 동안 가장 관련이 있을 수 있습니다.
+전역 캐시가 활성화된 동안 캐시 항목은 라우트 경로에 따라 자동 생성되는 `CacheKey` 아래에 저장됩니다. 특정 캐시 설정 (`@CacheKey()` 및 `@CacheTTL()`)을 메서드별로 재정의하여 개별 컨트롤러 메서드에 대한 사용자 지정 캐싱 전략을 허용할 수 있습니다. [다른 캐시 저장소](/techniques/caching#different-stores)를 사용하는 동안 가장 관련이 있을 수 있습니다.
 
 ```typescript
 @Controller()
@@ -144,7 +144,7 @@ export class AppController {
 
 > info **힌트** `@CacheKey()` 및 `@CacheTTL()` 데코레이터는 `@nestjs/common` 패키지에서 가져옵니다.
 
-`@CacheKey()` 데코레이터는 해당하는 `@CacheTTL()` 데코레이터와 함께 또는 없이 사용할 수 있으며 그 반대의 경우도 마찬가지입니다. `@CacheKey()` 또는 `@CacheTTL()`만 재정의하도록 선택할 수 있습니다. 데코레이터로 재정의되지 않은 설정은 전역적으로 등록된 기본값을 사용합니다 ([캐싱 사용자 지정](https://docs.nestjs.com/techniques/caching#customize-caching) 참조).
+`@CacheKey()` 데코레이터는 해당하는 `@CacheTTL()` 데코레이터와 함께 또는 없이 사용할 수 있으며 그 반대의 경우도 마찬가지입니다. `@CacheKey()` 또는 `@CacheTTL()`만 재정의하도록 선택할 수 있습니다. 데코레이터로 재정의되지 않은 설정은 전역적으로 등록된 기본값을 사용합니다 ([캐싱 사용자 지정](/techniques/caching#customize-caching) 참조).
 
 #### WebSockets and Microservices
 

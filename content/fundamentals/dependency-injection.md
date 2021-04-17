@@ -1,10 +1,10 @@
 ### Custom providers
 
-이전 장에서 **DI 종속성 주입**의 다양한 측면과 Nest에서 사용되는 방법에 대해 설명했습니다. 이에 대한 한가지 예는 인스턴스(종종 서비스 제공 업체)를 클래스에 주입하는 데 사용되는 [생성자 기반](https://docs.nestjs.com/providers#dependency-injection) 종속성 주입입니다. 의존성 주입이 기본적인 방식으로 Nest 코어에 내장되어 있다는 사실에 놀라지 않을 것입니다. 지금까지 우리는 하나의 주요 패턴만 살펴 보았습니다. 애플리케이션이 더 복잡해짐에 따라 DI 시스템의 전체 기능을 활용해야 할 수도 있으므로 더 자세히 살펴 보겠습니다.
+이전 장에서 **DI 종속성 주입**의 다양한 측면과 Nest에서 사용되는 방법에 대해 설명했습니다. 이에 대한 한가지 예는 인스턴스(종종 서비스 프로바이더)를 클래스에 주입하는데 사용되는 [생성자 기반](/providers#dependency-injection) 종속성 주입입니다. 의존성 주입이 기본적인 방식으로 Nest 코어에 내장되어 있다는 사실에 놀라지 않을 것입니다. 지금까지 우리는 하나의 주요 패턴만 살펴보았습니다. 애플리케이션이 더 복잡해짐에 따라 DI 시스템의 전체기능을 활용해야할 수도 있으므로 더 자세히 살펴 보겠습니다.
 
 #### DI fundamentals
 
-종속성 주입은 대신 IoC 컨테이너(이 경우 NestJS 런타임 시스템)에 종속성 인스턴스화를 위임하는 [IoC(inversion of control)](https://en.wikipedia.org/wiki/Inversion_of_control) 기술입니다. 자신의 코드에서 명령적으로 수행하는 것입니다. [프로바이더 장](https://docs.nestjs.com/providers)에서 이 예제에서 어떤 일이 발생하는지 살펴보겠습니다.
+종속성 주입은 대신 IoC 컨테이너(이 경우 NestJS 런타임 시스템)에 종속성 인스턴스화를 위임하는 [IoC(inversion of control)](https://en.wikipedia.org/wiki/Inversion_of_control) 기술입니다. 자신의 코드에서 명령적으로 수행하는 것입니다. [프로바이더 장](/providers)에서 이 예제에서 어떤 일이 발생하는지 살펴보겠습니다.
 
 먼저 프로바이더를 정의합니다. `@Injectable()` 데코레이터는 `CatsService` 클래스를 프로바이더로 표시합니다.
 
@@ -36,7 +36,7 @@ export class CatsService {
 }
 ```
 
-그런 다음 Nest가 공급자를 컨트롤러 클래스에 주입하도록 요청합니다.
+그런 다음 Nest가 프로바이더를 컨트롤러 클래스에 주입하도록 요청합니다.
 
 ```typescript
 @@filename(cats.controller)
@@ -99,7 +99,7 @@ export class AppModule {}
 
 Nest IoC 컨테이너가 `CatsController`를 인스턴스화할 때 먼저 종속성\*을 찾습니다. `CatsService` 종속성을 찾으면 등록단계(위 #3)에 따라 `CatsService` 클래스를 반환하는 `CatsService` 토큰에 대한 조회를 수행합니다. `SINGLETON` 범위(기본 동작)를 가정하면 Nest는 `CatsService`의 인스턴스를 만들고 캐시한 다음 반환하거나 이미 캐시된 경우 기존 인스턴스를 반환합니다.
 
-\*이 설명은 요점을 설명하기 위해 약간 단순화되었습니다. 우리가 살펴본 중요한 영역중 하나는 종속성에 대한 코드 분석 프로세스가 매우 정교하고 애플리케이션 부트스트랩중에 발생한다는 것입니다. 한가지 주요 기능은 종속성 분석(또는 "종속성 그래프 생성")이 **전이적 transitive**이라는 것입니다. 위의 예에서 `CatsService` 자체에 종속성이 있으면 이것도 해결됩니다. 종속성 그래프는 종속성이 올바른 순서(기본적으로 "상향 bottom up")로 해결되도록 합니다. 이 메커니즘은 개발자가 복잡한 종속성 그래프를 관리할 필요가 없도록 합니다.
+\*이 설명은 요점을 설명하기 위해 약간 단순화되었습니다. 우리가 살펴본 중요한 영역중 하나는 종속성에 대한 코드 분석 프로세스가 매우 정교하고 애플리케이션 부트스트랩중에 발생한다는 것입니다. 한가지 주요 기능은 종속성 분석(또는 "종속성 그래프 생성")이 **전이적**(transitive)이라는 것입니다. 위의 예에서 `CatsService` 자체에 종속성이 있으면 이것도 해결됩니다. 종속성 그래프는 종속성이 올바른 순서(기본적으로 "상향(bottom up)")로 해결되도록 합니다. 이 메커니즘은 개발자가 복잡한 종속성 그래프를 관리할 필요가 없도록 합니다.
 
 <app-banner-courses></app-banner-courses>
 
@@ -125,11 +125,11 @@ providers: [
 ];
 ```
 
-이제이 명시적인 구성을 보았으므로 등록 프로세스를 이해할 수 있습니다. 여기서는 `CatsService` 토큰을 `CatsService` 클래스와 명확하게 연관시킵니다. 축약 표기법은 가장 일반적인 사용 사례를 단순화하기 위한 편의일뿐입니다. 토큰은 동일한 이름으로 클래스의 인스턴스를 요청하는 데 사용됩니다.
+이제이 명시적인 구성을 보았으므로 등록 프로세스를 이해할 수 있습니다. 여기서는 `CatsService` 토큰을 `CatsService` 클래스와 명확하게 연관시킵니다. 축약 표기법은 가장 일반적인 사용사례를 단순화하기 위한 편의일뿐입니다. 토큰은 동일한 이름으로 클래스의 인스턴스를 요청하는 데 사용됩니다.
 
 #### Custom providers
 
-귀하의 요구 사항이 _표준 프로바이더_에서 제공하는 것 이상으로 넘어가면 어떻게됩니까? 다음은 몇가지 예입니다.
+귀하의 요구 사항이 _표준 프로바이더_ 에서 제공하는 것 이상으로 넘어가면 어떻게됩니까? 다음은 몇가지 예입니다.
 
 - Nest가 클래스를 인스턴스화(또는 캐시된 인스턴스 반환)하는 대신 사용자 지정 인스턴스를 만들고 싶습니다.
 - 두번째 종속성에서 기존 클래스를 재사용하려는 경우
@@ -139,7 +139,7 @@ Nest를 사용하면 이러한 경우를 처리할 사용자 지정 프로바이
 
 #### Value providers: `useValue`
 
-`useValue` 구문은 상수 값을 삽입하거나 Nest 컨테이너에 외부 라이브러리를 넣거나 실제 구현을 모의 객체로 대체하는 데 유용합니다. Nest가 테스트 목적으로 모의 `CatsService`를 사용하도록 강제하고 싶다고 가정해 보겠습니다.
+`useValue` 구문은 상수값을 삽입하거나 Nest 컨테이너에 외부 라이브러리를 넣거나 실제 구현을 모의 객체로 대체하는 데 유용합니다. Nest가 테스트 목적으로 모의 `CatsService`를 사용하도록 강제하고 싶다고 가정해 보겠습니다.
 
 ```typescript
 import { CatsService } from './cats.service';
@@ -166,7 +166,7 @@ export class AppModule {}
 
 #### Non-class-based provider tokens
 
-지금까지 우리는 클래스 이름을 프로바이더 토큰(`providers` 배열에 나열된 프로바이더의 `provide` 속성 값)으로 사용했습니다. 이는 토큰이 클래스 이름이기도 한 [생성자 기반 주입](https://docs.nestjs.com/providers#dependency-injection)과 함께 사용되는 표준 패턴과 일치합니다. (이 개념이 완전히 명확하지 않은 경우 토큰에 대한 복습은 [DI 기초](/fundamentals/custom-providers#di-fundamentals)를 다시 참조하세요). 때때로 우리는 DI 토큰으로 문자열이나 기호를 사용할 수 있는 유연성을 원할 수 있습니다. 예를 들면:
+지금까지 우리는 클래스 이름을 프로바이더 토큰(`providers` 배열에 나열된 프로바이더의 `provide` 속성 값)으로 사용했습니다. 이는 토큰이 클래스 이름이기도 한 [생성자 기반 주입](/providers#dependency-injection)과 함께 사용되는 표준 패턴과 일치합니다. (이 개념이 완전히 명확하지 않은 경우 토큰에 대한 복습은 [DI 기초](/fundamentals/custom-providers#di-fundamentals)를 다시 참조하세요). 때때로 우리는 DI 토큰으로 문자열이나 기호를 사용할 수 있는 유연성을 원할 수 있습니다. 예를 들면:
 
 ```typescript
 import { connection } from './connection';
@@ -184,10 +184,9 @@ export class AppModule {}
 
 이 예에서는 문자열 값 토큰 (`'CONNECTION'`)을 외부 파일에서 가져온 기존 `connection` 객체와 연결합니다.
 
-> warning **알림** 문자열을 토큰 값으로 사용하는 것 외에도 JavaScript
-[심볼 symbols](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol) 또는 TypeScript [열거형 enums](https://www.typescriptlang.org/docs/handbook/enums.html)를 사용할 수 있습니다.
+> warning **알림** 문자열을 토큰 값으로 사용하는 것 외에도 자바스크립트 [심볼 symbols](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol) 또는 TypeScript [열거형 enums](https://www.typescriptlang.org/docs/handbook/enums.html)를 사용할 수 있습니다.
 
-이전에 표준 [생성자 기반 주입](https://docs.nestjs.com/providers#dependency-injection) 패턴을 사용하여 공급자를 주입하는 방법을 살펴 보았습니다. 이 패턴은 종속성이 클래스 이름으로 선언되도록 **요구**합니다. `'CONNECTION'` 사용자 지정 프로바이더는 문자열 값 토큰을 사용합니다. 그러한 프로바이더를 주입하는 방법을 살펴 보겠습니다. 이를 위해 `@Inject()` 데코레이터를 사용합니다. 이 데코레이터는 단일 인수인 토큰을 받습니다.
+이전에 표준 [생성자 기반 주입](/providers#dependency-injection) 패턴을 사용하여 공급자를 주입하는 방법을 살펴 보았습니다. 이 패턴은 종속성이 클래스 이름으로 선언되도록 **요구**합니다. `'CONNECTION'` 커스텀 프로바이더는 문자열 값 토큰을 사용합니다. 그러한 프로바이더를 주입하는 방법을 살펴 보겠습니다. 이를 위해 `@Inject()` 데코레이터를 사용합니다. 이 데코레이터는 단일인수인 토큰을 받습니다.
 
 ```typescript
 @@filename()
@@ -311,7 +310,7 @@ export class AppModule {}
 
 #### Export custom provider
 
-다른 프로바이더와 마찬가지로 사용자 지정 프로바이더는 선언 모듈로 범위가 지정됩니다. 다른 모듈에 표시하려면 내보내야 합니다. 사용자 지정 프로바이더를 내보내려면 해당 토큰 또는 전체 프로바이더 객체를 사용할 수 있습니다.
+다른 프로바이더와 마찬가지로 커스텀 프로바이더는 선언 모듈로 범위가 지정됩니다. 다른 모듈에 표시하려면 내보내야 합니다. 커스텀 프로바이더를 내보내려면 해당 토큰 또는 전체 프로바이더 객체를 사용할 수 있습니다.
 
 다음 예제는 토큰을 사용한 내보내기를 보여줍니다.
 

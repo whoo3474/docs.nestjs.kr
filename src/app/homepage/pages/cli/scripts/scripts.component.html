@@ -21,12 +21,12 @@
 <h4 appAnchor id="the-nest-binary"><span>The nest binary</span></h4>
 <p><code>nest</code> 명령은 OS 레벨 바이너리입니다(즉, OS 명령줄에서 실행 됨). 이 명령은 실제로 아래에 설명된 세가지 영역을 포함합니다. 프로젝트가 스캐폴딩될 때 자동으로 제공되는 <code>package.json</code> 스크립트를 통해 빌드(<code>nest build</code>) 및 실행(<code>nest start</code>) 하위 명령어를 실행하는 것이 좋습니다 (<code>nest new</code>를 실행하는 대신 저장소를 복제하여 시작하려면 <a rel='nofollow' target='_blank' href="https://github.com/nestjs/typescript-starter">typescript starter</a> 참조).</p>
 <h4 appAnchor id="build"><span>Build</span></h4>
-<p>See the <a rel='nofollow' target='_blank' href="https://docs.nestjs.com/cli/usages#nest-build">nest build</a> documentation for more details.
-<code>nest build</code>는 표준 <code>tsc</code> 컴파일러 (<a rel='nofollow' target='_blank' href="https://docs.nestjs.com/cli/overview#project-structure">표준 프로젝트</a>) 또는 웹팩 컴파일러 (<a rel='nofollow' target='_blank' href="https://docs.nestjs.com/cli/overview#project-structure">monorepos</a>). <code>tsconfig-paths</code>를 즉시 처리하는 것을 제외하고는 다른 컴파일 기능이나 단계를 추가하지 않습니다. 그 이유는 대부분의 개발자, 특히 Nest로 시작할 때 가끔 까다로울 수 있는 컴파일러 옵션(예: <code>tsconfig.json</code> 파일)을 조정할 필요가 없기 때문입니다.</p>
-<p>자세한 내용은 <a rel='nofollow' target='_blank' href="https://docs.nestjs.com/cli/usages#nest-build">nest build</a> 문서를 참조하세요.</p>
+<p>See the <a href="/cli/usages#nest-build">nest build</a> documentation for more details.
+<code>nest build</code>는 표준 <code>tsc</code> 컴파일러 (<a href="/cli/overview#project-structure">표준 프로젝트</a>) 또는 웹팩 컴파일러 (<a href="/cli/overview#project-structure">monorepos</a>). <code>tsconfig-paths</code>를 즉시 처리하는 것을 제외하고는 다른 컴파일 기능이나 단계를 추가하지 않습니다. 그 이유는 대부분의 개발자, 특히 Nest로 시작할 때 가끔 까다로울 수 있는 컴파일러 옵션(예: <code>tsconfig.json</code> 파일)을 조정할 필요가 없기 때문입니다.</p>
+<p>자세한 내용은 <a href="/cli/usages#nest-build">nest build</a> 문서를 참조하세요.</p>
 <h4 appAnchor id="execution"><span>Execution</span></h4>
 <p><code>nest start</code>는 단순히 프로젝트가 빌드되었는지 확인한 다음(<code>nest build</code>와 동일) 컴파일된 애플리케이션을 실행하기 위한 이식 가능하고 쉬운 방법으로 <code>node</code> 명령을 호출합니다. 빌드와 마찬가지로 <code>nest start</code> 명령과 해당 옵션을 사용하거나 완전히 대체하여 필요에 따라 이 프로세스를 자유롭게 사용자 지정할 수 있습니다. 전체 프로세스는 표준 TypeScript 애플리케이션 빌드 및 실행 파이프 라인이며 프로세스를 자유롭게 관리할 수 있습니다.</p>
-<p>자세한 내용은 <a rel='nofollow' target='_blank' href="https://docs.nestjs.com/cli/usages#nest-start">nest start</a> 문서를 참조하세요.</p>
+<p>자세한 내용은 <a href="/cli/usages#nest-start">nest start</a> 문서를 참조하세요.</p>
 <h4 appAnchor id="generation"><span>Generation</span></h4>
 <p><code>nest generate</code> 명령어는 이름에서 알 수 있듯이 새 Nest 프로젝트 또는 그 안에 구성 요소를 생성합니다.</p>
 <h4 appAnchor id="package-scripts"><span>Package scripts</span></h4>

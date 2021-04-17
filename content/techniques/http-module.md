@@ -76,7 +76,7 @@ HttpModule.registerAsync({
 });
 ```
 
-다른 팩토리 공급자와 마찬가지로 팩토리 함수는 [async](https://docs.nestjs.com/fundamentals/custom-providers#factory-providers-usefactory)일 수 있으며 `inject`를 통해 종속성을 주입할 수 있습니다.
+다른 팩토리 공급자와 마찬가지로 팩토리 함수는 [async](/fundamentals/custom-providers#factory-providers-usefactory)일 수 있으며 `inject`를 통해 종속성을 주입할 수 있습니다.
 
 ```typescript
 HttpModule.registerAsync({

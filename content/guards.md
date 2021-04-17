@@ -53,7 +53,7 @@ export class AuthGuard {
 
 #### Execution context
 
-`canActivate()` 함수는 `ExecutionContext` 인스턴스라는 단일인수를받습니다. `ExecutionContext`는 `ArgumentsHost`에서 상속됩니다. 이전에 예외필터 장에서 `ArgumentsHost`를 보았습니다. 위의 샘플에서는 이전에 사용했던 `ArgumentsHost`에 정의된 동일한 헬퍼 메서드를 사용하여 `Request` 객체에 대한 참조를 얻습니다. 이 주제에 대한 자세한 내용은 [예외필터](https://docs.nestjs.com/exception-filters#arguments-host) 장의 **인수 호스트**(Arguments host) 섹션을 다시 참조할 수 있습니다.
+`canActivate()` 함수는 `ExecutionContext` 인스턴스라는 단일인수를받습니다. `ExecutionContext`는 `ArgumentsHost`에서 상속됩니다. 이전에 예외필터 장에서 `ArgumentsHost`를 보았습니다. 위의 샘플에서는 이전에 사용했던 `ArgumentsHost`에 정의된 동일한 헬퍼 메서드를 사용하여 `Request` 객체에 대한 참조를 얻습니다. 이 주제에 대한 자세한 내용은 [예외필터](https:///exception-filters#arguments-host) 장의 **인수 호스트**(Arguments host) 섹션을 다시 참조할 수 있습니다.
 
 `ArgumentsHost`를 확장함으로써 `ExecutionContext`는 현재 실행 프로세스에 대한 추가 세부정보를 제공하는 몇가지 새로운 헬퍼 메서드도 추가합니다. 이러한 세부정보는 광범위한 컨트롤러, 메서드 및 실행 컨텍스트에서 작동할 수 있는 보다 일반적인 가드를 구축하는 데 도움이될 수 있습니다. `ExecutionContext`는 [여기](/fundamentals/execution-context)에 대해 자세히 알아보세요.
 
@@ -143,7 +143,7 @@ export class AppModule {}
 
 우리의 `RolesGuard`는 작동하지만 아직 똑똑하지는 않습니다. 우리는 아직 가장 중요한 가드 기능인 [실행 컨텍스트(execution context)](/fundamentals/execution-context)를 활용하고 있지 않습니다. 역할이나 각 핸들러에 대해 허용되는 역할에 대해서는 아직 알지 못합니다. 예를 들어 `CatsController`는 라우트마다 다른 권한체계를 가질 수 있습니다. 일부는 관리자만 사용할 수 있고 다른 일부는 모든 사용자가 사용할 수 있습니다. 유연하고 재사용 가능한 방식으로 역할을 라우트에 어떻게 일치시킬 수 있습니까?
 
-여기에서 **맞춤 메타데이터**가 작동합니다 ([여기](https://docs.nestjs.com/fundamentals/execution-context#reflection-and-metadata)에서 자세히 알아보기). Nest는 `@SetMetadata()` 데코레이터를 통해 라우트 핸들러에 커스텀 **메타데이터**를 첨부하는 기능을 제공합니다. 이 메타데이터는 스마트 가드가 결정을 내리는데 필요한 누락된 `role` 데이터를 제공합니다. `@SetMetadata()` 사용을 살펴 보겠습니다.
+여기에서 **맞춤 메타데이터**가 작동합니다 ([여기](/fundamentals/execution-context#reflection-and-metadata)에서 자세히 알아보기). Nest는 `@SetMetadata()` 데코레이터를 통해 라우트 핸들러에 커스텀 **메타데이터**를 첨부하는 기능을 제공합니다. 이 메타데이터는 스마트 가드가 결정을 내리는데 필요한 누락된 `role` 데이터를 제공합니다. `@SetMetadata()` 사용을 살펴 보겠습니다.
 
 ```typescript
 @@filename(cats.controller)

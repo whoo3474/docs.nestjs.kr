@@ -8,7 +8,7 @@
 
 기본 컨트롤러를 만들기 위해 클래스와 **데코레이터**를 사용합니다. 데코레이터는 클래스를 필수 메타데이터와 연결하고 Nest가 라우팅 맵을 만들 수 있도록 합니다(요청을 해당 컨트롤러에 연결).
 
-> info **힌트** [validation](https://docs.nestjs.com/techniques/validation)이 내장된 CRUD 컨트롤러를 빠르게 생성하려면 CLI의 [CRUD 생성기](https://docs.nestjs.com/recipes/crud-generator#crud-generator): `nest g resource [name]`을 사용할 수 있습니다.
+> info **힌트** [validation](/techniques/validation)이 내장된 CRUD 컨트롤러를 빠르게 생성하려면 CLI의 [CRUD 생성기](/recipes/crud-generator#crud-generator): `nest g resource [name]`을 사용할 수 있습니다.
 
 #### Routing
 

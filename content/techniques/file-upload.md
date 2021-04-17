@@ -149,7 +149,7 @@ MulterModule.registerAsync({
 });
 ```
 
-다른 [팩토리 프로바이더](https://docs.nestjs.com/fundamentals/custom-providers#factory-providers-usefactory)와 마찬가지로 팩토리 함수는 `async`일 수 있으며 `inject`을 통해 종속성을 삽입할 수 있습니다.
+다른 [팩토리 프로바이더](/fundamentals/custom-providers#factory-providers-usefactory)와 마찬가지로 팩토리 함수는 `async`일 수 있으며 `inject`을 통해 종속성을 삽입할 수 있습니다.
 
 ```typescript
 MulterModule.registerAsync({

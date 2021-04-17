@@ -56,7 +56,7 @@ findOne(): UserEntity {
 }
 ```
 
-인터셉터는 애플리케이션 전체에 적용될 수 있습니다 ([여기](https://docs.nestjs.com/interceptors#binding-interceptors)에서 다룹니다). 인터셉터와 엔티티 클래스 선언의 조합은 `UserEntity`를 반환하는 **모든** 메소드가 `password` 속성을 제거하도록 합니다. 이를 통해 이 비즈니스 규칙을 중앙집중식으로 시행할 수 있습니다.
+인터셉터는 애플리케이션 전체에 적용될 수 있습니다 ([여기](/interceptors#binding-interceptors)에서 다룹니다). 인터셉터와 엔티티 클래스 선언의 조합은 `UserEntity`를 반환하는 **모든** 메소드가 `password` 속성을 제거하도록 합니다. 이를 통해 이 비즈니스 규칙을 중앙집중식으로 시행할 수 있습니다.
 
 #### Expose properties
 

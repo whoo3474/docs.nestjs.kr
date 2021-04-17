@@ -33,7 +33,7 @@ Nest는 <module> 인스턴스를 만들 수 없습니다.
 <module> "imports" 배열의 색인 [<index>]에 있는 모듈이 정의되지 않았습니다.
 
 잠재적 원인:
-- 모듈간의 순환 종속성. 그것을 피하려면 forwardRef()를 사용하십시오. 자세히보기: https://docs.nestjs.com/fundamentals/circular-dependency
+- 모듈간의 순환 종속성. 그것을 피하려면 forwardRef()를 사용하십시오. 자세히보기: /fundamentals/circular-dependency
 - 색인 [<index>]의 모듈이 "undefined" 타입입니다. import 문과 모듈 타입을 확인하십시오.
 
 Scope [<module_import_chain>]

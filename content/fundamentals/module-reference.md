@@ -191,7 +191,7 @@ export class CatsService {
 }
 ```
 
-> info **힌트** [여기](https://docs.nestjs.com/fundamentals/injection-scopes#request-provider)에서 요청 프로바이더에 대해 자세히 알아보세요.
+> info **힌트** [여기](/fundamentals/injection-scopes#request-provider)에서 요청 프로바이더에 대해 자세히 알아보세요.
 
 이제 `ContextIdFactory` 클래스의 `getByRequest()` 메소드를 사용하여 요청 객체를 기반으로 컨텍스트 ID를 만들고 이를 `resolve()` 호출에 전달합니다.
 

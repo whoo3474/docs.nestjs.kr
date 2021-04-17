@@ -24,7 +24,7 @@ $ npm install -g @nestjs/cli
 $ nest new hello-prisma
 ```
 
-이 명령으로 생성된 프로젝트 파일에 대한 자세한 내용은 [첫 번째 단계](https://docs.nestjs.com/first-steps) 페이지를 참조하세요. 이제 `npm start`를 실행하여 애플리케이션을 시작할 수도 있습니다. `http://localhost:3000/`에서 실행되는 REST API는 현재 `src/app.controller.ts`에 구현된 단일 라우트를 제공합니다. 이 가이드의 과정에서 _users_ 및 _posts_ 에 대한 데이터를 저장하고 검색하기 위한 추가 라우트를 구현합니다.
+이 명령으로 생성된 프로젝트 파일에 대한 자세한 내용은 [첫번째 단계](/first-steps) 페이지를 참조하세요. 이제 `npm start`를 실행하여 애플리케이션을 시작할 수도 있습니다. `http://localhost:3000/`에서 실행되는 REST API는 현재 `src/app.controller.ts`에 구현된 단일 라우트를 제공합니다. 이 가이드의 과정에서 _users_ 및 _posts_ 에 대한 데이터를 저장하고 검색하기 위한 추가 라우트를 구현합니다.
 
 #### Set up Prisma
 

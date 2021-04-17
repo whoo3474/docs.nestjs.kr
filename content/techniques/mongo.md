@@ -275,7 +275,7 @@ export class CatsService {
 export class AppModule {}
 ```
 
-다른 [팩토리 프로바이더](https://docs.nestjs.com/fundamentals/custom-providers#factory-providers-usefactory)와 마찬가지로 팩토리 함수는 `async`일 수 있으며 `inject`을 통해 종속성을 삽입할 수 있습니다.
+다른 [팩토리 프로바이더](/fundamentals/custom-providers#factory-providers-usefactory)와 마찬가지로 팩토리 함수는 `async`일 수 있으며 `inject`을 통해 종속성을 삽입할 수 있습니다.
 
 ```typescript
 @Module({
@@ -431,7 +431,7 @@ export class EventsModule {}
 
 애플리케이션을 단위 테스트할 때 일반적으로 데이터베이스 연결을 피하여 테스트 스위트를 더 간단하게 설정하고 실행할 수 있도록합니다. 그러나 우리의 클래스는 연결 인스턴스에서 가져온 모델에 따라 달라질 수 있습니다. 이 클래스를 어떻게 해결합니까? 해결책은 모의 모델을 만드는 것입니다.
 
-이를 보다 쉽게하기 위해 `@nestjs/mongoose` 패키지는 준비된 [주입 토큰](https://docs.nestjs.com/fundamentals/custom-providers#di-fundamentals)을 반환하는 `getModelToken()` 함수를 노출합니다. 토큰 이름을 기반으로 합니다. 이 토큰을 사용하면 `useClass`, `useValue`, `useFactory`를 포함한 표준 [커스텀 프로바이더](/fundamentals/custom-providers) 기술을 사용하여 모의 구현을 쉽게 제공할 수 있습니다. 예를 들면:
+이를 보다 쉽게하기 위해 `@nestjs/mongoose` 패키지는 준비된 [주입 토큰](/fundamentals/custom-providers#di-fundamentals)을 반환하는 `getModelToken()` 함수를 노출합니다. 토큰 이름을 기반으로 합니다. 이 토큰을 사용하면 `useClass`, `useValue`, `useFactory`를 포함한 표준 [커스텀 프로바이더](/fundamentals/custom-providers) 기술을 사용하여 모의 구현을 쉽게 제공할 수 있습니다. 예를 들면:
 
 ```typescript
 @Module({
@@ -464,7 +464,7 @@ MongooseModule.forRootAsync({
 });
 ```
 
-다른 [팩토리 프로바이더](https://docs.nestjs.com/fundamentals/custom-providers#factory-providers-usefactory)와 마찬가지로 팩토리 함수는 `async`일 수 있으며 `inject`을 통해 종속성을 삽입할 수 있습니다.
+다른 [팩토리 프로바이더](/fundamentals/custom-providers#factory-providers-usefactory)와 마찬가지로 팩토리 함수는 `async`일 수 있으며 `inject`을 통해 종속성을 삽입할 수 있습니다.
 
 ```typescript
 MongooseModule.forRootAsync({

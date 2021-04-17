@@ -420,7 +420,7 @@ BullModule.forRootAsync({
 });
 ```
 
-우리 팩토리는 다른 [비동기 프로바이더](https://docs.nestjs.com/fundamentals/async-providers)처럼 작동합니다 (예: `async`일 수 있으며 `inject`를 통해 종속성을 삽입할 수 있음).
+우리 팩토리는 다른 [비동기 프로바이더](/fundamentals/async-providers)처럼 작동합니다 (예: `async`일 수 있으며 `inject`를 통해 종속성을 삽입할 수 있음).
 
 ```typescript
 BullModule.forRootAsync({

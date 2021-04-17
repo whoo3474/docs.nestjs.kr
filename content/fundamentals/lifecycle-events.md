@@ -10,7 +10,7 @@ Nest 애플리케이션과 모든 애플리케이션 요소에는 Nest에서 관
 
 #### Lifecycle events
 
-라이프 사이클 이벤트는 애플리케이션 부트스트랩 및 종료중에 발생합니다. Nest는 다음 각 수명주기 이벤트에서 `모듈`, `인젝터블` 및 `컨트롤러`에 등록된 수명주기 후크 메서드를 호출합니다([아래](https://docs.nestjs.com/fundamentals/lifecycle-events#application-shutdown)에 설명된대로 **종료 후크**를 먼저 사용 설정해야 합니다.). 위의 다이어그램에 표시된 것처럼 Nest는 적절한 기본 메서드를 호출하여 연결 수신을 시작하고 연결 수신을 중지합니다.
+라이프 사이클 이벤트는 애플리케이션 부트스트랩 및 종료중에 발생합니다. Nest는 다음 각 수명주기 이벤트에서 `모듈`, `인젝터블` 및 `컨트롤러`에 등록된 수명주기 후크 메서드를 호출합니다([아래](/fundamentals/lifecycle-events#application-shutdown)에 설명된대로 **종료 후크**를 먼저 사용 설정해야 합니다.). 위의 다이어그램에 표시된 것처럼 Nest는 적절한 기본 메서드를 호출하여 연결 수신을 시작하고 연결 수신을 중지합니다.
 
 다음 표에서 `onModuleDestroy`, `beforeApplicationShutdown` 및 `onApplicationShutdown`은 명시적으로 `app.close()`를 호출하거나 프로세스가 특수 시스템 신호(예: SIGTERM)를 수신하고 애플리케이션 부트 스트랩에서 `enableShutdownHooks`를 올바르게 호출했습니다(아래 **애플리케이션 종료** 부분 참조).
 

@@ -6,7 +6,7 @@
 
 ### With CLI
 
-[Nest CLI](https://docs.nestjs.com/cli/overview)를 사용하는 경우 구성 프로세스가 매우 간단합니다. CLI는 `HotModuleReplacementPlugin`의 사용을 허용하는 `webpack`을 래핑합니다.
+[Nest CLI](/cli/overview)를 사용하는 경우 구성 프로세스가 매우 간단합니다. CLI는 `HotModuleReplacementPlugin`의 사용을 허용하는 `webpack`을 래핑합니다.
 
 #### Installation
 
@@ -84,7 +84,7 @@ $ npm run start:dev
 
 ### Without CLI
 
-[Nest CLI](https://docs.nestjs.com/cli/overview)를 사용하지 않는 경우 구성이 약간 더 복잡해집니다(더 많은 수동 단계가 필요함).
+[Nest CLI](/cli/overview)를 사용하지 않는 경우 구성이 약간 더 복잡해집니다(더 많은 수동 단계가 필요함).
 
 #### Installation
 

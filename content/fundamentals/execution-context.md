@@ -7,7 +7,7 @@ Nest는 여러 애플리케이션 컨텍스트(예: Nest HTTP 서버 기반, 마
 
 #### ArgumentsHost class
 
-`ArgumentsHost` 클래스는 핸들러에 전달되는 인수를 검색하는 메서드를 제공합니다. 인수를 검색할 적절한 컨텍스트(예: HTTP, RPC(마이크로 서비스) 또는 WebSockets)를 선택할 수 있습니다. 프레임 워크는 액세스하려는 위치에 일반적으로 `host` 매개변수로 참조되는 `ArgumentsHost`의 인스턴스를 제공합니다. 예를 들어 [예외 필터](https://docs.nestjs.com/exception-filters#arguments-host)의 `catch()` 메서드는 `ArgumentsHost` 인스턴스와 함께 호출됩니다.
+`ArgumentsHost` 클래스는 핸들러에 전달되는 인수를 검색하는 메서드를 제공합니다. 인수를 검색할 적절한 컨텍스트(예: HTTP, RPC(마이크로 서비스) 또는 WebSockets)를 선택할 수 있습니다. 프레임 워크는 액세스하려는 위치에 일반적으로 `host` 매개변수로 참조되는 `ArgumentsHost`의 인스턴스를 제공합니다. 예를 들어 [예외필터](/exception-filters#arguments-host)의 `catch()` 메서드는 `ArgumentsHost` 인스턴스와 함께 호출됩니다.
 
 `ArgumentsHost`는 단순히 핸들러의 인수에 대한 추상화 역할을 합니다. 예를 들어 HTTP 서버 애플리케이션의 경우(`@nestjs/platform-express`를 사용하는 경우) `host` 객체는 Express의 `[request, response, next]` 배열을 캡슐화합니다. 여기서 `request`는 요청 객체입니다. `response`는 응답 객체이고 `next`는 애플리케이션의 요청-응답주기를 제어하는 함수입니다. 반면에 [GraphQL](/graphql/quick-start) 애플리케이션의 경우 `host` 객체에는 `[root, args, context, info]` 배열이 포함됩니다.
 
@@ -102,7 +102,7 @@ export interface RpcArgumentsHost {
 
 #### ExecutionContext class
 
-`ExecutionContext`는 `ArgumentsHost`를 확장하여 현재 실행 프로세스에 대한 추가 세부 정보를 제공합니다. `ArgumentsHost`와 마찬가지로 Nest는 [가드](https://docs.nestjs.com/guards#execution-context) 및 [인터셉터](https://docs.nestjs.com/interceptors#execution-context)의 `intercept()` 메소드. 다음과 같은 방법을 제공합니다.
+`ExecutionContext`는 `ArgumentsHost`를 확장하여 현재 실행 프로세스에 대한 추가 세부 정보를 제공합니다. `ArgumentsHost`와 마찬가지로 Nest는 [가드](/guards#execution-context) 및 [인터셉터](/interceptors#execution-context)의 `intercept()` 메소드. 다음과 같은 방법을 제공합니다.
 
 ```typescript
 export interface ExecutionContext extends ArgumentsHost {

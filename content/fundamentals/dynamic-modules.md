@@ -53,7 +53,7 @@ export class AuthService {
 
 이를 **정적** 모듈 바인딩이라고 합니다. Nest가 모듈을 함께 연결하는 데 필요한 모든 정보는 호스트 및 소비 모듈에서 이미 선언되었습니다. 이 과정에서 무슨 일이 일어나고 있는지 살펴 보겠습니다. Nest는 다음을 통해 `AuthModule` 내에서 `UsersService`를 사용할 수 있습니다.
 
-1. `UsersModule` 자체가 소비하는 다른 모듈을 전이적으로 가져오고 모든 종속성을 전이적으로 해결하는 것을 포함하여 `UsersModule`을 인스턴스화합니다 ([사용자 정의 공급자](https://docs.nestjs.com/fundamentals/custom-providers) 참조).
+1. `UsersModule` 자체가 소비하는 다른 모듈을 전이적으로 가져오고 모든 종속성을 전이적으로 해결하는 것을 포함하여 `UsersModule`을 인스턴스화합니다 ([사용자 정의 공급자](/fundamentals/custom-providers) 참조).
 2. `AuthModule`을 인스턴스화하고 `UsersModule`의 내보낸 공급자를 `AuthModule`의 구성 요소에 사용할 수 있도록 합니다 (`AuthModule`에서 선언된 것처럼).
 3. `AuthService`에 `UsersService`의 인스턴스를 삽입합니다.
 
@@ -71,7 +71,7 @@ Nest의 좋은 예는 **구성 모듈**입니다. 많은 애플리케이션은 �
 
 #### Config module example
 
-이 섹션에서는 [configuration chapter](https://docs.nestjs.com/techniques/configuration#service)에 있는 예제 코드의 기본 버전을 사용합니다. 이 장이 끝날 때까지 완성된 버전은 [예제 여기](https://github.com/nestjs/nest/tree/master/sample/25-dynamic-modules)로 제공됩니다.
+이 섹션에서는 [configuration chapter](/techniques/configuration#service)에 있는 예제 코드의 기본 버전을 사용합니다. 이 장이 끝날 때까지 완성된 버전은 [예제 여기](https://github.com/nestjs/nest/tree/master/sample/25-dynamic-modules)로 제공됩니다.
 
 우리의 요구 사항은 `ConfigModule`이 `options` 객체를 받아 사용자 정의하도록 만드는 것입니다. 지원하려는 기능은 다음과 같습니다. 기본 샘플은 프로젝트 루트 폴더에 있는 `.env` 파일의 위치를 하드코딩합니다. 원하는 폴더에서 `.env` 파일을 관리할 수 있도록 구성 가능하게 만들고 싶다고 가정해 보겠습니다. 예를 들어 다양한 `.env` 파일을 `config`라는 프로젝트 루트 아래의 폴더(즉, `src`의 형제 폴더)에 저장한다고 가정 해보십시오. 다른 프로젝트에서 `ConfigModule`을 사용할 때 다른 폴더를 선택할 수 있기를 원합니다.
 
@@ -205,7 +205,7 @@ export class ConfigService {
 
 이제 `ConfigService`는 `options`에서 지정한 폴더에서 `.env` 파일을 찾는 방법을 알고 있습니다.
 
-나머지 작업은 `register()` 단계의 `options` 객체를 `ConfigService`에 주입하는 것입니다. 그리고 물론, 우리는 그것을 하기 위해 _종속성 주입_ 을 사용할 것입니다. 이것이 핵심 사항이므로 반드시 이해해야 합니다. 우리의 `ConfigModule`은 `ConfigService`를 제공합니다. 차례로 `ConfigService`는 런타임에만 제공되는 `options` 객체에 의존합니다. 따라서 런타임에 먼저 `options` 객체를 Nest IoC 컨테이너에 바인딩한 다음 Nest가 이를 `ConfigService`에 주입하도록 해야합니다. **사용자 지정 프로바이더**장에서 프로바이더는 서비스뿐만 아니라 [모든 값을 포함](https://docs.nestjs.com/fundamentals/custom-providers#non-service-based-providers)할 수 있음을 기억하십시오. 간단한 `options` 객체를 처리하기 위해 의존성 주입을 사용해도 괜찮습니다.
+나머지 작업은 `register()` 단계의 `options` 객체를 `ConfigService`에 주입하는 것입니다. 그리고 물론, 우리는 그것을 하기 위해 _종속성 주입_ 을 사용할 것입니다. 이것이 핵심 사항이므로 반드시 이해해야 합니다. 우리의 `ConfigModule`은 `ConfigService`를 제공합니다. 차례로 `ConfigService`는 런타임에만 제공되는 `options` 객체에 의존합니다. 따라서 런타임에 먼저 `options` 객체를 Nest IoC 컨테이너에 바인딩한 다음 Nest가 이를 `ConfigService`에 주입하도록 해야합니다. **사용자 지정 프로바이더**장에서 프로바이더는 서비스뿐만 아니라 [모든 값을 포함](/fundamentals/custom-providers#non-service-based-providers)할 수 있음을 기억하십시오. 간단한 `options` 객체를 처리하기 위해 의존성 주입을 사용해도 괜찮습니다.
 
 먼저 옵션 개체를 IoC 컨테이너에 바인딩하는 방법을 살펴 보겠습니다. 정적 `register()` 메서드에서 이 작업을 수행합니다. 우리는 모듈을 동적으로 구성하고 있으며 모듈의 속성중 하나는 프로바이더 목록입니다. 그래서 우리가 해야 할 일은 옵션 객체를 프로바이더로 정의하는 것입니다. 그러면 다음 단계에서 활용할 `ConfigService`에 주입할 수 있습니다. 아래 코드에서 `providers` 배열에 주의하십시오.
 
@@ -231,7 +231,7 @@ export class ConfigModule {
 }
 ```
 
-이제 `'CONFIG_OPTIONS'` 프로바이더를 `ConfigService`에 삽입하여 프로세스를 완료할 수 있습니다. 클래스가 아닌 토큰을 사용하여 프로바이더를 정의할 때 [여기에 설명 된대로](https://docs.nestjs.com/fundamentals/custom-providers#non-class-based-provider-tokens) `@Inject()` 데코레이터를 사용해야 합니다.
+이제 `'CONFIG_OPTIONS'` 프로바이더를 `ConfigService`에 삽입하여 프로세스를 완료할 수 있습니다. 클래스가 아닌 토큰을 사용하여 프로바이더를 정의할 때 [여기에 설명 된대로](/fundamentals/custom-providers#non-class-based-provider-tokens) `@Inject()` 데코레이터를 사용해야 합니다.
 
 ```typescript
 import * as dotenv from 'dotenv';
