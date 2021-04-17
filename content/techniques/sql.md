@@ -814,7 +814,7 @@ export class AppModule {}
   </tr>
   <tr>
     <td><code>synchronize</code></td>
-    <td><code>true</code>이면 자동 로드된 모델이 동기화됩니다.(기본값: <code>false</code>)</td>
+    <td><code>true</code>이면 자동 로드된 모델이 동기화됩니다.(기본값: <code>true</code>)</td>
   </tr>
 </table>
 
