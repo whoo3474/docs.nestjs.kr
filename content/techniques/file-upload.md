@@ -56,7 +56,7 @@ The `FileInterceptor()` decorator takes two arguments:
 @@filename()
 @Post('upload')
 @UseInterceptors(FilesInterceptor('files'))
-uploadFile(@UploadedFiles() files: Express.Multer.File) {
+uploadFile(@UploadedFiles() files: Array<Express.Multer.File>) {
   console.log(files);
 }
 @@switch
@@ -111,7 +111,7 @@ uploadFile(files) {
 @@filename()
 @Post('upload')
 @UseInterceptors(AnyFilesInterceptor())
-uploadFile(@UploadedFiles() files: Express.Multer.File) {
+uploadFile(@UploadedFiles() files: Array<Express.Multer.File>) {
   console.log(files);
 }
 @@switch
