@@ -237,7 +237,7 @@ constructor(
 
 > info **힌트** `ClientsModule` 및 `ClientProxy` 클래스는 `@nestjs/microservices` 패키지에서 가져옵니다.
 
-때때로 우리는 클라이언트 애플리케이션에서 하드코딩하는 대신 다른 서비스(예: `ConfigService`)에서 전송자 구성을 가져와야할 수 있습니다. 이를 위해 `ClientProxyFactory` 클래스를 사용하여 [custom provider](/techniques/custom-providers)를 등록할 수 있습니다. 이 클래스에는 트랜스포터 옵션 객체를 받아들이고 사용자 정의된 `ClientProxy` 인스턴스를 반환하는 정적 `create()` 메서드가 있습니다.
+때때로 우리는 클라이언트 애플리케이션에서 하드코딩하는 대신 다른 서비스(예: `ConfigService`)에서 전송자 구성을 가져와야할 수 있습니다. 이를 위해 `ClientProxyFactory` 클래스를 사용하여 [custom provider](/fundamentals/custom-providers)를 등록할 수 있습니다. 이 클래스에는 트랜스포터 옵션 객체를 받아들이고 사용자 정의된 `ClientProxy` 인스턴스를 반환하는 정적 `create()` 메서드가 있습니다.
 
 ```typescript
 @Module({

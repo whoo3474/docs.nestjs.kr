@@ -129,7 +129,7 @@ export class AppController {
 이 [장](/techniques/performance)에서 언급했듯이 Nest와 함께 호환되는 모든 HTTP 공급자를 사용할 수 있습니다. 이러한 라이브러리중 하나가 [Fastify](https://github.com/fastify/fastify)입니다. Fastify로 MVC 애플리케이션을 생성하려면 다음 패키지를 설치해야합니다.
 
 ```bash
-$ npm i --save fastify point-of-view handlebars
+$ npm i --save fastify-static point-of-view handlebars
 ```
 
 다음 단계는 플랫폼에 따라 약간의 차이를 제외하고 Express에서 사용되는 거의 동일한 프로세스를 다룹니다. 설치 프로세스가 완료되면 `main.ts` 파일을 열고 내용을 업데이트합니다.

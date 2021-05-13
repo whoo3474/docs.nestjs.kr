@@ -33,15 +33,15 @@ $ npm i --save fastify-helmet
 [fastify-helmet](https://github.com/fastify/fastify-helmet)은 미들웨어로 사용해서는 안되며 [Fastify 플러그인](https://www.fastify.io/docs/latest/Plugins/)으로 사용됩니다. 즉,`app.register ()`를 사용하여
 
 ```typescript
-import * as helmet from 'fastify-helmet';
+import { fastifyHelmet } from 'fastify-helmet';
 // somewhere in your initialization file
-app.register(helmet);
+await app.register(fastifyHelmet);
 ```
 
 > warning **경고** `apollo-server-fastify` 및 `fastify-helmet`을 사용할 때 GraphQL 플레이 그라운드의 [CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)에 문제가 있을 수 있습니다. 이 충돌을 해결하기 위해 아래와 같이 CSP를 구성합니다.
 >
 > ```typescript
-> app.register(helmet, {
+> await app.register(fastifyHelmet, {
 >   contentSecurityPolicy: {
 >     directives: {
 >       defaultSrc: [`'self'`],
@@ -54,7 +54,7 @@ app.register(helmet);
 > });
 >
 > // If you are not going to use CSP at all, you can use this:
-> app.register(helmet, {
+> await app.register(fastifyHelmet, {
 >   contentSecurityPolicy: false,
 > });
 > ```
