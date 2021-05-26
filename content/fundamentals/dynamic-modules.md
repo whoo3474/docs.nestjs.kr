@@ -117,7 +117,7 @@ export class AppModule {}
 
 ```typescript
 @Module({
-  imports: [DogsService],
+  imports: [DogsModule],
   controllers: [CatsController],
   providers: [CatsService],
   exports: [CatsService]
@@ -128,7 +128,7 @@ export class AppModule {}
 
 > info **힌트** 동적 모듈의 경우 모듈 옵션 개체의 모든 속성은 `module`을 **제외한** 선택사항입니다.
 
-정적 `register()` 메서드는 어떻습니까? 이제 작업이 `DynamicModule` 인터페이스가 있는 객체를 반환하는 것임을 알 수 있습니다. 우리가 그것을 호출할 때, 우리는 모듈 클래스 이름을 나열하여 정적 사례에서 수행하는 방식과 유사하게 `imports` 목록에 모듈을 효과적으로 제공합니다. 즉, 동적 모듈 API는 단순히 모듈을 반환하지만 `@Modules` 데코레이터의 속성을 수정하는 대신 프로그래밍 방식으로 지정합니다.
+정적 `register()` 메서드는 어떻습니까? 이제 작업이 `DynamicModule` 인터페이스가 있는 객체를 반환하는 것임을 알 수 있습니다. 우리가 그것을 호출할 때, 우리는 모듈 클래스 이름을 나열하여 정적 사례에서 수행하는 방식과 유사하게 `imports` 목록에 모듈을 효과적으로 제공합니다. 즉, 동적 모듈 API는 단순히 모듈을 반환하지만 `@Module` 데코레이터의 속성을 수정하는 대신 프로그래밍 방식으로 지정합니다.
 
 그림을 완성하는 데 도움이 되는 몇가지 세부 정보가 여전히 있습니다.
 
