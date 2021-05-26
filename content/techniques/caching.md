@@ -41,7 +41,7 @@ constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
 `Cache` 인스턴스의 `get` 메소드(`cache-manager` 패키지)는 캐시에서 항목을 검색하는 데 사용됩니다. 항목이 캐시에 없으면 예외가 발생합니다.
 
 ```typescript
-const value = this.cacheManager.get('key');
+const value = await this.cacheManager.get('key');
 ```
 
 캐시에 항목을 추가하려면 `set` 메소드를 사용하세요.
