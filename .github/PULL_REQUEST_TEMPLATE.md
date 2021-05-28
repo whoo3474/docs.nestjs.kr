@@ -1,7 +1,7 @@
 ## PR Checklist
 Please check if your PR fulfills the following requirements:
 
-- [ ] The commit message follows our guidelines: https://github.com/nestjs/docs.nestjs.com/blob/master/CONTRIBUTING.md
+- [ ] The commit message follows our guidelines: https://github.com/jakekwak/docs.nestjs.kr/blob/master/CONTRIBUTING.md
 
 
 ## PR Type
