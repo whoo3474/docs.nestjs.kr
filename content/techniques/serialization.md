@@ -74,7 +74,7 @@ get fullName(): string {
 `@Transform()` 데코레이터를 사용하여 추가 데이터 변환을 수행할 수 있습니다. 예를 들어 다음 구문은 전체 객체를 반환하는 대신 `RoleEntity`의 이름 속성을 반환합니다.
 
 ```typescript
-@Transform(role => role.name)
+@Transform(({ value }) => value.name)
 role: RoleEntity;
 ```
 
