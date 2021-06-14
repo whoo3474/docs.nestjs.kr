@@ -21,7 +21,7 @@ $ npm i -g @nestjs/cli
 $ nest new project-name
 ```
 
-`project` 디렉토리가 생성되고 노드 모듈과 몇가지 다른 상용구 파일이 설치되며 `src/` 디렉토리가 생성되고 여러 코어 파일로 채워집니다.
+`project-name` 디렉토리가 생성되고 노드 모듈과 몇가지 다른 상용구 파일이 설치되며 `src/` 디렉토리가 생성되고 여러 코어 파일로 채워집니다.
 
 <div class="file-tree">
   <div class="item">src</div>
