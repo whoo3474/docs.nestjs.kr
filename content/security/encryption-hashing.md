@@ -11,7 +11,7 @@ Node.js는 문자열, 숫자, 버퍼, 스트림등을 암호화하고 복호화�
 예를 들어 AES (Advanced Encryption System) `'aes-256-ctr'` 알고리즘 CTR 암호화 모드를 사용해 보겠습니다.
 
 ```typescript
-import { createCipheriv, randomBytes } from 'crypto';
+import { createCipheriv, randomBytes, scrypt } from 'crypto';
 import { promisify } from 'util';
 
 const iv = randomBytes(16);
