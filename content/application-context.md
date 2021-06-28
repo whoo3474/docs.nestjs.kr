@@ -19,7 +19,7 @@ bootstrap();
 
 ```typescript
 @@filename()
-const app = await NestFactory.create(AppModule);
+const app = await NestFactory.createApplicationContext(AppModule);
 const tasksService = app.get(TasksService);
 ```
 
