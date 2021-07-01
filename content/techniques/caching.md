@@ -52,7 +52,7 @@ await this.cacheManager.set('key', 'value');
 
 캐시의 기본 만료 시간은 5 초입니다.
 
-다음과 같이 이 특정 키에 대한 TTL(만료 시간)을 수동으로 지정할 수 있습니다.
+다음과 같이 이 특정 키에 대한 TTL(만료시간(초))을 수동으로 지정할 수 있습니다.
 
 ```typescript
 await this.cacheManager.set('key', 'value', { ttl: 1000 });
@@ -80,7 +80,6 @@ await this.cacheManager.reset();
 
 > warning **경고** [GraphQL](/graphql/quick-start) 애플리케이션에서 인터셉터는 각 필드 리졸버에 대해 개별적으로 실행됩니다. 따라서 `CacheModule`(인터셉터를 사용하여 응답을 캐시함)은 제대로 작동하지 않습니다.
 
-To enable auto-caching responses, just tie the `CacheInterceptor` where you want to cache data.
 자동 캐싱 응답을 사용하려면 데이터를 캐시하려는 위치에 `CacheInterceptor`를 연결하면 됩니다.
 
 ```typescript
