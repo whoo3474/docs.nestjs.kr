@@ -253,16 +253,20 @@ import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class PrismaService extends PrismaClient
-  implements OnModuleInit, OnModuleDestroy {
+  implements OnModuleInit {
   async onModuleInit() {
     await this.$connect();
   }
 
-  async onModuleDestroy() {
-    await this.$disconnect();
+  async enableShutdownHooks(app: INestApplication) {
+    this.$on('beforeExit', async () => {
+      await app.close();
+    });
   }
 }
 ```
+
+> info **참고** `onModuleInit`는 선택사항입니다. 생략하면 Prisma가 데이터베이스에 대한 첫번째 호출에서 느리게 연결됩니다. Prisma에는 연결을 끊을 자체 종료 후크가 있으므로 `onModuleDestroy`는 신경 쓰지 않습니다. `enableShutdownHooks`에 대한 자세한 내용은 [`enableShutdownHooks` 관련 문제](#issues-with-enableShutdownHooks)를 참조하세요.
 
 다음으로 Prisma 스키마에서 `User` 및 `Post` 모델에 대한 데이터베이스 호출을 수행하는데 사용할 수 있는 서비스를 작성할 수 있습니다.
 
@@ -516,6 +520,25 @@ This controller implements the following routes:
 ###### `DELETE`
 
 - `/post/:id`: Delete a post by its `id`
+
+#### `enableShutdownHooks` 관련 문제
+
+Prisma는 NestJS `enableShutdownHooks`를 방해합니다. Prisma는 종료 신호를 수신하고 애플리케이션 종료 후크가 실행되기 전에 `process.exit()`를 호출합니다. 이를 처리하려면 Prisma `beforeExit` 이벤트에 대한 리스너를 추가해야합니다.
+
+```typescript
+// main.ts
+...
+import { PrismaService } from './services/prisma/prisma.service';
+...
+bootstrap() {
+  ...
+  const prismaService: PrismaService = app.get(PrismaService);
+  prismaService.enableShutdownHooks(app)
+  ...
+}
+```
+
+종료 신호의 Prisma 처리 및 `beforeExit` 이벤트에 대해 [자세히 알아보기](https://github.com/prisma/prisma/issues/2917#issuecomment-708340112)할 수 있습니다.
 
 #### Summary
 
