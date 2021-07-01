@@ -38,7 +38,7 @@ constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
 
 > info **힌트** `Cache` 클래스는 `cache-manager`에서 가져오는 반면 `CACHE_MANAGER` 토큰은 `@nestjs/common` 패키지에서 가져옵니다.
 
-`Cache` 인스턴스의 `get` 메소드(`cache-manager` 패키지)는 캐시에서 항목을 검색하는 데 사용됩니다. 항목이 캐시에 없으면 예외가 발생합니다.
+`Cache` 인스턴스 (`cache-manager` 패키지)의 `get` 메소드는 캐시에서 항목을 검색하는 데 사용됩니다. 캐시에 항목이 없으면 `undefined`가 반환됩니다.
 
 ```typescript
 const value = await this.cacheManager.get('key');
