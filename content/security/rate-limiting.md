@@ -64,7 +64,7 @@ export class WsThrottlerGuard extends ThrottlerGuard {
 
 #### GraphQL
 
-`ThrottlerGuard`는 GraphQL 요청 작업에도 사용할 수 있습니다. 다시 말하지만, 가드를 확장할 수 있지만 이 경우  `getRequestResponse` 메소드가 재정의됩니다.
+`ThrottlerGuard`는 GraphQL 요청 작업에도 사용할 수 있습니다. 다시 말하지만, 가드를 확장할 수 있지만 이번에는 `getRequestResponse` 메서드가 재정의됩니다.
 
 ```typescript
 @Injectable()
