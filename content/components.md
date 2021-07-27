@@ -4,7 +4,7 @@
 
 <figure><img src="/assets/Components_1.png" /></figure>
 
-이전 장에서 우리는 간단한 `CatsController`를 만들었습니다. 컨트롤러는 HTTP 요청을 처리하고 더 복잡한 작업을 **프로바이더**에게 위임해야 합니다. 공급자는 [모듈](/module)에서 `provider`로 선언된 일반 자바스크립트 클래스입니다.
+이전 장에서 우리는 간단한 `CatsController`를 만들었습니다. 컨트롤러는 HTTP 요청을 처리하고 더 복잡한 작업을 **프로바이더**에게 위임해야 합니다. 공급자는 [모듈](/modules)에서 `provider`로 선언된 일반 자바스크립트 클래스입니다.
 
 > info **힌트** Nest를 사용하면 보다 객체지향적인 방식(OO-way)으로 종속성을 설계하고 구성할 수 있으므로 [SOLID](https://en.wikipedia.org/wiki/SOLID) 원칙을 따르는 것이 좋습니다.
 
