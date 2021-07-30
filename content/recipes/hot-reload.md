@@ -20,7 +20,7 @@ $ npm i --save-dev webpack-node-externals run-script-webpack-plugin webpack
 
 #### Configuration
 
-설치가 완료되면 애플리케이션의 루트 디렉터리에v`webpack-hmr.config.js` 파일을 만듭니다.
+설치가 완료되면 애플리케이션의 루트 디렉터리에 `webpack-hmr.config.js` 파일을 만듭니다.
 
 ```typescript
 const nodeExternals = require('webpack-node-externals');
