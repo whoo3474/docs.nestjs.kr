@@ -95,7 +95,7 @@ export class AppModule {}
   constructor(private catsService: CatsService)
 ```
 
-1. `app.module.ts`에서 `CatsService` 토큰을 `cats.service.ts` 파일의 `CatsService` 클래스와 연관시킵니다. 이 연결 (_registration_이라고도 함)이 어떻게 발생하는지 정확히 [아래를 참조](/fundamentals/custom-providers#standard-providers)합니다.
+3. `app.module.ts`에서 `CatsService` 토큰을 `cats.service.ts` 파일의 `CatsService` 클래스와 연관시킵니다. 이 연결 (_registration_ 이라고도 함)이 어떻게 발생하는지 정확히 [아래를 참조](/fundamentals/custom-providers#standard-providers)합니다.
 
 Nest IoC 컨테이너가 `CatsController`를 인스턴스화할 때 먼저 종속성\*을 찾습니다. `CatsService` 종속성을 찾으면 등록단계(위 #3)에 따라 `CatsService` 클래스를 반환하는 `CatsService` 토큰에 대한 조회를 수행합니다. `SINGLETON` 범위(기본 동작)를 가정하면 Nest는 `CatsService`의 인스턴스를 만들고 캐시한 다음 반환하거나 이미 캐시된 경우 기존 인스턴스를 반환합니다.
 
