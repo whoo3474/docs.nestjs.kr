@@ -1,6 +1,6 @@
 ### Middleware
 
-미들웨어는 라우트 핸들러 **이전에** 호출되는 함수입니다. 미들웨어 기능은 [요청(request)](https://expressjs.com/en/4x/api.html#req) 및 [응답(response)](https://expressjs.com/en/4x/api.html#res ) 객체 및 애플리케이션의 요청 - 응답주기에서 `next()` 미들웨어 함수입니다. **다음**(next) 미들웨어 함수는 일반적으로 `next`라는 변수로 표시됩니다.
+미들웨어는 라우트 핸들러 **이전에** 호출되는 함수입니다. 미들웨어 기능은 [요청(request)](https://expressjs.com/en/4x/api.html#req) 및 [응답(response)](https://expressjs.com/en/4x/api.html#res) 객체 및 애플리케이션의 요청 - 응답주기에서 `next()` 미들웨어 함수입니다. **다음**(next) 미들웨어 함수는 일반적으로 `next`라는 변수로 표시됩니다.
 
 <figure><img src="/assets/Middlewares_1.png" /></figure>
 
@@ -124,7 +124,7 @@ export class AppModule {
 
 #### Route wildcards
 
-패턴 기반 리읕,도 지원됩니다. 예를 들어 별표는 **와일드카드**로 사용되며 모든 문자조합과 일치합니다.
+패턴 기반 라우트도 지원됩니다. 예를 들어 별표는 **와일드카드**로 사용되며 모든 문자조합과 일치합니다.
 
 ```typescript
 forRoutes({ path: 'ab*cd', method: RequestMethod.ALL });
@@ -197,7 +197,6 @@ consumer
 #### Functional middleware
 
 우리가 사용해온 `LoggerMiddleware` 클래스는 매우 간단합니다. 멤버, 추가 메서드 및 종속성이 없습니다. 클래스 대신 간단한 함수로 정의할 수 없는 이유는 무엇입니까? 사실 우리는 할 수 있습니다. 이러한 유형의 미들웨어를 **기능적 미들웨어**라고 합니다. 로거 미들웨어를 클래스 기반에서 기능적 미들웨어로 변환하여 차이점을 설명해 보겠습니다.
-
 
 ```typescript
 @@filename(logger.middleware)
