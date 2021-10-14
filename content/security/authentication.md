@@ -631,7 +631,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
 - `jwtFromRequest`: `Request`에서 JWT를 추출하는 방법을 제공합니다. API 요청의 Authorization 헤더에 전달자 토큰을 제공하는 표준 접근 방식을 사용합니다. 다른 옵션은 [여기](https://github.com/mikenicholson/passport-jwt#extracting-the-jwt-from-the-request)에 설명되어 있습니다.
 - `ignoreExpiration`: 명시적으로 말하자면, JWT가 Passport 모듈에 만료되지 않았는지 확인하는 책임을 위임하는 기본 `false` 설정을 선택합니다. 즉, 경로에 만료된 JWT가 제공되면 요청이 거부되고 '401 Unauthorized'응답이 전송됩니다. Passport는 이를 자동으로 처리합니다.
-- `secretOrKey`: 토큰 서명을 위해 대칭 암호를 제공하는 편리한 옵션을 사용하고 있습니다. PEM으로 인코딩된 공개키와 같은 다른 옵션은 프로덕션앱에 더 적합할 수 있습니다 (자세한 내용은 [여기](https://github.com/mikenicholson/passport-jwt#extracting-the-jwt-from-the-request)). 어쨌든 앞서 언급했듯이 **이 비밀을 공개하지 마세요**.
+- `secretOrKey`: 토큰 서명을 위해 대칭 암호를 제공하는 편리한 옵션을 사용하고 있습니다. PEM으로 인코딩된 공개키와 같은 다른 옵션은 프로덕션앱에 더 적합할 수 있습니다 (자세한 내용은 [여기](https://github.com/mikenicholson/passport-jwt#configure-strategy)). 어쨌든 앞서 언급했듯이 **이 비밀을 공개하지 마세요**.
 
 
 `validate()` 메소드는 약간의 논의가 필요합니다. jwt-strategy의 경우 Passport는 먼저 JWT의 서명을 확인하고 JSON을 디코딩합니다. 그런 다음 디코딩된 JSON을 단일 매개 변수로 전달하는 `validate()`메소드를 호출합니다. JWT 서명이 작동하는 방식에 따라 이전에 서명하여 유효한 사용자에게 발급한 **유효한 토큰**을 받음을 보장합니다.
