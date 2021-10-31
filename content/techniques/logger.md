@@ -35,7 +35,7 @@ await app.listen(3000);
 
 배열의 값은` 'log'`, `'error'`, `'warn'`, `'debug'` 및 `'verbose'`의 조합일 수 있습니다.
 
-> info **힌트** 기본 로거 메시지에서 색상을 비활성화하려면 `NO_COLOR` 환경 변수를 설정하십시오.
+> info **힌트** 기본 로거 메시지에서 색상을 비활성화하려면 `NO_COLOR` 환경 변수를 비어 있지 않은 문자열로 설정하십시오.
 
 #### Custom implementation
 
