@@ -33,11 +33,11 @@ $ nest n <name> [options]
 | `--skip-install`                      | 패키지 설치를 건너 뜁니다. <br/>별칭: `-s`                                                                     |
 | `--package-manager [package-manager]` | 패키지 관리자를 지정하십시오. `npm` 또는 `yarn`을 사용하세요. 패키지 관리자는 전역으로 설치해야 합니다. <br/>별칭: `-p`      |
 | `--language [language]`               | 프로그래밍 언어(`TS` 또는 `JS`)를 지정합니다. <br/>별칭: `-l`                                                   |
-| `--collection [collectionName]`       | 스키메틱 컬렉션을 지정합니다. 스키메틱이 포함된 설치된 npm 패키지의 패키지 이름을 사용합니다. <br/>별칭: `-c` |
+| `--collection [collectionName]`       | 스키매틱 컬렉션을 지정합니다. 스키매틱이 포함된 설치된 npm 패키지의 패키지 이름을 사용합니다. <br/>별칭: `-c` |
 
 #### nest generate
 
-스키메틱을 기반으로 파일 생성 및/또는 수정
+스키매틱을 기반으로 파일 생성 및/또는 수정
 
 ```bash
 $ nest generate <schematic> <name> [options]
@@ -48,7 +48,7 @@ $ nest g <schematic> <name> [options]
 
 | Argument      | Description                                                                                              |
 | ------------- | -------------------------------------------------------------------------------------------------------- |
-| `<schematic>` | 생성할 `schematic` 또는 `collection:schematic`입니다. 사용 가능한 스키메틱은 아래 표를 참조하십시오. |
+| `<schematic>` | 생성할 `schematic` 또는 `collection:schematic`입니다. 사용 가능한 스키매틱은 아래 표를 참조하십시오. |
 | `<name>`      | 생성된 구성 요소의 이름입니다.                                                                     |
 
 ##### Schematics
@@ -80,7 +80,7 @@ $ nest g <schematic> <name> [options]
 | `--dry-run`                     | 변경될 사항을 보고하지만 파일 시스템은 변경하지 않습니다. <br/>별칭: `-d`                        |
 | `--project [project]`           | 엘리먼트를 추가해야 하는 프로젝트입니다. <br/>별칭: `-p`                                                       |
 | `--flat`                        | 엘리먼트에 대한 폴더를 생성하지 마십시오.                                                                       |
-| `--collection [collectionName]` | 스키메틱 컬렉션을 지정합니다. 스키메틱이 포함된 설치된 npm 패키지의 패키지 이름을 사용합니다. <br/>별칭: `-c` |
+| `--collection [collectionName]` | 스키매틱 컬렉션을 지정합니다. 스키매틱이 포함된 설치된 npm 패키지의 패키지 이름을 사용합니다. <br/>별칭: `-c` |
 | `--spec`                        | 스펙 파일 생성 적용 (기본값)                                                                         |
 | `--no-spec`                     | 스펙 파일 생성 비활성화                                                                                   |
 
@@ -140,7 +140,7 @@ $ nest start <name> [options]
 
 #### nest add
 
-**nest 라이브러리**로 패키지된 라이브러리를 가져와서 설치 스키메틱을 실행합니다.
+**nest 라이브러리**로 패키지된 라이브러리를 가져와서 설치 스키매틱을 실행합니다.
 
 ```bash
 $ nest add <name> [options]

@@ -19,7 +19,7 @@ Following the best practices, for each entity we would have to perform several o
 
 이러한 반복적인 프로세스의 속도를 높이기 위해 [Nest CLI](/cli/overview)는 모든 상용구 코드를 자동으로 생성하는 생성기(스키매틱)를 제공하여 이 모든 작업을 피하고 개발자 경험을 훨씬 간단하게 만듭니다.
 
-> info **참고** 스키메틱은 **HTTP** 컨트롤러, **Microservice** 컨트롤러, **GraphQL** 리졸버(코드 우선 및 스키마 우선) 및 **WebSocket** 게이트웨이 생성을 지원합니다.
+> info **참고** 스키매틱은 **HTTP** 컨트롤러, **Microservice** 컨트롤러, **GraphQL** 리졸버(코드 우선 및 스키마 우선) 및 **WebSocket** 게이트웨이 생성을 지원합니다.
 
 #### Generating a new resource
 

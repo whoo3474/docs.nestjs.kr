@@ -170,7 +170,7 @@ query: 쿼리
 
 mutation: 변이, 뮤테이션, 변형
 
-schematic: 회로도, 스키메틱
+schematic: 회로도, 스키매틱
 
 resolver: 리졸버, 해석기
 

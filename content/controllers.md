@@ -484,7 +484,7 @@ export class CatsController {
 }
 ```
 
-> info **힌트** Nest CLI는 **모든 상용구(boilerplate) 코드**를 자동으로 생성하는 생성기(스키메틱)를 제공하여 이 모든 작업을 피하도록 돕고, 개발자 경험을 훨씬 더 간단하게 만들 수 있습니다. 이 기능에 대한 자세한 내용은 [여기](/recipes/crud-generator)를 참조하세요.
+> info **힌트** Nest CLI는 **모든 상용구(boilerplate) 코드**를 자동으로 생성하는 생성기(스키매틱)를 제공하여 이 모든 작업을 피하도록 돕고, 개발자 경험을 훨씬 더 간단하게 만들 수 있습니다. 이 기능에 대한 자세한 내용은 [여기](/recipes/crud-generator)를 참조하세요.
 
 #### Getting up and running
 
